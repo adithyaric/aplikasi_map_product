@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ $title ?? '' }} | SPPD</title>
+    <title>@yield('title')</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -99,7 +99,7 @@
         <!-- Main Footer -->
         <footer class="main-footer">
             <strong>
-                Copyright &copy; 2023 SPPD | Developed by <a href="#">PT. Decaaindo. Surya Persada</a>.
+                Copyright &copy; {{ date('Y') }} SPPD | Developed by <a href="#">PT. Decaaindo. Surya Persada</a>.
             </strong>
             <!-- Default to the left -->
 

@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
-@section('title', 'Fakultas')
+@section('title', 'Prodi')
 
 @section('container')
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Data Fakultas
+            Data Prodi
         </h1>
     </section>
 
@@ -16,26 +16,26 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <a href="{{ route('faculties.create') }}" class="btn btn-md bg-green">Tambah</a>
+                        <a href="{{ route('studies.create') }}" class="btn btn-md bg-green">Tambah</a>
                     </div><!-- /.box-header -->
                     <div class="box-body table-responsive">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <td>No</td>
-                                    <td>Nama Fakultas</td>
-                                    <td>Kode Fakultas</td>
+                                    <td>Nama Prodi</td>
+                                    <td>Kode Prodi</td>
                                     <td>Aksi</td>
                                 </tr>
                             </thead>
-                            @foreach ($faculties as $value)
+                            @foreach ($studies as $value)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->code }}</td>
                                     <td>
-                                        <a class="btn btn-warning" href="{{ route('faculties.edit', $value->id) }}">Edit</a>
-                                        <form action="{{ route('faculties.destroy', $value->id) }}" method="post"
+                                        <a class="btn btn-warning" href="{{ route('studies.edit', $value->id) }}">Edit</a>
+                                        <form action="{{ route('studies.destroy', $value->id) }}" method="post"
                                             style="display: inline;">
                                             @method('delete')
                                             @csrf

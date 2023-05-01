@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FacultyRequest;
-use App\Models\Faculty;
+use App\Http\Requests\StudyRequest;
+use App\Models\Study;
 
-class FacultyController extends Controller
+class StudyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,9 @@ class FacultyController extends Controller
      */
     public function index()
     {
-        $faculties = Faculty::get();
+        $studies = Study::get();
 
-        return view('faculty.index', compact('faculties'));
+        return view('study.index', compact('studies'));
     }
 
     /**
@@ -26,21 +26,21 @@ class FacultyController extends Controller
      */
     public function create()
     {
-        return view('faculty.create');
+        return view('study.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(FacultyRequest $request)
+    public function store(StudyRequest $request)
     {
         $data = $request->validated();
-        Faculty::create($data);
+        Study::create($data);
 
-        return redirect(route('faculties.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
-
+        return redirect(route('studies.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }
 
     /**
@@ -48,7 +48,7 @@ class FacultyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Faculty $faculty)
+    public function show(Study $study)
     {
         //
     }
@@ -58,22 +58,23 @@ class FacultyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Faculty $faculty)
+    public function edit(Study $study)
     {
-        return view('faculty.edit', compact('faculty'));
+        return view('study.edit', compact('study'));
     }
 
     /**
      * Update the specified resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(FacultyRequest $request, Faculty $faculty)
+    public function update(StudyRequest $request, Study $study)
     {
         $data = $request->validated();
-        $faculty->update($data);
+        $study->update($data);
 
-        return redirect(route('faculties.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
+        return redirect(route('studies.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }
 
     /**
@@ -81,10 +82,10 @@ class FacultyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Faculty $faculty)
+    public function destroy(Study $study)
     {
-        $faculty->delete();
+        $study->delete();
 
-        return redirect(route('faculties.index'))->with('toast_success', 'Berhasil Menghapus Data!');
+        return redirect(route('studies.index'))->with('toast_success', 'Berhasil Menghapus Data!');
     }
 }
