@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SatuanController;
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/users', UserController::class); //Users
     Route::resource('/satuan', SatuanController::class); //Satuan
+    Route::resource('/category', CategoryController::class); //Kategori
 });
 
 require __DIR__.'/auth.php';
