@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UserController;
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/satuan', SatuanController::class); //Satuan
     Route::resource('/category', CategoryController::class); //Kategori
     Route::resource('/customer', CustomerController::class); //Kustomer
+    Route::resource('/driver', DriverController::class); //Driver
 });
 
 require __DIR__.'/auth.php';
