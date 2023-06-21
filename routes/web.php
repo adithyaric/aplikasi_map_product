@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SatuanController;
@@ -34,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class); //Users
     Route::resource('/satuan', SatuanController::class); //Satuan
     Route::resource('/category', CategoryController::class); //Kategori
+    Route::resource('/customer', CustomerController::class); //Kustomer
 });
 
 require __DIR__.'/auth.php';
