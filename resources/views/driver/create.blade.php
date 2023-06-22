@@ -27,9 +27,9 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="">Nomor HP</label>
+                                <label for="">Nomor Plat</label>
                                 <input required type="text" class="form-control" name="no_plat"
-                                    value="{{ old('no_plat') }}" placeholder="Masukkan Nomor HP">
+                                    value="{{ old('no_plat') }}" placeholder="Masukkan Nomor Plat">
                                 @error('no_plat')
                                     <div class="invalid-feedback">
                                         {{ $message }}

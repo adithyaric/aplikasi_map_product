@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -38,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/category', CategoryController::class); //Kategori
     Route::resource('/customer', CustomerController::class); //Kustomer
     Route::resource('/driver', DriverController::class); //Driver
+    Route::resource('/bahanbaku', BahanBakuController::class); //Bahan Baku
 });
 
 require __DIR__.'/auth.php';

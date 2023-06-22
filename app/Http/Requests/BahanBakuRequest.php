@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class BahanBakuRequest extends FormRequest
 {
     public function authorize()
     {
@@ -15,9 +15,10 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'role' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
+            'harga' => 'required',
+            'stock' => 'required',
+            'category_id' => 'required',
+            'satuan_id' => 'required',
         ];
     }
 }

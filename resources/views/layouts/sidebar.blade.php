@@ -26,6 +26,9 @@
                 <ul class="treeview-menu">
                     <li><a href="{{ route('users.index') }}"><i class="fa fa-user"></i> Users</a></li></li>
                     <li><a href="{{ route('customer.index') }}"><i class="fa fa-users"></i> Kustomer</a></li></li>
+                    <li><a href="{{ route('driver.index') }}"><i class="fa fa-users"></i> Drivers</a></li></li>
+                    <li><a href="{{ route('satuan.index') }}"><i class="fa fa-circle"></i> Satuan</a></li></li>
+                    <li><a href="{{ route('category.index') }}"><i class="fa fa-circle"></i> Kategori</a></li></li>
                 </ul>
             </li>
         </ul><!-- /.sidebar-menu -->

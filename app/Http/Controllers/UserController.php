@@ -19,7 +19,9 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('users.create');
+        $levels = ['Owner', 'Administrasi', 'Finance'];
+
+        return view('users.create', compact('levels'));
     }
 
     public function store(UserRequest $request)
@@ -37,7 +39,9 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        $levels = ['Owner', 'Administrasi', 'Finance'];
+
+        return view('users.edit', compact('user', 'levels'));
     }
 
     public function update(Request $request, User $user)
