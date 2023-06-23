@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UserController;
@@ -40,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/customer', CustomerController::class); //Kustomer
     Route::resource('/driver', DriverController::class); //Driver
     Route::resource('/bahanbaku', BahanBakuController::class); //Bahan Baku
+    Route::resource('/product', ProductController::class); //Product
 });
 
 require __DIR__.'/auth.php';
