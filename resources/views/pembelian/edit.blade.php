@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Tambah Bahan Baku')
+@section('title', 'Edit Pembelian')
 
 @section('container')
     <section class="content">
@@ -10,48 +10,41 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Tambah Bahan Baku</h3>
+                        <h3 class="box-title">Edit Pembelian</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form action="{{ route('bahanbaku.store') }}" method="POST">
+                    <form action="{{ route('pembelian.update', $pembelian->id) }}" method="POST">
+                        @method('PUT')
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
                                 <label>Kategori</label>
-                                <select required class="form-control select2" name="category_id" data-placeholder="Pilih Kategori"
-                                    style="width: 100%;">
+                                <select required class="form-control select2" name="category_id"
+                                    data-placeholder="Pilih Kategori" style="width: 100%;">
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}"
-                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}
+                                            {{ old('category_id', $pembelian->category_id) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Satuan Bahan Baku</label>
-                                <select required class="form-control select2" name="satuan_id" data-placeholder="Pilih Satuan Bahan Baku"
-                                    style="width: 100%;">
-                                    @foreach ($satuans as $satuan)
-                                        <option value="{{ $satuan->id }}"
-                                            {{ old('satuan_id') == $satuan->id ? 'selected' : '' }}>{{ $satuan->name }}
+                                <label>Bahan Baku</label>
+                                <select required class="form-control select2" name="bahan_baku_id"
+                                    data-placeholder="Pilih Bahan Baku" style="width: 100%;">
+                                    @foreach ($bahan_bakus as $bahan_baku)
+                                        <option value="{{ $bahan_baku->id }}"
+                                            {{ old('bahan_baku_id', $pembelian->bahan_baku_id) == $bahan_baku->id ? 'selected' : '' }}>
+                                            {{ $bahan_baku->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="">Nama Bahan Baku</label>
-                                <input required type="text" class="form-control" name="name"
-                                    value="{{ old('name') }}" placeholder="Masukkan Nama Bahan Baku">
-                                @error('name')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="">Harga Bahan Baku</label>
+                                <label for="">Harga</label>
                                 <input required type="text" class="form-control" name="harga"
-                                    value="{{ old('harga') }}" placeholder="Masukkan Harga Bahan Baku">
+                                    value="{{ old('harga', $pembelian->harga) }}" placeholder="Masukkan Harga">
                                 @error('harga')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -59,10 +52,20 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="">Stok Bahan Baku</label>
-                                <input required type="text" class="form-control" name="stock"
-                                    value="{{ old('stock') }}" placeholder="Masukkan Stok Bahan Baku">
-                                @error('stock')
+                                <label for="">Jumlah</label>
+                                <input required type="text" class="form-control" name="jumlah"
+                                    value="{{ old('jumlah', $pembelian->jumlah) }}" placeholder="Masukkan Jumlah">
+                                @error('jumlah')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="">Keterangan</label>
+                                <input required type="text" class="form-control" name="keterangan"
+                                    value="{{ old('keterangan', $pembelian->keterangan) }}" placeholder="Masukkan Keterangan">
+                                @error('keterangan')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -71,7 +74,7 @@
                         </div><!-- /.box-body -->
 
                         <div class="box-footer">
-                            <a href="{{ route('bahanbaku.index') }}" class="btn btn-default">Kembali</a>
+                            <a href="{{ route('pembelian.index') }}" class="btn btn-default">Kembali</a>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
