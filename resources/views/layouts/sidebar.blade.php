@@ -30,6 +30,8 @@
                     <li><a href="{{ route('satuan.index') }}"><i class="fa fa-circle"></i> Satuan</a></li></li>
                     <li><a href="{{ route('category.index') }}"><i class="fa fa-circle"></i> Kategori</a></li></li>
                     <li><a href="{{ route('bahanbaku.index') }}"><i class="fa fa-circle"></i> Bahan Baku</a></li></li>
+                    <li><a href="{{ route('product.index') }}"><i class="fa fa-circle"></i> Product</a></li></li>
+                    <li><a href="{{ route('project.index') }}"><i class="fa fa-circle"></i> Project</a></li></li>
                 </ul>
             </li>
         </ul><!-- /.sidebar-menu -->
