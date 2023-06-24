@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\PembelianController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -46,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/product', ProductController::class); //Product
     Route::resource('/project', ProjectController::class); //Project
     Route::resource('/pembelian', PembelianController::class); //Pembelian
+    Route::resource('/penjualan', PenjualanController::class); //Penjualan
 });
 
 require __DIR__.'/auth.php';
