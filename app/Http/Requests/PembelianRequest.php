@@ -14,6 +14,7 @@ class PembelianRequest extends FormRequest
     public function rules()
     {
         return [
+            'tgl_dibuat' => 'required',
             'bahan_baku_id' => 'required',
             'category_id' => 'required',
             'harga' => 'required',

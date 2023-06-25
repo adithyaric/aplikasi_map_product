@@ -71,6 +71,16 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="">Tanggal Dibuat</label>
+                                <input required type="date" class="form-control" name="tgl_dibuat"
+                                    value="{{ old('tgl_dibuat', $pembelian->tgl_dibuat) }}" placeholder="Masukkan Tanggal Dibuat">
+                                @error('tgl_dibuat')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                         </div><!-- /.box-body -->
 
                         <div class="box-footer">

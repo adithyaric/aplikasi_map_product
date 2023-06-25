@@ -17,8 +17,8 @@
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
-                                <label>Bahan Baku Project</label>
-                                <select required class="form-control select2" name="product_id" data-placeholder="Pilih Bahan Baku Project"
+                                <label>Produk Project</label>
+                                <select required class="form-control select2" name="product_id" data-placeholder="Pilih Produk Project"
                                     style="width: 100%;">
                                     @foreach ($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>

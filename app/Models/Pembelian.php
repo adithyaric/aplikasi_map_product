@@ -10,6 +10,7 @@ class Pembelian extends Model
     use HasFactory;
 
     protected $fillable = [
+        'tgl_dibuat',
         'bahan_baku_id',
         'category_id',
         'harga',

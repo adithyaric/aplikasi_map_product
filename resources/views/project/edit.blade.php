@@ -18,9 +18,9 @@
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
-                                <label>Bahan Baku Project</label>
+                                <label>Produk Project</label>
                                 <select required class="form-control select2" name="product_id"
-                                    data-placeholder="Pilih Bahan Baku Project" style="width: 100%;">
+                                    data-placeholder="Pilih Produk Project" style="width: 100%;">
                                     @foreach ($products as $product)
                                         <option value="{{ $product->id }}"
                                             @if ($project->product_id == $product->id) selected @endif>{{ $product->name }}</option>
