@@ -37,18 +37,18 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Durasi</label>
-                                <input required type="text" class="form-control" name="durasi"
-                                    value="{{ old('durasi') }}" placeholder="Masukkan Durasi">
+                                {{-- <input required type="text" class="form-control" name="durasi" value="{{ old('durasi') }}" placeholder="Masukkan Durasi"> --}}
+                                <input type="text" name="durasi" id="durasi" class="form-control" value="{{ old('durasi') }}" />
                                 @error('durasi')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label for="">Hari Toleransi</label>
-                                <input required type="text" class="form-control" name="hari_toleransi"
-                                    value="{{ old('hari_toleransi') }}" placeholder="Masukkan Hari Toleransi">
+                                {{-- <input required type="text" class="form-control" name="hari_toleransi" value="{{ old('hari_toleransi') }}" placeholder="Masukkan Hari Toleransi"> --}}
+                                <input type="text" class="form-control datepicker" name="dates" data-date-format="yyyy-mm-dd">
                                 @error('hari_toleransi')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -76,4 +76,27 @@
             </div>
         </div>
     </section>
+@endsection
+@section('page-script')
+    <script>
+        $(document).ready(function() {
+            var startDate = new Date();
+            var endDate = new Date();
+            endDate.setDate(startDate.getDate() + 3);
+
+            $('#durasi').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                format: 'YYYY-MM-DD H:mm',
+                startDate: startDate,
+                endDate: endDate
+            });
+
+            $('.datepicker').datepicker({
+                daysOfWeekDisabled: [0],
+                multidate: true,
+                clearBtn: true
+            });
+        });
+    </script>
 @endsection

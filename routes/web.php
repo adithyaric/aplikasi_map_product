@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/bahanbaku', BahanBakuController::class); //Bahan Baku
     Route::resource('/product', ProductController::class); //Product
     Route::resource('/project', ProjectController::class); //Project
+    Route::get('get-targets', [ProjectController::class, 'target'])->name('getTarget');
     Route::resource('/pembelian', PembelianController::class); //Pembelian
     Route::resource('/penjualan', PenjualanController::class); //Penjualan
     Route::resource('/pengiriman', PengirimanController::class); //Pengiriman

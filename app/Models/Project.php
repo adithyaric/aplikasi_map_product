@@ -15,10 +15,16 @@ class Project extends Model
         'jml_product', // jumlah product
         'hari_toleransi',
         'keterangan',
+        'target',
     ];
 
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function targets()
+    {
+        return $this->hasMany(ProjectTarget::class);
     }
 }

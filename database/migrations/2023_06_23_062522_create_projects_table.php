@@ -19,8 +19,9 @@ return new class extends Migration
             $table->foreignIdFor(Product::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('durasi');
             $table->string('jml_product')->nullable();
-            $table->string('hari_toleransi')->nullable();
+            $table->json('hari_toleransi')->nullable();
             $table->string('keterangan')->nullable();
+            $table->string('target')->nullable();
             $table->timestamps();
         });
     }

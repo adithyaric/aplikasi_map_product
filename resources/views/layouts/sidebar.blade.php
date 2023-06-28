@@ -34,6 +34,7 @@
                     <li><a href="{{ route('project.index') }}"><i class="fa fa-circle"></i> Project</a></li></li>
                     <li><a href="{{ route('pembelian.index') }}"><i class="fa fa-circle"></i> Pembelian</a></li></li>
                     <li><a href="{{ route('penjualan.index') }}"><i class="fa fa-circle"></i> Penjualan</a></li></li>
+                    <li><a href="{{ route('pengiriman.index') }}"><i class="fa fa-send"></i> Pengiriman</a></li></li>
                 </ul>
             </li>
         </ul><!-- /.sidebar-menu -->

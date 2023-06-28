@@ -24,6 +24,9 @@
                                 <tr>
                                     <td>No</td>
                                     <td>Nama Product</td>
+                                    <td>Jumlah Product</td>
+                                    <td>Durasi</td>
+                                    <td>Hari Toleransi</td>
                                     <td>Keterangan</td>
                                     <td>Aksi</td>
                                 </tr>
@@ -32,9 +35,13 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->product->name }}</td>
+                                    <td>{{ $value->jml_product }}</td>
+                                    <td>{{ $value->durasi }}</td>
+                                    <td>{{ $value->hari_toleransi }}</td>
                                     <td>{{ $value->keterangan }}</td>
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('project.edit', $value->id) }}">Edit</a>
+                                        <a class="btn btn-info" href="{{ route('project.show', $value->id) }}">Show</a>
                                         <form action="{{ route('project.destroy', $value->id) }}" method="post"
                                             style="display: inline;">
                                             @method('delete')

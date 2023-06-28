@@ -14,6 +14,12 @@
     <link rel="stylesheet" href="{{ asset('assets/adminlte/bootstrap/css/bootstrap.min.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('assets/adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
+    <!-- Datetimepicker -->
+    <link href="{{ asset('assets/adminlte/plugins/datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/adminlte/plugins/datepicker/datepicker3.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Daterangepicker -->
+    <link href="{{ asset('assets/adminlte/plugins/daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet" type="text/css" />
+
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Font Awesome -->
@@ -114,6 +120,8 @@
     <script src="{{ asset('assets/adminlte/bootstrap/js/bootstrap.min.js') }}"></script>
     <!-- Select2 -->
     <script src="{{ asset('assets/adminlte/plugins/select2/select2.full.min.js') }}"></script>
+    <!-- Datepicker -->
+    <script src="{{ asset('assets/adminlte/plugins/datepicker/bootstrap-datepicker.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('assets/adminlte/dist/js/app.min.js') }}"></script>
     <!-- DataTables -->
@@ -123,6 +131,12 @@
     <script src="{{ asset('assets/adminlte/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
     <!-- FastClick -->
     <script src="{{ asset('assets/adminlte/plugins/fastclick/fastclick.min.js') }}"></script>
+    <!-- bootstrap time picker -->
+    <script src="{{ asset('assets/adminlte/plugins/datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/adminlte/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+    <!-- datetimerange -->
+    <script src="{{ asset('assets/adminlte/plugins/daterangepicker/moment.js') }}"></script>
+    <script src="{{ asset('assets/adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <!-- page script -->
     <script>
         $(function() {
@@ -138,6 +152,7 @@
             });
         });
     </script>
+    @yield('page-script')
 </body>
 
 </html>
