@@ -11,9 +11,9 @@ class Pengiriman extends Model
 
     protected $fillable = [
         'tgl_pengiriman',
-        'customer_id',
+        // 'customer_id',
         'driver_id',
-        'project_id',
+        // 'project_id',
         'penjualan_id',
         'jml_product',
         'jam',
@@ -21,20 +21,20 @@ class Pengiriman extends Model
 
     protected $table = 'pengiriman';
 
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
-    }
+    // public function customer()
+    // {
+    //     return $this->belongsTo(Customer::class);
+    // }
 
     public function driver()
     {
         return $this->belongsTo(Driver::class);
     }
 
-    public function project()
-    {
-        return $this->belongsTo(Project::class);
-    }
+    // public function project()
+    // {
+    //     return $this->belongsTo(Project::class);
+    // }
 
     public function penjualan()
     {

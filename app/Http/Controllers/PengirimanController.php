@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportPengiriman;
 use App\Http\Requests\PengirimanRequest;
 use App\Models\Customer;
 use App\Models\Driver;
@@ -9,6 +10,7 @@ use App\Models\Pengiriman;
 use App\Models\Penjualan;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PengirimanController extends Controller
 {
@@ -82,5 +84,14 @@ class PengirimanController extends Controller
         $pengiriman->save();
 
         return redirect(route('pengiriman.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
+    }
+
+    public function pengirimanExport(Request $request)
+    {
+        $tanggal = explode(' - ', $request->input('tanggal'));
+        $dateStart = $tanggal[0];
+        $dateEnd = $tanggal[1];
+
+        return Excel::download(new ExportPengiriman($dateStart, $dateEnd), 'pengiriman.xlsx');
     }
 }

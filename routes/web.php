@@ -55,8 +55,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('/entry', ProjectEntryController::class); //Entry Project
     // Route::get('entry/create', [ProjectEntryController::class, 'create'])->name('entry.create');
     Route::resource('/pembelian', PembelianController::class); //Pembelian
+    Route::get('/pembelian-export', [PembelianController::class, 'pembelianExport'])->name('pembelian.export');
     Route::resource('/penjualan', PenjualanController::class); //Penjualan
     Route::resource('/pengiriman', PengirimanController::class); //Pengiriman
+    Route::get('/pengiriman-export', [PengirimanController::class, 'pengirimanExport'])->name('pengiriman.export');
     Route::get('/pengiriman-solar', [PengirimanController::class, 'solar'])->name('pengiriman.solar');
     Route::put('/pengiriman-solar-update/{pengiriman}', [PengirimanController::class, 'solarUpdate'])->name('pengiriman.solar.update');
     Route::resource('/stock', StockController::class); //Stock

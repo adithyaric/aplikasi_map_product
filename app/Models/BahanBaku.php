@@ -17,6 +17,11 @@ class BahanBaku extends Model
         'satuan_id',
     ];
 
+    public function product()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('total');
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
