@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportProject;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProjectController extends Controller
 {
@@ -155,5 +157,14 @@ class ProjectController extends Controller
         $project->delete();
 
         return redirect(route('project.index'))->with('toast_error', 'Berhasil Menghapus Data!');
+    }
+
+    public function projectExport(Request $request)
+    {
+        $tanggal = explode(' - ', $request->input('tanggal'));
+        $dateStart = $tanggal[0];
+        $dateEnd = $tanggal[1];
+
+        return Excel::download(new ExportProject($dateStart, $dateEnd), 'project.xlsx');
     }
 }

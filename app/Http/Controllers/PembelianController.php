@@ -73,6 +73,6 @@ class PembelianController extends Controller
         $dateStart = $tanggal[0];
         $dateEnd = $tanggal[1];
 
-        return Excel::download(new ExportPembelian($dateStart, $dateEnd), 'pengiriman.xlsx');
+        return Excel::download(new ExportPembelian($dateStart, $dateEnd), 'pembelian.xlsx');
     }
 }

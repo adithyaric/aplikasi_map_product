@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/project', ProjectController::class); //Project
     Route::get('get-target', [ProjectController::class, 'target'])->name('getTarget');
     Route::get('get-capaian', [ProjectController::class, 'capaian'])->name('getCapaian');
+    Route::get('/project-export', [ProjectController::class, 'projectExport'])->name('project.export');
     Route::resource('/entry', ProjectEntryController::class); //Entry Project
     // Route::get('entry/create', [ProjectEntryController::class, 'create'])->name('entry.create');
     Route::resource('/pembelian', PembelianController::class); //Pembelian
