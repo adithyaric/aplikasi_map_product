@@ -15,6 +15,7 @@ class ProjectRequest extends FormRequest
     {
         return [
             'product_id' => 'required',
+            'customer_id' => 'required',
             'durasi' => 'required',
             'jml_product' => 'required',
             'hari_toleransi' => 'required',

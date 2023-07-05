@@ -16,63 +16,13 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <div class="box-body table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <tr>
-                                    <th>Nama Kustomer</th>
-                                    <td>{{ $project->customer->name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Nama Produk</th>
-                                    <td>{{ $project->product->name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Durasi</th>
-                                    <td>
-                                        @php
-                                            $dates = explode(' - ', $project->durasi);
-                                            $start_date = \Carbon\Carbon::parse($dates[0])->format('d-m-Y');
-                                            $end_date = \Carbon\Carbon::parse($dates[1])->format('d-m-Y');
-                                        @endphp
-
-                                        {{ $start_date }} - {{ $end_date }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Total Target</th>
-                                    <td>{{ $project->jml_product }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Hari Toleransi</th>
-                                    <td>
-                                        @php
-                                            $hari_toleransi = json_decode($project->hari_toleransi);
-                                            sort($hari_toleransi);
-                                        @endphp
-                                        <ul>
-                                            @foreach ($hari_toleransi as $toleransi)
-                                                <li>{{ $toleransi }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Banyak Hari Toleransi</th>
-                                    <td>{{ count(json_decode($project->hari_toleransi)) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Keterangan</th>
-                                    <td>{{ $project->keterangan }}</td>
-                                </tr>
-                            </table>
-                        </div>
                     </div><!-- /.box-header -->
                     <div class="box-body">
                         <div id="chartTarget"></div>
-                        {{-- <div id="chartCapaian"></div> --}}
+                        <div id="chartCapaian"></div>
                     </div><!-- /.box-body -->
                     <div class="box-footer">
-                        <a href="{{ route('project.index') }}" class="btn btn-default">Kembali</a>
+                        <a href="{{ route('entry.index') }}" class="btn btn-default">Kembali</a>
                     </div>
                 </div><!-- /.box -->
             </div><!-- /.col -->
@@ -151,6 +101,9 @@
                         return day.day;
                     });
                     var targets = res.map(function(day) {
+                        return day.target;
+                    });
+                    var entries = res.map(function(day) {
                         return day.capaian;
                     });
                     chart = new Highcharts.chart('chartCapaian', {
@@ -192,9 +145,13 @@
                             }
                         },
                         series: [{
-                            name: 'Hari',
-                            colorByPoint: true,
+                            name: 'Targets',
+                            color: 'blue',
                             data: targets.map(Number)
+                        }, {
+                            name: 'Capaian',
+                            color: 'red',
+                            data: entries.map(Number)
                         }]
                     });
                 }

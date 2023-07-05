@@ -26,7 +26,6 @@
                                     <td>Nama Bahan Baku</td>
                                     <td>Harga</td>
                                     <td>Stok</td>
-                                    <td>Kategori</td>
                                     <td>Satuan</td>
                                     <td>Aksi</td>
                                 </tr>
@@ -37,7 +36,6 @@
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->harga }}</td>
                                     <td>{{ $value->stock }}</td>
-                                    <td>{{ $value->category->name }}</td>
                                     <td>{{ $value->satuan->name }}</td>
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('bahanbaku.edit', $value->id) }}">Edit</a>

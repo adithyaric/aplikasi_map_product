@@ -18,6 +18,16 @@
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
+                                <label for="">No Invoice</label>
+                                <input required type="text" class="form-control" name="no_invoice"
+                                    value="{{ old('no_invoice', $penjualan->no_invoice) }}" placeholder="Masukkan no_invoice">
+                                @error('no_invoice')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <label>Customer</label>
                                 <select required class="form-control select2" name="customer_id"
                                     data-placeholder="Pilih Customer" style="width: 100%;">
@@ -30,13 +40,13 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Produk</label>
-                                <select required class="form-control select2" name="product_id"
-                                    data-placeholder="Pilih Produk" style="width: 100%;">
-                                    @foreach ($products as $product)
-                                        <option value="{{ $product->id }}"
-                                            {{ old('product_id', $penjualan->product_id) == $product->id ? 'selected' : '' }}>
-                                            {{ $product->name }}
+                                <label>Project</label>
+                                <select required class="form-control select2" name="project_id"
+                                    data-placeholder="Pilih Project" style="width: 100%;">
+                                    @foreach ($projects as $project)
+                                        <option value="{{ $project->id }}"
+                                            {{ old('project_id', $penjualan->project_id) == $project->id ? 'selected' : '' }}>
+                                            {{ $project->keterangan }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -44,7 +54,8 @@
                             <div class="form-group">
                                 <label for="">Total Barang</label>
                                 <input required type="text" class="form-control" name="total_barang"
-                                    value="{{ old('total_barang', $penjualan->total_barang) }}" placeholder="Masukkan Total Barang">
+                                    value="{{ old('total_barang', $penjualan->total_barang) }}"
+                                    placeholder="Masukkan Total Barang">
                                 @error('total_barang')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -62,6 +73,16 @@
                                 @enderror
                             </div>
                             <div class="form-group">
+                                <label for="">Diskon</label>
+                                <input type="text" class="form-control" name="diskon"
+                                    value="{{ old('diskon', $penjualan->diskon) }}" placeholder="Masukkan diskon">
+                                @error('diskon')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <label for="">Total</label>
                                 <input required type="text" class="form-control" name="total"
                                     value="{{ old('total', $penjualan->total) }}" placeholder="Masukkan Total">
@@ -73,8 +94,15 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Metode Pembayaran</label>
-                                <input required type="text" class="form-control" name="metode_pembayaran"
-                                    value="{{ old('metode_pembayaran', $penjualan->metode_pembayaran) }}" placeholder="Masukkan Metode Pembayaran">
+                                {{-- <input required type="text" class="form-control" name="metode_pembayaran" value="{{ old('metode_pembayaran', $penjualan->metode_pembayaran) }}" placeholder="Masukkan Metode Pembayaran"> --}}
+                                <select required class="form-control select2" name="metode_pembayaran"
+                                    data-placeholder="Pilih Metode Bayar" style="width: 100%;">
+                                    <option selected disabled value="">Metode Pembayaran</option>
+                                    <option @if ($penjualan->metode_pembayaran == 'tunai') selected @endif value="tunai">Tunai</option>
+                                    <option @if ($penjualan->metode_pembayaran == 'non-tunai') selected @endif value="non-tunai">Non Tunai
+                                    </option>
+                                </select>
+
                                 @error('metode_pembayaran')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -84,7 +112,8 @@
                             <div class="form-group">
                                 <label for="">Tanggal Penjualan</label>
                                 <input required type="date" class="form-control" name="tgl_penjualan"
-                                    value="{{ old('tgl_penjualan', $penjualan->tgl_penjualan) }}" placeholder="Masukkan Tanggal Penjualan">
+                                    value="{{ old('tgl_penjualan', $penjualan->tgl_penjualan) }}"
+                                    placeholder="Masukkan Tanggal Penjualan">
                                 @error('tgl_penjualan')
                                     <div class="invalid-feedback">
                                         {{ $message }}

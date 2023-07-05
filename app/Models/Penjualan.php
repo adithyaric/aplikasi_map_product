@@ -10,11 +10,14 @@ class Penjualan extends Model
     use HasFactory;
 
     protected $fillable = [
+        'no_invoice',
         'tgl_penjualan',
         'customer_id',
+        'project_id',
         'product_id',
         'total_barang',
         'harga',
+        'diskon',
         'total',
         'metode_pembayaran',
     ];
@@ -22,6 +25,11 @@ class Penjualan extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
     }
 
     public function product()

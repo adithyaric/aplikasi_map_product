@@ -14,11 +14,13 @@ class PenjualanRequest extends FormRequest
     public function rules()
     {
         return [
+            'no_invoice' => 'required',
             'tgl_penjualan' => 'required',
             'customer_id' => 'required',
-            'product_id' => 'required',
+            'project_id' => 'required',
             'total_barang' => 'required',
             'harga' => 'required',
+            'diskon' => 'nullable',
             'total' => 'required',
             'metode_pembayaran' => 'required',
         ];

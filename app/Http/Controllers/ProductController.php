@@ -51,11 +51,13 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->all();
+        // dd($data);
         $product->update([
             'name' => $data['name'],
             'harga' => $data['harga'],
         ]);
 
+        $product->bahanbaku()->detach();
         $product->bahanbaku()->sync($data['bahanbaku']);
 
         return redirect(route('product.index'))->with('toast_success', 'Berhasil Menyimpan Data!');

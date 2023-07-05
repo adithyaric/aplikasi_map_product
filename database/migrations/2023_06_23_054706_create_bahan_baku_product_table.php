@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Product::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(BahanBaku::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->string('total')->nullable();
             $table->timestamps();
         });
     }

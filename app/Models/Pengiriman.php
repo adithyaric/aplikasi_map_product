@@ -14,6 +14,7 @@ class Pengiriman extends Model
         'customer_id',
         'driver_id',
         'project_id',
+        'penjualan_id',
         'jml_product',
         'jam',
     ];
@@ -33,5 +34,10 @@ class Pengiriman extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function penjualan()
+    {
+        return $this->belongsTo(Penjualan::class);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\PenjualanRequest;
 use App\Models\Customer;
 use App\Models\Penjualan;
 use App\Models\Product;
+use App\Models\Project;
 
 class PenjualanController extends Controller
 {
@@ -21,6 +22,7 @@ class PenjualanController extends Controller
         return view('penjualan.create', [
             'customers' => Customer::get(),
             'products' => Product::get(),
+            'projects' => Project::get(),
         ]);
     }
 
@@ -43,6 +45,7 @@ class PenjualanController extends Controller
             'penjualan' => $penjualan,
             'customers' => Customer::get(),
             'products' => Product::get(),
+            'projects' => Project::get(),
         ]);
     }
 

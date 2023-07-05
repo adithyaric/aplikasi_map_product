@@ -15,9 +15,6 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-                    <div class="box-header">
-                        <a href="{{ route('project.create') }}" class="btn btn-md bg-green">Tambah</a>
-                    </div><!-- /.box-header -->
                     <div class="box-body table-responsive">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
@@ -28,13 +25,14 @@
                                     <td>Jumlah Product</td>
                                     <td>Durasi</td>
                                     <td>Keterangan</td>
+                                    <td>Banyak Capaian</td>
                                     <td>Aksi</td>
                                 </tr>
                             </thead>
                             @foreach ($projects as $value)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $value->customer->name }}</td>
+                                    <td></td>
                                     <td>{{ $value->product->name }}</td>
                                     <td>{{ $value->jml_product }}</td>
                                     <td>
@@ -47,16 +45,10 @@
                                         {{ $start_date }} - {{ $end_date }}
                                     </td>
                                     <td>{{ $value->keterangan }}</td>
+                                    <td>{{ $value->entries->sum('capaian') }}</td>
                                     <td>
-                                        <a class="btn btn-warning" href="{{ route('project.edit', $value->id) }}">Edit</a>
-                                        <a class="btn btn-info" href="{{ route('project.show', $value->id) }}">Show</a>
-                                        <form action="{{ route('project.destroy', $value->id) }}" method="post"
-                                            style="display: inline;">
-                                            @method('delete')
-                                            @csrf
-                                            <button class="border-0 btn btn-danger "
-                                                onclick="return confirm('Are you sure?')">Hapus</button>
-                                        </form>
+                                        <a class="btn btn-primary" href="{{ route('entry.create', ['project_id' => $value->id]) }}">Input</a>
+                                        <a class="btn btn-info" href="{{ route('entry.show', $value->id) }}">Show</a>
                                     </td>
                                 </tr>
                             @endforeach

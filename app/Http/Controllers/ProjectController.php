@@ -2,37 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProjectRequest;
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Project;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    public function index()
+    public function olahData($data, $request)
     {
-        $projects = Project::get();
-
-        return view('project.index', compact('projects'));
-    }
-
-    public function create()
-    {
-        return view('project.create', [
-            'products' => Product::get(),
-        ]);
-    }
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'product_id' => 'required',
-            'durasi' => 'required',
-            'jml_product' => 'required',
-            // 'hari_toleransi' => 'required',
-            'keterangan' => 'required',
-        ]);
-
         $sundays = [];
         [$startDate, $endDate] = explode(' - ', $request->durasi);
         $startDate = strtotime($startDate);
@@ -51,7 +30,9 @@ class ProjectController extends Controller
         $target_jml_product_each_days = [];
         $remaining_jml_product = $request->jml_product - ($days * floor($data['target']));
         for ($i = $startDate; $i <= $endDate; $i = strtotime('+1 day', $i)) {
-            if (! in_array(date('Y-m-d', $i), $data['hari_toleransi'])) {
+            if (in_array(date('Y-m-d', $i), $data['hari_toleransi'])) {
+                $target_jml_product_each_days[] = ['day' => date('Y-m-d', $i), 'target' => 0];
+            } else {
                 $target = floor($data['target']);
                 if ($remaining_jml_product > 0) {
                     $target++;
@@ -61,11 +42,42 @@ class ProjectController extends Controller
             }
         }
         $data['hari_toleransi'] = json_encode($data['hari_toleransi']);
+        $data['target_jml_product_each_days'] = $target_jml_product_each_days;
 
         // dd($data, $target_jml_product_each_days);
 
+        return $data;
+    }
+
+    public function index()
+    {
+        $projects = Project::get();
+
+        return view('project.index', compact('projects'));
+    }
+
+    public function create()
+    {
+        return view('project.create', [
+            'products' => Product::get(),
+            'customers' => Customer::get(),
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'product_id' => 'required',
+            'customer_id' => 'required',
+            'durasi' => 'required',
+            'jml_product' => 'required',
+            // 'hari_toleransi' => 'required',
+            'keterangan' => 'required',
+        ]);
+
+        $data = $this->olahData($data, $request);
         $project = Project::create($data);
-        foreach ($target_jml_product_each_days as $target) {
+        foreach ($data['target_jml_product_each_days'] as $target) {
             $project->targets()->create($target);
         }
 
@@ -75,8 +87,28 @@ class ProjectController extends Controller
     public function target(Request $request)
     {
         $data = Project::find($request->project_id);
+        $targets = $data->targets->toArray();
+        foreach ($targets as &$target) {
+            $target['day'] = Carbon::parse($target['day'])->format('d-m-Y');
+        }
 
-        return $data->targets->toArray();
+        return $targets;
+    }
+
+    public function capaian(Request $request)
+    {
+        $data = Project::find($request->project_id);
+        $targets = $data->targets->toArray();
+        $entries = $data->entries->sortBy('day')->values()->toArray();
+        $merged = array_merge($targets, $entries);
+        foreach ($merged as &$entry) {
+            $entry['day'] = date('d-m-Y', strtotime($entry['day']));
+        }
+        usort($merged, function ($a, $b) {
+            return strtotime($a['day']) - strtotime($b['day']);
+        });
+
+        return $merged;
     }
 
     public function show(Project $project)
@@ -91,13 +123,29 @@ class ProjectController extends Controller
         return view('project.edit', [
             'project' => $project,
             'products' => Product::get(),
+            'customers' => Customer::get(),
         ]);
     }
 
-    public function update(ProjectRequest $request, Project $project)
+    public function update(Request $request, Project $project)
     {
-        $data = $request->validated();
+        $data = $request->validate([
+            'product_id' => 'required',
+            'customer_id' => 'required',
+            'durasi' => 'required',
+            'jml_product' => 'required',
+            // 'hari_toleransi' => 'required',
+            'keterangan' => 'required',
+        ]);
+
+        $data = $this->olahData($data, $request);
         $project->update($data);
+        $project->targets()->delete();
+        foreach ($data['target_jml_product_each_days'] as $target) {
+            $project->targets()->create($target);
+        }
+
+        // dd($project, $project->targets->toArray());
 
         return redirect(route('project.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }

@@ -16,6 +16,11 @@ class Product extends Model
 
     public function bahanbaku()
     {
-        return $this->belongsToMany(BahanBaku::class);
+        return $this->belongsToMany(BahanBaku::class)->withPivot('total');
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
     }
 }

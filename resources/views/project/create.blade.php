@@ -17,6 +17,18 @@
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
+                                <label>Customer</label>
+                                <select required class="form-control select2" name="customer_id"
+                                    data-placeholder="Pilih Customer" style="width: 100%;">
+                                    @foreach ($customers as $customer)
+                                        <option value="{{ $customer->id }}"
+                                            {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
+                                            {{ $customer->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>Produk Project</label>
                                 <select required class="form-control select2" name="product_id" data-placeholder="Pilih Produk Project"
                                     style="width: 100%;">
@@ -27,7 +39,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Jumlah Product</label>
-                                <input required type="text" class="form-control" name="jml_product"
+                                <input required type="number" class="form-control" name="jml_product"
                                     value="{{ old('jml_product') }}" placeholder="Masukkan Jumlah Product">
                                 @error('jml_product')
                                     <div class="invalid-feedback">

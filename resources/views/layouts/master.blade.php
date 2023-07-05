@@ -51,9 +51,9 @@
             <!-- Logo -->
             <a href="/" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>SPPD</b></span>
+                <span class="logo-mini"><b>logo</b></span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>PUSKESMAS</b></span>
+                <span class="logo-lg"><b>Inventory</b></span>
             </a>
 
             <!-- Header Navbar -->
@@ -105,7 +105,7 @@
         <!-- Main Footer -->
         <footer class="main-footer">
             <strong>
-                Copyright &copy; {{ date('Y') }} SPPD | Developed by <a href="#">PT. Decaaindo. Surya Persada</a>.
+                Copyright &copy; {{ date('Y') }} Developed by <a href="#">PT. Decaaindo. Surya Persada</a>.
             </strong>
             <!-- Default to the left -->
 

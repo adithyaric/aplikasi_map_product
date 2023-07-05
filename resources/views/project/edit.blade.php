@@ -18,6 +18,18 @@
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
+                                <label>Customer</label>
+                                <select required class="form-control select2" name="customer_id"
+                                    data-placeholder="Pilih Customer" style="width: 100%;">
+                                    @foreach ($customers as $customer)
+                                        <option value="{{ $customer->id }}"
+                                            {{ old('customer_id', $project->customer_id) == $customer->id ? 'selected' : '' }}>
+                                            {{ $customer->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>Produk Project</label>
                                 <select required class="form-control select2" name="product_id"
                                     data-placeholder="Pilih Produk Project" style="width: 100%;">
@@ -29,8 +41,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Jumlah Product</label>
-                                <input required type="text" class="form-control" name="jml_product"
-                                    value="{{ old('jml_product', $project->jml_product) }}" placeholder="Masukkan Jumlah Product">
+                                <input required type="number" class="form-control" name="jml_product"
+                                    value="{{ old('jml_product', $project->jml_product) }}"
+                                    placeholder="Masukkan Jumlah Product">
                                 @error('jml_product')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -39,8 +52,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Durasi</label>
-                                <input required type="text" class="form-control" name="durasi"
-                                    value="{{ old('durasi', $project->durasi) }}" placeholder="Masukkan Durasi">
+                                {{-- <input required type="text" class="form-control" name="durasi" value="{{ old('durasi', $project->durasi) }}" placeholder="Masukkan Durasi"> --}}
+                                <input type="text" name="durasi" id="durasi" class="form-control"
+                                    value="{{ old('durasi', $project->durasi) }}" />
                                 @error('durasi')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -49,8 +63,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Hari Toleransi</label>
-                                <input required type="text" class="form-control" name="hari_toleransi"
-                                    value="{{ old('hari_toleransi', $project->hari_toleransi) }}" placeholder="Masukkan Hari Toleransi">
+                                <input type="text" class="form-control datepicker" name="dates" data-date-format="yyyy-mm-dd">
                                 @error('hari_toleransi')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -60,7 +73,8 @@
                             <div class="form-group">
                                 <label for="">Keterangan</label>
                                 <input required type="text" class="form-control" name="keterangan"
-                                    value="{{ old('keterangan', $project->keterangan) }}" placeholder="Masukkan keterangan">
+                                    value="{{ old('keterangan', $project->keterangan) }}"
+                                    placeholder="Masukkan keterangan">
                                 @error('keterangan')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -78,4 +92,30 @@
             </div>
         </div>
     </section>
+@endsection
+@php
+    $dates = explode(' - ', $project->durasi);
+@endphp
+@section('page-script')
+    <script>
+        $(document).ready(function() {
+            var startDate = @json($dates[0]);
+            var endDate = @json($dates[1]);
+            // endDate.setDate(startDate.getDate() + 3);
+
+            $('#durasi').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                format: 'YYYY-MM-DD H:mm',
+                startDate: startDate,
+                endDate: endDate
+            });
+
+            $('.datepicker').datepicker({
+                daysOfWeekDisabled: [0],
+                multidate: true,
+                clearBtn: true
+            });
+        });
+    </script>
 @endsection

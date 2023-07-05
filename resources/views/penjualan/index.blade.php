@@ -24,6 +24,7 @@
                                 <tr>
                                     <td>No</td>
                                     <td>Nama Kustomer</td>
+                                    <td>Nama Project</td>
                                     <td>Nama Produk</td>
                                     <td>Total</td>
                                     <td>Aksi</td>
@@ -33,7 +34,8 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->customer->name }}</td>
-                                    <td>{{ $value->product->name }}</td>
+                                    <td>{{ $value->project->keterangan }}</td>
+                                    <td>{{ $value->project->product->name }}</td>
                                     <td>{{ $value->total }}</td>
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('penjualan.edit', $value->id) }}">Edit</a>

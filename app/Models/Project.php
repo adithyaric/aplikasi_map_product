@@ -11,12 +11,18 @@ class Project extends Model
 
     protected $fillable = [
         'product_id',
+        'customer_id',
         'durasi',
         'jml_product', // jumlah product
         'hari_toleransi',
         'keterangan',
         'target',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 
     public function product()
     {
@@ -26,5 +32,15 @@ class Project extends Model
     public function targets()
     {
         return $this->hasMany(ProjectTarget::class);
+    }
+
+    public function entries()
+    {
+        return $this->hasMany(ProjectEntry::class);
+    }
+
+    public function penjualan()
+    {
+        return $this->hasMany(Penjualan::class);
     }
 }

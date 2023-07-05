@@ -17,13 +17,13 @@
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
-                                <label>Customer</label>
-                                <select required class="form-control select2" name="customer_id"
-                                    data-placeholder="Pilih Customer" style="width: 100%;">
-                                    @foreach ($customers as $customer)
-                                        <option value="{{ $customer->id }}"
-                                            {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
-                                            {{ $customer->name }}
+                                <label>penjualan</label>
+                                <select required class="form-control select2" name="penjualan_id"
+                                    data-placeholder="Pilih penjualan" style="width: 100%;">
+                                    @foreach ($penjualans as $penjualan)
+                                        <option value="{{ $penjualan->id }}"
+                                            {{ old('penjualan_id') == $penjualan->id ? 'selected' : '' }}>
+                                            {{ $penjualan->no_invoice }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -36,18 +36,6 @@
                                         <option value="{{ $driver->id }}"
                                             {{ old('driver_id') == $driver->id ? 'selected' : '' }}>
                                             {{ $driver->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Project</label>
-                                <select required class="form-control select2" name="project_id"
-                                    data-placeholder="Pilih Project" style="width: 100%;">
-                                    @foreach ($projects as $project)
-                                        <option value="{{ $project->id }}"
-                                            {{ old('project_id') == $project->id ? 'selected' : '' }}>
-                                            {{ $project->keterangan }}
                                         </option>
                                     @endforeach
                                 </select>

@@ -17,7 +17,7 @@ class BahanBakuRequest extends FormRequest
             'name' => 'required',
             'harga' => 'required',
             'stock' => 'required',
-            'category_id' => 'required',
+            'category_id' => 'nullable',
             'satuan_id' => 'required',
         ];
     }

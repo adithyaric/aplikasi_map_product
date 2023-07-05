@@ -6,7 +6,9 @@ use App\Http\Requests\PengirimanRequest;
 use App\Models\Customer;
 use App\Models\Driver;
 use App\Models\Pengiriman;
+use App\Models\Penjualan;
 use App\Models\Project;
+use Illuminate\Http\Request;
 
 class PengirimanController extends Controller
 {
@@ -23,6 +25,7 @@ class PengirimanController extends Controller
             'customers' => Customer::get(),
             'drivers' => Driver::get(),
             'projects' => Project::get(),
+            'penjualans' => Penjualan::get(),
         ]);
     }
 
@@ -46,6 +49,7 @@ class PengirimanController extends Controller
             'customers' => Customer::get(),
             'drivers' => Driver::get(),
             'projects' => Project::get(),
+            'penjualans' => Penjualan::get(),
         ]);
     }
 
@@ -62,5 +66,21 @@ class PengirimanController extends Controller
         $pengiriman->delete();
 
         return redirect(route('pengiriman.index'))->with('toast_error', 'Berhasil Menghapus Data!');
+    }
+
+    public function solar(Request $request)
+    {
+        return view('pengiriman.solar', [
+            'pengiriman' => Pengiriman::find($request->pengiriman_id),
+        ]);
+    }
+
+    public function solarUpdate(Request $request, Pengiriman $pengiriman)
+    {
+        $pengiriman->solar = $request->solar;
+        $pengiriman->status = 'selesai';
+        $pengiriman->save();
+
+        return redirect(route('pengiriman.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }
 }

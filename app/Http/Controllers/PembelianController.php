@@ -28,6 +28,9 @@ class PembelianController extends Controller
     {
         $data = $request->validated();
         Pembelian::create($data);
+        $bahanBaku = BahanBaku::find($request->bahan_baku_id);
+        $bahanBaku->stock += $request->jumlah;
+        $bahanBaku->save();
 
         return redirect(route('pembelian.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }

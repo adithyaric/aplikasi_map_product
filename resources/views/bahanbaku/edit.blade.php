@@ -18,18 +18,6 @@
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
-                                <label>Kategori Bahan Baku</label>
-                                <select required class="form-control select2" name="category_id"
-                                    data-placeholder="Pilih Kategori Bahan Baku" style="width: 100%;">
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}"
-                                            {{ old('category_id', $bahanBaku->category_id) == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label>Satuan Bahan Baku</label>
                                 <select required class="form-control select2" name="satuan_id"
                                     data-placeholder="Pilih Satuan Bahan Baku" style="width: 100%;">

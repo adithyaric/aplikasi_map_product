@@ -11,8 +11,11 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectEntryController;
 use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,10 +50,23 @@ Route::middleware('auth')->group(function () {
     Route::resource('/bahanbaku', BahanBakuController::class); //Bahan Baku
     Route::resource('/product', ProductController::class); //Product
     Route::resource('/project', ProjectController::class); //Project
-    Route::get('get-targets', [ProjectController::class, 'target'])->name('getTarget');
+    Route::get('get-target', [ProjectController::class, 'target'])->name('getTarget');
+    Route::get('get-capaian', [ProjectController::class, 'capaian'])->name('getCapaian');
+    Route::resource('/entry', ProjectEntryController::class); //Entry Project
+    // Route::get('entry/create', [ProjectEntryController::class, 'create'])->name('entry.create');
     Route::resource('/pembelian', PembelianController::class); //Pembelian
     Route::resource('/penjualan', PenjualanController::class); //Penjualan
     Route::resource('/pengiriman', PengirimanController::class); //Pengiriman
+    Route::get('/pengiriman-solar', [PengirimanController::class, 'solar'])->name('pengiriman.solar');
+    Route::put('/pengiriman-solar-update/{pengiriman}', [PengirimanController::class, 'solarUpdate'])->name('pengiriman.solar.update');
+    Route::resource('/stock', StockController::class); //Stock
 });
 
 require __DIR__.'/auth.php';
+
+//* Artisan Commands
+Route::get('/optimize-clear', function () {
+    Artisan::call('optimize:clear');
+
+    return redirect('/login')->with(['success' => 'Optimization Berhasil']);
+});
