@@ -21,9 +21,7 @@ class ExportPengiriman implements FromQuery, WithHeadings, WithMapping
 
     public function query()
     {
-        return Pengiriman::query()
-            ->with(['penjualan.project.product', 'penjualan.project'])
-            ->whereBetween('tgl_pengiriman', [$this->startDate, $this->endDate]);
+        return Pengiriman::query()->whereBetween('tgl_pengiriman', [$this->startDate, $this->endDate]);
     }
 
     public function headings(): array
@@ -32,30 +30,26 @@ class ExportPengiriman implements FromQuery, WithHeadings, WithMapping
             'Tanggal : '.$this->startDate.' - '.$this->endDate,
             'No',
             'TGL',
-            'Produk',
-            'Jumlah',
-            'Satuan',
-            'Harga',
-            'Total',
+            'No. POL',
+            'Driver',
+            'No. Order Penjualan',
+            'Jarak Tempuh (KM)',
+            'Total Solar Digunakan (L)',
             'Ket',
         ];
     }
 
     public function map($pengiriman): array
     {
-        $satuan = $pengiriman->penjualan->project->product->bahanbaku->map(function ($bahanbaku) {
-            return $bahanbaku->name.' ('.$bahanbaku->satuan->name.')';
-        })->join(', ');
-
         return [
             '',
             $pengiriman->id,
             $pengiriman->tgl_pengiriman,
-            $pengiriman->penjualan->project->product->name,
-            $pengiriman->jml_product,
-            $satuan,
-            $pengiriman->penjualan->harga,
-            $pengiriman->penjualan->total,
+            $pengiriman->driver->no_plat,
+            $pengiriman->driver->name,
+            $pengiriman->penjualan->no_invoice,
+            $pengiriman->jarak,
+            $pengiriman->total,
             $pengiriman->penjualan->project->keterangan,
         ];
     }

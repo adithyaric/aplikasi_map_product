@@ -27,6 +27,15 @@
                                 @enderror
                             </div>
                             <div class="form-group">
+                                <label for="">jarak</label>
+                                <input required type="text" class="form-control" name="jarak" value="{{ old('jarak', $pengiriman->jarak) }}" placeholder="Masukkan Jarak KM">
+                                @error('jarak')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <label for="">Penjualan</label>
                                 <input required type="text" class="form-control" name="penjualan" value="{{ old('penjualan', $pengiriman->penjualan->no_invoice) }}" readonly>
                             </div>

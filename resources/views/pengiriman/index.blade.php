@@ -15,12 +15,12 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-                    {{-- <form action="{{ route('pengiriman.export') }}" method="GET"> --}}
-                    {{-- <div class="form-group"> --}}
-                    {{-- <input type="text" name="tanggal" id="tanggal" class="" value="{{ old('tanggal') }}" /> --}}
-                    {{-- <button class="btn btn-primary" type="submit">Export</button> --}}
-                    {{-- </div> --}}
-                    {{-- </form> --}}
+                    <form action="{{ route('pengiriman.export') }}" method="GET">
+                        <div class="form-group">
+                            <input type="text" name="tanggal" id="tanggal" class="" value="{{ old('tanggal') }}" />
+                            <button class="btn btn-primary" type="submit">Export</button>
+                        </div>
+                    </form>
                     <div class="box-header">
                         <a href="{{ route('pengiriman.create') }}" class="btn btn-md bg-green">Tambah</a>
                     </div><!-- /.box-header -->
@@ -57,6 +57,12 @@
                                                 Hapus
                                             </button>
                                         </form>
+                                        <form action="{{ route('pengiriman.nota') }}" method="GET">
+                                            <div class="form-group">
+                                                <input type="hidden" name="pengiriman_id" value="{{ $value->id }}" />
+                                                <button class="btn btn-primary" type="submit">Export Nota</button>
+                                            </div>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -66,4 +72,20 @@
             </div><!-- /.col -->
         </div><!-- /.row -->
     </section><!-- /.content -->
+@endsection
+@section('page-script')
+    <script>
+        $(document).ready(function() {
+            var startDate = new Date();
+            var endDate = new Date();
+
+            $('#tanggal').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                format: 'YYYY-MM-DD H:mm',
+                startDate: startDate,
+                endDate: endDate
+            });
+        });
+    </script>
 @endsection

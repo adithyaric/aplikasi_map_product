@@ -23,6 +23,7 @@
                             <thead>
                                 <tr>
                                     <td>No</td>
+                                    <td>No Invoice</td>
                                     <td>Nama Kustomer</td>
                                     <td>Nama Project</td>
                                     <td>Nama Produk</td>
@@ -33,6 +34,7 @@
                             @foreach ($penjualans as $value)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $value->no_invoice }}</td>
                                     <td>{{ $value->customer->name }}</td>
                                     <td>{{ $value->project->keterangan }}</td>
                                     <td>{{ $value->project->product->name }}</td>

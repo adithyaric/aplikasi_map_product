@@ -17,6 +17,9 @@ class Pengiriman extends Model
         'penjualan_id',
         'jml_product',
         'jam',
+        'solar',
+        'status',
+        'jarak',
     ];
 
     protected $table = 'pengiriman';

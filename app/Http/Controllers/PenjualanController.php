@@ -28,8 +28,12 @@ class PenjualanController extends Controller
 
     public function store(PenjualanRequest $request)
     {
+        $project = Project::find($request->project_id);
         $data = $request->validated();
         Penjualan::create($data);
+        foreach ($project->product->bahanbaku as $bahanbaku) {
+            $bahanbaku->decrement('stock');
+        }
 
         return redirect(route('penjualan.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }
