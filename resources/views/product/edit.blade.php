@@ -32,6 +32,18 @@
                                     {{-- @endforeach --}}
                                 {{-- </select> --}}
                             {{-- </div> --}}
+                            <div class="form-group">
+                                <label>Kategori Bahan Baku</label>
+                                <select required class="form-control select2" name="category_id"
+                                    data-placeholder="Pilih Kategori Bahan Baku" style="width: 100%;">
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <hr>
                             <div class="forn-group">
                                 <div id="bahanbaku-repeater">

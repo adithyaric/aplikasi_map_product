@@ -22,6 +22,7 @@ return new class extends Migration
             $table->json('hari_toleransi')->nullable();
             $table->string('keterangan')->nullable();
             $table->string('target')->nullable();
+            $table->string('harga')->nullable();
             $table->timestamps();
         });
     }

@@ -12,11 +12,17 @@ class Product extends Model
     protected $fillable = [
         'name',
         'harga',
+        'category_id',
     ];
 
     public function bahanbaku()
     {
         return $this->belongsToMany(BahanBaku::class)->withPivot('total');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function projects()

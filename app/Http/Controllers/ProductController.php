@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BahanBaku;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,7 @@ class ProductController extends Controller
     {
         return view('product.create', [
             'bahanbakus' => BahanBaku::get(),
+            'categories' => Category::get(),
         ]);
     }
 
@@ -28,6 +30,7 @@ class ProductController extends Controller
         $product = Product::create([
             'name' => $data['name'],
             'harga' => $data['harga'],
+            'category_id' => $data['category_id'],
         ]);
 
         $product->bahanbaku()->attach($data['bahanbaku']);
@@ -44,6 +47,7 @@ class ProductController extends Controller
     {
         return view('product.edit', [
             'bahanbakus' => BahanBaku::get(),
+            'categories' => Category::get(),
             'product' => $product,
         ]);
     }
@@ -55,6 +59,7 @@ class ProductController extends Controller
         $product->update([
             'name' => $data['name'],
             'harga' => $data['harga'],
+            'category_id' => $data['category_id'],
         ]);
 
         $product->bahanbaku()->detach();

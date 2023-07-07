@@ -49,7 +49,7 @@ class ExportPengiriman implements FromQuery, WithHeadings, WithMapping
             $pengiriman->driver->name,
             $pengiriman->penjualan->no_invoice,
             $pengiriman->jarak,
-            $pengiriman->total,
+            $pengiriman->solar,
             $pengiriman->penjualan->project->keterangan,
         ];
     }

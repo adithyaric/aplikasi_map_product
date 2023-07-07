@@ -36,6 +36,15 @@
                                 @enderror
                             </div>
                             <div class="form-group">
+                                <label for="">waktu_tempuh</label>
+                                <input type="text" class="form-control" name="waktu_tempuh" value="{{ old('waktu_tempuh', $pengiriman->waktu_tempuh) }}" placeholder="Masukkan Waktu Tempuh">
+                                @error('waktu_tempuh')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <label for="">Penjualan</label>
                                 <input required type="text" class="form-control" name="penjualan" value="{{ old('penjualan', $pengiriman->penjualan->no_invoice) }}" readonly>
                             </div>

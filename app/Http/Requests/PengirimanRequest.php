@@ -21,6 +21,12 @@ class PengirimanRequest extends FormRequest
             'project_id' => 'nullable',
             'jml_product' => 'required',
             'jam' => 'required',
+            'untuk_pengecoran' => 'nullable',
+            'lokasi_pengecoran' => 'nullable',
+            'dry_automatic' => 'nullable',
+            'slump_permintaan' => 'nullable',
+            'waktu_tempuh' => 'nullable',
+
         ];
     }
 }

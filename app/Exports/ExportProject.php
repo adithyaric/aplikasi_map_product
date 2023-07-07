@@ -47,7 +47,7 @@ class ExportProject implements FromQuery, WithHeadings, WithMapping
             $project->created_at,
             $project->jml_product,
             $project->entries->sum('capaian'),
-            $project,
+            $project->harga,
             $project->keterangan,
         ];
     }

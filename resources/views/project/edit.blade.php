@@ -81,6 +81,16 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="">Harga Project</label>
+                                <input required type="text" class="form-control" name="harga"
+                                    value="{{ old('harga', $project->harga) }}" placeholder="Masukkan Harga Project">
+                                @error('harga')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                         </div><!-- /.box-body -->
 
                         <div class="box-footer">

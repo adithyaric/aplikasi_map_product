@@ -14,7 +14,6 @@ class Penjualan extends Model
         'tgl_penjualan',
         'customer_id',
         'project_id',
-        'product_id',
         'total_barang',
         'harga',
         'diskon',
@@ -32,8 +31,8 @@ class Penjualan extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function product()
+    public function pengiriman()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Pengiriman::class);
     }
 }

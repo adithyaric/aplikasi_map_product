@@ -70,6 +70,43 @@
                                     </div>
                                 @enderror
                             </div>
+                            {{--  --}}
+                            <div class="form-group">
+                                <label for="">untuk_pengecoran</label>
+                                <input type="text" class="form-control" name="untuk_pengecoran" value="{{ old('untuk_pengecoran') }}">
+                                @error('untuk_pengecoran')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="">lokasi_pengecoran</label>
+                                <input type="text" class="form-control" name="lokasi_pengecoran" value="{{ old('lokasi_pengecoran') }}">
+                                @error('lokasi_pengecoran')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="">dry_automatic</label>
+                                <input type="text" class="form-control" name="dry_automatic" value="{{ old('dry_automatic') }}">
+                                @error('dry_automatic')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="">slump_permintaan</label>
+                                <input type="text" class="form-control" name="slump_permintaan" value="{{ old('slump_permintaan') }}">
+                                @error('slump_permintaan')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                         </div><!-- /.box-body -->
 
                         <div class="box-footer">

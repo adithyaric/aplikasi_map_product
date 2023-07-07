@@ -17,6 +17,8 @@ class Project extends Model
         'hari_toleransi',
         'keterangan',
         'target',
+        'status',
+        'harga',
     ];
 
     public function customer()

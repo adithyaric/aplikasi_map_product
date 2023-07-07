@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/bahanbaku', BahanBakuController::class);
     Route::resource('/product', ProductController::class);
     Route::resource('/project', ProjectController::class);
+    Route::patch('/projects/{project}/updateStatus', [ProjectController::class, 'updateStatus'])->name('projects.updateStatus');
     Route::get('get-target', [ProjectController::class, 'target'])->name('getTarget');
     Route::get('get-capaian', [ProjectController::class, 'capaian'])->name('getCapaian');
     Route::get('/project-export', [ProjectController::class, 'projectExport'])->name('project.export');

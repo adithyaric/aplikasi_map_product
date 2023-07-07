@@ -34,6 +34,7 @@
                                     <td>Jumlah Product</td>
                                     <td>Durasi</td>
                                     <td>Keterangan</td>
+                                    <td>Status</td>
                                     <td>Aksi</td>
                                 </tr>
                             </thead>
@@ -54,14 +55,20 @@
                                     </td>
                                     <td>{{ $value->keterangan }}</td>
                                     <td>
+                                        <form action="{{ route('projects.updateStatus', $value->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button class="border-0 btn btn-{{ $value->status === 'proses' ? 'primary' : 'success' }}" type="submit">{{ $value->status }}</button>
+                                        </form>
+                                    </td>
+                                    <td>
                                         <a class="btn btn-warning" href="{{ route('project.edit', $value->id) }}">Edit</a>
                                         <a class="btn btn-info" href="{{ route('project.show', $value->id) }}">Show</a>
                                         <form action="{{ route('project.destroy', $value->id) }}" method="post"
                                             style="display: inline;">
                                             @method('delete')
                                             @csrf
-                                            <button class="border-0 btn btn-danger "
-                                                onclick="return confirm('Are you sure?')">Hapus</button>
+                                            <button class="border-0 btn btn-danger" onclick="return confirm('Are you sure?')">Hapus</button>
                                         </form>
                                     </td>
                                 </tr>

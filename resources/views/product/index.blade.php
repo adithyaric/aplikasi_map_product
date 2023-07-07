@@ -24,6 +24,7 @@
                                 <tr>
                                     <td>No</td>
                                     <td>Nama Product</td>
+                                    <td>Kategori Product</td>
                                     <td>Harga</td>
                                     <td>Aksi</td>
                                 </tr>
@@ -32,6 +33,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->name }}</td>
+                                    <td>{{ $value->category->name }}</td>
                                     <td>{{ $value->harga }}</td>
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('product.edit', $value->id) }}">Edit</a>

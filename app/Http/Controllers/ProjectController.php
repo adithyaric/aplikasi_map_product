@@ -75,6 +75,7 @@ class ProjectController extends Controller
             'jml_product' => 'required',
             // 'hari_toleransi' => 'required',
             'keterangan' => 'required',
+            'harga' => 'required',
         ]);
 
         $data = $this->olahData($data, $request);
@@ -138,6 +139,7 @@ class ProjectController extends Controller
             'jml_product' => 'required',
             // 'hari_toleransi' => 'required',
             'keterangan' => 'required',
+            'harga' => 'required',
         ]);
 
         $data = $this->olahData($data, $request);
@@ -150,6 +152,14 @@ class ProjectController extends Controller
         // dd($project, $project->targets->toArray());
 
         return redirect(route('project.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
+    }
+
+    public function updateStatus(Project $project)
+    {
+        $newStatus = $project->status === 'proses' ? 'selesai' : 'proses';
+        $project->update(['status' => $newStatus]);
+
+        return redirect()->back();
     }
 
     public function destroy(Project $project)
