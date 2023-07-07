@@ -17,7 +17,15 @@
                 <div class="box">
                     <form action="{{ route('pengiriman.export') }}" method="GET">
                         <div class="form-group">
-                            <input type="text" name="tanggal" id="tanggal" class="" value="{{ old('tanggal') }}" />
+                            <label for="">Export Pengiriman</label>
+                            <input type="text" name="tanggal" id="tanggal" class="form-input" value="{{ old('tanggal') }}" />
+                            <button class="btn btn-primary" type="submit">Export</button>
+                        </div>
+                    </form>
+                    <form action="{{ route('pengiriman.daily') }}" method="GET">
+                        <div class="form-group">
+                            <label for="">Pengiriman Daily</label>
+                            <input type="date" name="tanggal" class="form-input" value="{{ old('tanggal') }}" />
                             <button class="btn btn-primary" type="submit">Export</button>
                         </div>
                     </form>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportDaily;
 use App\Exports\ExportPengiriman;
 use App\Http\Requests\PengirimanRequest;
 use App\Models\Customer;
@@ -106,6 +107,11 @@ class PengirimanController extends Controller
         $dateEnd = $tanggal[1];
 
         return Excel::download(new ExportPengiriman($dateStart, $dateEnd), 'pengiriman.xlsx');
+    }
+
+    public function pengirimanDaily(Request $request)
+    {
+        return Excel::download(new ExportDaily($request->input('tanggal')), 'pengiriman.xlsx');
     }
 
     public function pengirimanNota(Request $request)
