@@ -91,8 +91,8 @@ class PengirimanController extends Controller
     public function solarUpdate(Request $request, Pengiriman $pengiriman)
     {
         $pengiriman->solar = $request->solar;
-        $pengiriman->jarak = $request->jarak;
-        $pengiriman->waktu_tempuh = $request->waktu_tempuh;
+        // $pengiriman->jarak = $request->jarak;
+        // $pengiriman->waktu_tempuh = $request->waktu_tempuh;
         $pengiriman->status = 'selesai';
         $pengiriman->save();
 
@@ -161,10 +161,10 @@ class PengirimanController extends Controller
         $templateProcessor->setValue('waktu_tempuh', $pengiriman->waktu_tempuh);
         $templateProcessor->setValue('jml_product', $pengiriman->jml_product);
 
-        $templateProcessor->setValue('untuk_pengecoran', $pengiriman->untuk_pengecoran);
-        $templateProcessor->setValue('lokasi_pengecoran', $pengiriman->lokasi_pengecoran);
+        $templateProcessor->setValue('untuk_pengecoran', $pengiriman->penjualan->project->untuk_pengecoran);
+        $templateProcessor->setValue('lokasi_pengecoran', $pengiriman->penjualan->project->lokasi_pengecoran);
         $templateProcessor->setValue('dry_automatic', $pengiriman->dry_automatic);
-        $templateProcessor->setValue('slump_permintaan', $pengiriman->slump_permintaan);
+        $templateProcessor->setValue('slump_permintaan', $pengiriman->penjualan->project->slump_permintaan);
 
         $filename = 'pengiriman-'.$pengiriman->penjualan->no_invoice.'.docx';
         $templateProcessor->saveAs($filename);

@@ -18,8 +18,9 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label>penjualan</label>
-                                <select required class="form-control select2" name="penjualan_id"
+                                <select required class="form-control select2" name="penjualan_id" id="penjualan_id"
                                     data-placeholder="Pilih penjualan" style="width: 100%;">
+                                    <option value="null" selected disabled>Pilih Invoice Penjualan</option>
                                     @foreach ($penjualans as $penjualan)
                                         <option value="{{ $penjualan->id }}"
                                             {{ old('penjualan_id') == $penjualan->id ? 'selected' : '' }}>
@@ -42,8 +43,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Jumlah Product</label>
-                                <input required type="text" class="form-control" name="jml_product"
-                                    value="{{ old('jml_product') }}" placeholder="Masukkan Jumlah Product">
+                                <input required type="text" class="form-control" id="jml_product" name="jml_product"
+                                    value="{{ old('jml_product') }}" placeholder="Masukkan Jumlah Product" readonly>
                                 @error('jml_product')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -70,43 +71,66 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="">jarak</label>
+                                <input required type="text" class="form-control" name="jarak"
+                                    value="{{ old('jarak') }}" placeholder="Masukkan Jarak KM">
+                                @error('jarak')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="">Waktu Tempuh</label>
+                                <input type="text" class="form-control" name="waktu_tempuh"
+                                    value="{{ old('waktu_tempuh') }}" placeholder="Masukkan Waktu Tempuh">
+                                @error('waktu_tempuh')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                             {{--  --}}
+                            {{-- <div class="form-group"> --}}
+                            {{-- <label for="">Untuk Pengecoran</label> --}}
+                            {{-- <input type="text" class="form-control" name="untuk_pengecoran" value="{{ old('untuk_pengecoran') }}"> --}}
+                            {{-- @error('untuk_pengecoran') --}}
+                            {{-- <div class="invalid-feedback"> --}}
+                            {{-- {{ $message }} --}}
+                            {{-- </div> --}}
+                            {{-- @enderror --}}
+                            {{-- </div> --}}
+                            {{-- <div class="form-group"> --}}
+                            {{-- <label for="">Lokasi Pengecoran</label> --}}
+                            {{-- <input type="text" class="form-control" name="lokasi_pengecoran" --}}
+                            {{-- value="{{ old('lokasi_pengecoran') }}"> --}}
+                            {{-- @error('lokasi_pengecoran') --}}
+                            {{-- <div class="invalid-feedback"> --}}
+                            {{-- {{ $message }} --}}
+                            {{-- </div> --}}
+                            {{-- @enderror --}}
+                            {{-- </div> --}}
                             <div class="form-group">
-                                <label for="">untuk_pengecoran</label>
-                                <input type="text" class="form-control" name="untuk_pengecoran" value="{{ old('untuk_pengecoran') }}">
-                                @error('untuk_pengecoran')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="">lokasi_pengecoran</label>
-                                <input type="text" class="form-control" name="lokasi_pengecoran" value="{{ old('lokasi_pengecoran') }}">
-                                @error('lokasi_pengecoran')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="">dry_automatic</label>
-                                <input type="text" class="form-control" name="dry_automatic" value="{{ old('dry_automatic') }}">
+                                <label for="">Dry Automatic</label>
+                                <input type="text" class="form-control" name="dry_automatic"
+                                    value="{{ old('dry_automatic') }}">
                                 @error('dry_automatic')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group">
-                                <label for="">slump_permintaan</label>
-                                <input type="text" class="form-control" name="slump_permintaan" value="{{ old('slump_permintaan') }}">
-                                @error('slump_permintaan')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                            {{-- <div class="form-group"> --}}
+                            {{-- <label for="">Slump Permintaan</label> --}}
+                            {{-- <input type="text" class="form-control" name="slump_permintaan" --}}
+                            {{-- value="{{ old('slump_permintaan') }}"> --}}
+                            {{-- @error('slump_permintaan') --}}
+                            {{-- <div class="invalid-feedback"> --}}
+                            {{-- {{ $message }} --}}
+                            {{-- </div> --}}
+                            {{-- @enderror --}}
+                            {{-- </div> --}}
                         </div><!-- /.box-body -->
 
                         <div class="box-footer">
@@ -118,4 +142,17 @@
             </div>
         </div>
     </section>
+@endsection
+@section('page-script')
+    <script>
+        $(document).ready(function() {
+            $('#penjualan_id').on('change', function() {
+                var penjualanId = $(this).val();
+
+                $.get('/penjualans/' + penjualanId + '/data', function(data) {
+                    $('#jml_product').val(data.total_barang);
+                });
+            });
+        });
+    </script>
 @endsection

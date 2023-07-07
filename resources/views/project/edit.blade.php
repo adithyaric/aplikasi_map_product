@@ -91,6 +91,33 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="">Untuk Pengecoran</label>
+                                <input type="text" class="form-control" name="untuk_pengecoran" value="{{ old('untuk_pengecoran', $project->untuk_pengecoran) }}">
+                                @error('untuk_pengecoran')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="">Lokasi Pengecoran</label>
+                                <input type="text" class="form-control" name="lokasi_pengecoran" value="{{ old('lokasi_pengecoran', $project->lokasi_pengecoran) }}">
+                                @error('lokasi_pengecoran')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="">Slump Permintaan</label>
+                                <input type="text" class="form-control" name="slump_permintaan" value="{{ old('slump_permintaan', $project->slump_permintaan) }}">
+                                @error('slump_permintaan')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                         </div><!-- /.box-body -->
 
                         <div class="box-footer">

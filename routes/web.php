@@ -15,6 +15,7 @@ use App\Http\Controllers\ProjectEntryController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
+use App\Models\Penjualan;
 use App\Models\Project;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -66,6 +67,12 @@ Route::middleware('auth')->group(function () {
         return [
             'harga' => $project->product->harga,
             'capaian' => $project->entries->sum('capaian'),
+        ];
+    });
+
+    Route::get('/penjualans/{penjualan}/data', function (Penjualan $penjualan) {
+        return [
+            'total_barang' => $penjualan->total_barang,
         ];
     });
 });

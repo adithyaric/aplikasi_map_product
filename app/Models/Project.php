@@ -19,6 +19,9 @@ class Project extends Model
         'target',
         'status',
         'harga',
+        'untuk_pengecoran',
+        'lokasi_pengecoran',
+        'slump_permintaan',
     ];
 
     public function customer()

@@ -21,6 +21,8 @@ class PengirimanRequest extends FormRequest
             'project_id' => 'nullable',
             'jml_product' => 'required',
             'jam' => 'required',
+            'jarak' => 'required',
+            'waktu_tempuh' => 'required',
             'untuk_pengecoran' => 'nullable',
             'lokasi_pengecoran' => 'nullable',
             'dry_automatic' => 'nullable',

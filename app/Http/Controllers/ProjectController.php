@@ -26,7 +26,7 @@ class ProjectController extends Controller
         }
         $dates = explode(',', $request->dates);
         // dump($sundays, $dates);
-        $data['hari_toleransi'] = array_merge($sundays, $dates);
+        $data['hari_toleransi'] = array_merge($sundays, array_filter($dates));
         $days -= count($data['hari_toleransi']);
         $data['target'] = $request->jml_product / $days; //average for each days
         $target_jml_product_each_days = [];
@@ -76,6 +76,9 @@ class ProjectController extends Controller
             // 'hari_toleransi' => 'required',
             'keterangan' => 'required',
             'harga' => 'required',
+            'untuk_pengecoran' => 'nullable',
+            'lokasi_pengecoran' => 'nullable',
+            'slump_permintaan' => 'nullable',
         ]);
 
         $data = $this->olahData($data, $request);
@@ -140,6 +143,9 @@ class ProjectController extends Controller
             // 'hari_toleransi' => 'required',
             'keterangan' => 'required',
             'harga' => 'required',
+            'untuk_pengecoran' => 'nullable',
+            'lokasi_pengecoran' => 'nullable',
+            'slump_permintaan' => 'nullable',
         ]);
 
         $data = $this->olahData($data, $request);
