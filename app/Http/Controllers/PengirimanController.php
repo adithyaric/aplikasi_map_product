@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ExportDaily;
 use App\Exports\ExportPengiriman;
+use App\Exports\ExportStockInOut;
 use App\Http\Requests\PengirimanRequest;
 use App\Models\Customer;
 use App\Models\Driver;
@@ -112,6 +113,11 @@ class PengirimanController extends Controller
     public function pengirimanDaily(Request $request)
     {
         return Excel::download(new ExportDaily($request->input('tanggal')), 'pengiriman.xlsx');
+    }
+
+    public function pengirimaninout(Request $request)
+    {
+        return Excel::download(new ExportStockInOut, 'StockInOut.xlsx');
     }
 
     public function pengirimanNota(Request $request)

@@ -18,8 +18,7 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="">No Invoice</label>
-                                <input required type="text" class="form-control" name="no_invoice"
-                                    value="{{ old('no_invoice') }}" placeholder="Masukkan no_invoice">
+                                <input required type="text" class="form-control" name="no_invoice" value="{{ old('no_invoice', $formatted_no_invoice) }}" placeholder="Masukkan no_invoice">
                                 @error('no_invoice')
                                     <div class="invalid-feedback">
                                         {{ $message }}

@@ -136,7 +136,7 @@
                         },
                         series: [{
                             name: 'Hari',
-                            colorByPoint: true,
+                            color: '#f52288',
                             data: targets.map(Number)
                         }]
                     });

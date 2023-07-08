@@ -19,10 +19,14 @@ class PenjualanController extends Controller
 
     public function create()
     {
+        $no_invoice = Penjualan::count() + 1;
+        $formatted_no_invoice = str_pad($no_invoice, 4, '0', STR_PAD_LEFT);
+
         return view('penjualan.create', [
             'customers' => Customer::get(),
             'products' => Product::get(),
             'projects' => Project::get(),
+            'formatted_no_invoice' => $formatted_no_invoice,
         ]);
     }
 

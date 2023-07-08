@@ -15,20 +15,20 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-                    <form action="{{ route('pengiriman.export') }}" method="GET">
-                        <div class="form-group">
-                            <label for="">Export Pengiriman</label>
-                            <input type="text" name="tanggal" id="tanggal" class="form-input" value="{{ old('tanggal') }}" />
-                            <button class="btn btn-primary" type="submit">Export</button>
-                        </div>
-                    </form>
-                    <form action="{{ route('pengiriman.daily') }}" method="GET">
-                        <div class="form-group">
-                            <label for="">Pengiriman Daily</label>
-                            <input type="date" name="tanggal" class="form-input" value="{{ old('tanggal') }}" />
-                            <button class="btn btn-primary" type="submit">Export</button>
-                        </div>
-                    </form>
+                    {{-- <form action="{{ route('pengiriman.export') }}" method="GET"> --}}
+                    {{-- <div class="form-group"> --}}
+                    {{-- <label for="">Export Pengiriman</label> --}}
+                    {{-- <input type="text" name="tanggal" id="tanggal" class="form-input" value="{{ old('tanggal') }}" /> --}}
+                    {{-- <button class="btn btn-primary" type="submit">Export</button> --}}
+                    {{-- </div> --}}
+                    {{-- </form> --}}
+                    {{-- <form action="{{ route('pengiriman.daily') }}" method="GET"> --}}
+                    {{-- <div class="form-group"> --}}
+                    {{-- <label for="">Pengiriman Daily</label> --}}
+                    {{-- <input type="date" name="tanggal" class="form-input" value="{{ old('tanggal') }}" /> --}}
+                    {{-- <button class="btn btn-primary" type="submit">Export</button> --}}
+                    {{-- </div> --}}
+                    {{-- </form> --}}
                     <div class="box-header">
                         <a href="{{ route('pengiriman.create') }}" class="btn btn-md bg-green">Tambah</a>
                     </div><!-- /.box-header -->

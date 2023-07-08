@@ -31,4 +31,9 @@ class BahanBaku extends Model
     {
         return $this->belongsTo(Satuan::class);
     }
+
+    public function pembelian()
+    {
+        return $this->hasMany(Pembelian::class);
+    }
 }

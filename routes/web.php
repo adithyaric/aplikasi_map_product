@@ -58,11 +58,22 @@ Route::middleware('auth')->group(function () {
     Route::resource('/penjualan', PenjualanController::class);
     Route::resource('/pengiriman', PengirimanController::class);
     Route::get('/pengiriman-export', [PengirimanController::class, 'pengirimanExport'])->name('pengiriman.export');
+    Route::get('/pengiriman-inout', [PengirimanController::class, 'pengirimaninout'])->name('pengiriman.inout');
     Route::get('/pengiriman-daily', [PengirimanController::class, 'pengirimanDaily'])->name('pengiriman.daily');
     Route::get('/pengiriman-nota', [PengirimanController::class, 'pengirimanNota'])->name('pengiriman.nota');
     Route::get('/pengiriman-solar', [PengirimanController::class, 'solar'])->name('pengiriman.solar');
     Route::put('/pengiriman-solar-update/{pengiriman}', [PengirimanController::class, 'solarUpdate'])->name('pengiriman.solar.update');
     Route::resource('/stock', StockController::class);
+
+    Route::get('/pembelianexport', function () {
+        return view('pembelian.export');
+    })->name('pembelian.exp');
+    Route::get('/projectexport', function () {
+        return view('project.export');
+    })->name('project.exp');
+    Route::get('/pengirimanexport', function () {
+        return view('pengiriman.export');
+    })->name('pengiriman.exp');
 
     Route::get('/projects/{project}/data', function (Project $project) {
         return [

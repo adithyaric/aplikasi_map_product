@@ -18,7 +18,7 @@
                     <div class="box-header">
                     </div><!-- /.box-header -->
                     <div class="box-body">
-                        <div id="chartTarget"></div>
+                        <!--<div id="chartTarget"></div>-->
                         <div id="chartCapaian"></div>
                     </div><!-- /.box-body -->
                     <div class="box-footer">
@@ -145,14 +145,14 @@
                             }
                         },
                         series: [{
-                            name: 'Targets',
-                            color: 'blue',
-                            data: targets.map(Number)
-                        }, {
-                            name: 'Capaian',
-                            color: 'red',
-                            data: entries.map(Number)
-                        }]
+                                name: 'Targets',
+                                color: '#f52288',
+                                data: targets.map(Number)
+                            }, {
+                                name: 'Capaian',
+                                color: '#22f5a8',
+                                data: entries.map(Number)
+                            }]
                     });
                 }
             });

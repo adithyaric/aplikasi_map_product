@@ -51,9 +51,9 @@
             <!-- Logo -->
             <a href="/" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>logo</b></span>
+                <span class="logo-mini"><b>TPE</b></span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>Inventory</b></span>
+                <span class="logo-lg"><b>TUBAN PRIMA ENERGI</b></span>
             </a>
 
             <!-- Header Navbar -->

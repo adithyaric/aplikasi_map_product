@@ -15,12 +15,12 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-                    <form action="{{ route('project.export') }}" method="GET">
-                        <div class="form-group">
-                            <input type="text" name="tanggal" id="tanggal" class="" value="{{ old('tanggal') }}" />
-                            <button class="btn btn-primary" type="submit">Export</button>
-                        </div>
-                    </form>
+                    {{-- <form action="{{ route('project.export') }}" method="GET"> --}}
+                    {{-- <div class="form-group"> --}}
+                    {{-- <input type="text" name="tanggal" id="tanggal" class="" value="{{ old('tanggal') }}" /> --}}
+                    {{-- <button class="btn btn-primary" type="submit">Export</button> --}}
+                    {{-- </div> --}}
+                    {{-- </form> --}}
                     <div class="box-header">
                         <a href="{{ route('project.create') }}" class="btn btn-md bg-green">Tambah</a>
                     </div><!-- /.box-header -->
@@ -58,7 +58,9 @@
                                         <form action="{{ route('projects.updateStatus', $value->id) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
-                                            <button class="border-0 btn btn-{{ $value->status === 'proses' ? 'primary' : 'success' }}" type="submit">{{ $value->status }}</button>
+                                            <button
+                                                class="border-0 btn btn-{{ $value->status === 'proses' ? 'primary' : 'success' }}"
+                                                type="submit">{{ $value->status }}</button>
                                         </form>
                                     </td>
                                     <td>
@@ -68,7 +70,8 @@
                                             style="display: inline;">
                                             @method('delete')
                                             @csrf
-                                            <button class="border-0 btn btn-danger" onclick="return confirm('Are you sure?')">Hapus</button>
+                                            <button class="border-0 btn btn-danger"
+                                                onclick="return confirm('Are you sure?')">Hapus</button>
                                         </form>
                                     </td>
                                 </tr>

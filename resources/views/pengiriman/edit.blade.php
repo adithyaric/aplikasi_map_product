@@ -19,8 +19,9 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label>penjualan</label>
-                                <select required class="form-control select2" name="penjualan_id"
+                                <select required class="form-control select2" name="penjualan_id" id="penjualan_id"
                                     data-placeholder="Pilih penjualan" style="width: 100%;">
+                                    <option value="null" selected disabled>Pilih Invoice Penjualan</option>
                                     @foreach ($penjualans as $penjualan)
                                         <option value="{{ $penjualan->id }}"
                                             {{ old('penjualan_id', $pengiriman->penjualan_id) == $penjualan->id ? 'selected' : '' }}>
@@ -43,9 +44,9 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Jumlah Product</label>
-                                <input required type="text" class="form-control" name="jml_product"
+                                <input type="text" class="form-control" name="jml_product" id="jml_product"
                                     value="{{ old('jml_product', $pengiriman->jml_product) }}"
-                                    placeholder="Masukkan Jumlah Product">
+                                    placeholder="Masukkan Jumlah Product" readonly>
                                 @error('jml_product')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -145,3 +146,17 @@
         </div>
     </section>
 @endsection
+@section('page-script')
+    <script>
+        $(document).ready(function() {
+            $('#penjualan_id').on('change', function() {
+                var penjualanId = $(this).val();
+
+                $.get('/penjualans/' + penjualanId + '/data', function(data) {
+                    $('#jml_product').val(data.total_barang);
+                });
+            });
+        });
+    </script>
+@endsection
+
