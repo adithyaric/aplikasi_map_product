@@ -27,6 +27,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+        $data['harga'] = str_replace(',', '', $data['harga']);
         $product = Product::create([
             'name' => $data['name'],
             'harga' => $data['harga'],
@@ -55,7 +56,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->all();
-        // dd($data);
+        $data['harga'] = str_replace(',', '', $data['harga']);
         $product->update([
             'name' => $data['name'],
             'harga' => $data['harga'],

@@ -20,7 +20,8 @@
                             <div class="form-group">
                                 <label for="">No Invoice</label>
                                 <input required type="text" class="form-control" name="no_invoice"
-                                    value="{{ old('no_invoice', $penjualan->no_invoice) }}" placeholder="Masukkan no_invoice">
+                                    value="{{ old('no_invoice', $penjualan->no_invoice) }}"
+                                    placeholder="Masukkan no_invoice">
                                 @error('no_invoice')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -59,11 +60,11 @@
                             <div class="form-group">
                                 <label for="">Harga Product</label>
                                 <input readonly type="text" class="form-control" name="harga" id="product-price"
-                                value="{{ old('harga', $penjualan->harga) }}" placeholder="Masukkan Harga">
+                                    value="{{ old('harga', $penjualan->harga) }}" placeholder="Masukkan Harga">
                                 @error('harga')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
                                 @enderror
                             </div>
                             <div class="form-group">
@@ -79,7 +80,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Diskon</label>
-                                <input type="text" class="form-control" name="diskon" id="diskon"
+                                <input type="text" class="numeral-mask form-control" name="diskon" id="diskon"
                                     value="{{ old('diskon', $penjualan->diskon) }}" placeholder="Masukkan diskon">
                                 @error('diskon')
                                     <div class="invalid-feedback">
@@ -138,12 +139,17 @@
     </section>
 @endsection
 @section('page-script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('.numeral-mask').mask("#,##0", {
+                reverse: true
+            });
+
             $('#project-select').on('change', function() {
                 var projectId = $(this).val();
 
-                 $.get('/projects/' + projectId + '/data', function(data) {
+                $.get('/projects/' + projectId + '/data', function(data) {
                     $('#product-price').val(data.harga);
                     $('#project-capaian').val(data.capaian);
                 });
@@ -152,7 +158,8 @@
             $('#total-barang, #diskon').on('input', function() {
                 var totalBarang = parseInt($('#total-barang').val()) || 0;
                 var harga = parseInt($('#product-price').val()) || 0;
-                var diskon = parseInt($('#diskon').val()) || 0;
+                // var diskon = parseInt($('#diskon').val()) || 0;
+                var diskon = parseInt($('#diskon').val().replace(/,/g, '')) || 0;
 
                 var total = (totalBarang * harga) - diskon;
                 $('#total').val(total);

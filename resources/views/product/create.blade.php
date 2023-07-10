@@ -17,22 +17,23 @@
                         @csrf
                         <div class="box-body">
                             {{-- <div class="form-group"> --}}
-                                {{-- <label>Bahan Baku Product</label> --}}
-                                {{-- <select required class="form-control" name="bahanbaku[]" --}}
-                                    {{-- data-placeholder="Pilih Bahan Baku Product" style="width: 100%;" multiple> --}}
-                                    {{-- @foreach ($bahanbakus as $bahanbaku) --}}
-                                        {{-- <option value="{{ $bahanbaku->id }}">{{ $bahanbaku->name }} --}}
-                                        {{-- </option> --}}
-                                    {{-- @endforeach --}}
-                                {{-- </select> --}}
+                            {{-- <label>Bahan Baku Product</label> --}}
+                            {{-- <select required class="form-control" name="bahanbaku[]" --}}
+                            {{-- data-placeholder="Pilih Bahan Baku Product" style="width: 100%;" multiple> --}}
+                            {{-- @foreach ($bahanbakus as $bahanbaku) --}}
+                            {{-- <option value="{{ $bahanbaku->id }}">{{ $bahanbaku->name }} --}}
+                            {{-- </option> --}}
+                            {{-- @endforeach --}}
+                            {{-- </select> --}}
                             {{-- </div> --}}
                             <div class="form-group">
                                 <label>Kategori</label>
-                                <select required class="form-control select2" name="category_id" data-placeholder="Pilih Kategori"
-                                    style="width: 100%;">
+                                <select required class="form-control select2" name="category_id"
+                                    data-placeholder="Pilih Kategori" style="width: 100%;">
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}"
-                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}
+                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -70,7 +71,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Harga Product</label>
-                                <input required type="text" class="form-control" name="harga"
+                                <input required type="text" class="numeral-mask form-control" name="harga"
                                     value="{{ old('harga') }}" placeholder="Masukkan Harga Product">
                                 @error('harga')
                                     <div class="invalid-feedback">
@@ -91,12 +92,20 @@
     </section>
 @endsection
 @section('page-script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
-let bahanbakuIndex = 0;
+        $(document).ready(function() {
+            $('.numeral-mask').mask("#,##0", {
+                reverse: true
+            });
+        });
+    </script>
+    <script>
+        let bahanbakuIndex = 0;
 
-function addBahanBaku() {
-    bahanbakuIndex++;
-    let bahanbakuTemplate = `
+        function addBahanBaku() {
+            bahanbakuIndex++;
+            let bahanbakuTemplate = `
         <div class="form-group">
             <label>Bahan Baku Product</label>
             <select required class="form-control" name="bahanbaku[${bahanbakuIndex}][bahan_baku_id]"
@@ -111,7 +120,7 @@ function addBahanBaku() {
             <input type="number" required class="form-control" name="bahanbaku[${bahanbakuIndex}][total]">
         </div>
     `;
-    $('#bahanbaku-repeater').append(bahanbakuTemplate);
-}
+            $('#bahanbaku-repeater').append(bahanbakuTemplate);
+        }
     </script>
 @endsection

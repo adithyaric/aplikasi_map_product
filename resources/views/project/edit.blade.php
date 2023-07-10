@@ -63,7 +63,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Hari Toleransi</label>
-                                <input type="text" class="form-control datepicker" name="dates" data-date-format="yyyy-mm-dd">
+                                <input type="text" class="form-control datepicker" name="dates"
+                                    data-date-format="yyyy-mm-dd">
                                 @error('hari_toleransi')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -83,7 +84,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Harga Project</label>
-                                <input required type="text" class="form-control" name="harga"
+                                <input required type="text" class="numeral-mask form-control" name="harga"
                                     value="{{ old('harga', $project->harga) }}" placeholder="Masukkan Harga Project">
                                 @error('harga')
                                     <div class="invalid-feedback">
@@ -93,7 +94,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Untuk Pengecoran</label>
-                                <input type="text" class="form-control" name="untuk_pengecoran" value="{{ old('untuk_pengecoran', $project->untuk_pengecoran) }}">
+                                <input type="text" class="form-control" name="untuk_pengecoran"
+                                    value="{{ old('untuk_pengecoran', $project->untuk_pengecoran) }}">
                                 @error('untuk_pengecoran')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -102,7 +104,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Lokasi Pengecoran</label>
-                                <input type="text" class="form-control" name="lokasi_pengecoran" value="{{ old('lokasi_pengecoran', $project->lokasi_pengecoran) }}">
+                                <input type="text" class="form-control" name="lokasi_pengecoran"
+                                    value="{{ old('lokasi_pengecoran', $project->lokasi_pengecoran) }}">
                                 @error('lokasi_pengecoran')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -111,7 +114,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Slump Permintaan</label>
-                                <input type="text" class="form-control" name="slump_permintaan" value="{{ old('slump_permintaan', $project->slump_permintaan) }}">
+                                <input type="text" class="form-control" name="slump_permintaan"
+                                    value="{{ old('slump_permintaan', $project->slump_permintaan) }}">
                                 @error('slump_permintaan')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -134,6 +138,14 @@
     $dates = explode(' - ', $project->durasi);
 @endphp
 @section('page-script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.numeral-mask').mask("#,##0", {
+                reverse: true
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {
             var startDate = @json($dates[0]);

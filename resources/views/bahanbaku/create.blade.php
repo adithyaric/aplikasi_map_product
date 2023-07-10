@@ -18,8 +18,8 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label>Satuan Bahan Baku</label>
-                                <select required class="form-control select2" name="satuan_id" data-placeholder="Pilih Satuan Bahan Baku"
-                                    style="width: 100%;">
+                                <select required class="form-control select2" name="satuan_id"
+                                    data-placeholder="Pilih Satuan Bahan Baku" style="width: 100%;">
                                     @foreach ($satuans as $satuan)
                                         <option value="{{ $satuan->id }}"
                                             {{ old('satuan_id') == $satuan->id ? 'selected' : '' }}>{{ $satuan->name }}
@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Harga Bahan Baku</label>
-                                <input required type="text" class="form-control" name="harga"
+                                <input required type="text" class="numeral-mask form-control" name="harga"
                                     value="{{ old('harga') }}" placeholder="Masukkan Harga Bahan Baku">
                                 @error('harga')
                                     <div class="invalid-feedback">
@@ -68,4 +68,14 @@
             </div>
         </div>
     </section>
+@endsection
+@section('page-script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.numeral-mask').mask("#,##0", {
+                reverse: true
+            });
+        });
+    </script>
 @endsection

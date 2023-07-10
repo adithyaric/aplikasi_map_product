@@ -18,19 +18,19 @@
                         @csrf
                         <div class="box-body">
                             {{-- <div class="form-group"> --}}
-                                {{-- <label>Bahan Baku Product</label> --}}
-                                {{-- <select required class="form-control select2" name="bahanbaku[]" --}}
-                                    {{-- data-placeholder="Pilih Bahan Baku Product" style="width: 100%;" multiple> --}}
-                                    {{-- @foreach ($bahanbakus as $bahanbaku) --}}
-                                        {{-- <option value="{{ $bahanbaku->id }}" --}}
-                                            {{-- @foreach ($product->bahanbaku as $value) --}}
-                                {{-- @if ($value->id == $bahanbaku->id) --}}
-                                {{-- selected --}}
-                                {{-- @endif @endforeach> --}}
-                                            {{-- {{ $bahanbaku->name }} --}}
-                                        {{-- </option> --}}
-                                    {{-- @endforeach --}}
-                                {{-- </select> --}}
+                            {{-- <label>Bahan Baku Product</label> --}}
+                            {{-- <select required class="form-control select2" name="bahanbaku[]" --}}
+                            {{-- data-placeholder="Pilih Bahan Baku Product" style="width: 100%;" multiple> --}}
+                            {{-- @foreach ($bahanbakus as $bahanbaku) --}}
+                            {{-- <option value="{{ $bahanbaku->id }}" --}}
+                            {{-- @foreach ($product->bahanbaku as $value) --}}
+                            {{-- @if ($value->id == $bahanbaku->id) --}}
+                            {{-- selected --}}
+                            {{-- @endif @endforeach> --}}
+                            {{-- {{ $bahanbaku->name }} --}}
+                            {{-- </option> --}}
+                            {{-- @endforeach --}}
+                            {{-- </select> --}}
                             {{-- </div> --}}
                             <div class="form-group">
                                 <label>Kategori Bahan Baku</label>
@@ -50,16 +50,20 @@
                                     @foreach ($product->bahanbaku as $key => $bb)
                                         <div class="form-group">
                                             <label>Bahan Baku Product</label>
-                                            <select required class="form-control" name="bahanbaku[{{ $key }}][bahan_baku_id]"
+                                            <select required class="form-control"
+                                                name="bahanbaku[{{ $key }}][bahan_baku_id]"
                                                 data-placeholder="Pilih Bahan Baku Product" style="width: 100%;">
                                                 @foreach ($bahanbakus as $bahanbaku)
-                                                    <option @if ($bb->id == $bahanbaku->id) selected @endif value="{{ $bahanbaku->id }}">{{ $bahanbaku->name }}</option>
+                                                    <option @if ($bb->id == $bahanbaku->id) selected @endif
+                                                        value="{{ $bahanbaku->id }}">{{ $bahanbaku->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label>Total</label>
-                                            <input type="number" required class="form-control" name="bahanbaku[{{ $key }}][total]" value="{{ $bb->pivot->total }}">
+                                            <input type="number" required class="form-control"
+                                                name="bahanbaku[{{ $key }}][total]"
+                                                value="{{ $bb->pivot->total }}">
                                         </div>
                                     @endforeach
                                 </div>
@@ -79,7 +83,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Harga Product</label>
-                                <input required type="text" class="form-control" name="harga"
+                                <input required type="text" class="numeral-mask form-control" name="harga"
                                     value="{{ old('harga', $product->harga) }}" placeholder="Masukkan Harga Product">
                                 @error('harga')
                                     <div class="invalid-feedback">
@@ -100,12 +104,20 @@
     </section>
 @endsection
 @section('page-script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
-let bahanbakuIndex = @json($key) + 1;
+        $(document).ready(function() {
+            $('.numeral-mask').mask("#,##0", {
+                reverse: true
+            });
+        });
+    </script>
+    <script>
+        let bahanbakuIndex = @json($key) + 1;
 
-function addBahanBaku() {
-    bahanbakuIndex++;
-    let bahanbakuTemplate = `
+        function addBahanBaku() {
+            bahanbakuIndex++;
+            let bahanbakuTemplate = `
         <div class="form-group">
             <label>Bahan Baku Product</label>
             <select required class="form-control" name="bahanbaku[${bahanbakuIndex}][bahan_baku_id]"
@@ -120,7 +132,7 @@ function addBahanBaku() {
             <input type="number" required class="form-control" name="bahanbaku[${bahanbakuIndex}][total]">
         </div>
     `;
-    $('#bahanbaku-repeater').append(bahanbakuTemplate);
-}
+            $('#bahanbaku-repeater').append(bahanbakuTemplate);
+        }
     </script>
 @endsection

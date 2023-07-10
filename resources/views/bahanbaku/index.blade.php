@@ -34,7 +34,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->name }}</td>
-                                    <td>{{ $value->harga }}</td>
+                                    <td>@currency($value->harga)</td>
                                     <td>{{ $value->stock }}</td>
                                     <td>{{ $value->satuan->name }}</td>
                                     <td>

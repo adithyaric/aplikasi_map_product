@@ -18,7 +18,9 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="">No Invoice</label>
-                                <input required type="text" class="form-control" name="no_invoice" value="{{ old('no_invoice', $formatted_no_invoice) }}" placeholder="Masukkan no_invoice">
+                                <input required type="text" class="form-control" name="no_invoice"
+                                    value="{{ old('no_invoice', $formatted_no_invoice) }}"
+                                    placeholder="Masukkan no_invoice">
                                 @error('no_invoice')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -56,11 +58,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Harga Product</label>
-                                <input type="number" name="harga" id="product-price" class="form-control" readonly>
+                                <input type="number" name="harga" id="product-price" class="form-control"
+                                    readonly>
                             </div>
                             <div class="form-group">
                                 <label for="">Total Barang</label>
-                                <input required id="total-barang" type="text" class="form-control" name="total_barang" value="{{ old('total_barang') }}" placeholder="Masukkan Total Barang">
+                                <input required id="total-barang" type="text" class="form-control" name="total_barang"
+                                    value="{{ old('total_barang') }}" placeholder="Masukkan Total Barang">
                                 @error('total_barang')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -78,7 +82,8 @@
                             {{-- </div> --}}
                             <div class="form-group">
                                 <label for="">Diskon</label>
-                                <input id="diskon" type="text" class="form-control" name="diskon" value="{{ old('diskon', 0) }}" placeholder="Masukkan diskon">
+                                <input id="diskon" type="text" class="form-control numeral-mask" name="diskon"
+                                    value="{{ old('diskon', 0) }}" placeholder="Masukkan diskon">
                                 @error('diskon')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -87,7 +92,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Total</label>
-                                <input required id="total" type="text" class="form-control" name="total" value="{{ old('total') }}" placeholder="Masukkan Total" readonly>
+                                <input required id="total" type="text" class="form-control" name="total"
+                                    value="{{ old('total') }}" placeholder="Masukkan Total" readonly>
                                 @error('total')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -132,21 +138,28 @@
     </section>
 @endsection
 @section('page-script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('.numeral-mask').mask("#,##0", {
+                reverse: true
+            });
+
             $('#project-select').on('change', function() {
                 var projectId = $(this).val();
 
-                 $.get('/projects/' + projectId + '/data', function(data) {
+                $.get('/projects/' + projectId + '/data', function(data) {
                     $('#product-price').val(data.harga);
                     $('#project-capaian').val(data.capaian);
                 });
             });
 
+
             $('#total-barang, #diskon').on('input', function() {
                 var totalBarang = parseInt($('#total-barang').val()) || 0;
                 var harga = parseInt($('#product-price').val()) || 0;
-                var diskon = parseInt($('#diskon').val()) || 0;
+                // var diskon = parseInt($('#diskon').val()) || 0;
+                var diskon = parseInt($('#diskon').val().replace(/,/g, '')) || 0;
 
                 var total = (totalBarang * harga) - diskon;
                 $('#total').val(total);

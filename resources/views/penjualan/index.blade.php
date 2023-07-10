@@ -38,7 +38,7 @@
                                     <td>{{ $value->customer->name }}</td>
                                     <td>{{ $value->project->keterangan }}</td>
                                     <td>{{ $value->project->product->name }}</td>
-                                    <td>{{ $value->total }}</td>
+                                    <td>@currency($value->total)</td>
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('penjualan.edit', $value->id) }}">Edit</a>
                                         <form action="{{ route('penjualan.destroy', $value->id) }}" method="post"

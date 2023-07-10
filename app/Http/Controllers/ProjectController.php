@@ -82,6 +82,7 @@ class ProjectController extends Controller
         ]);
 
         $data = $this->olahData($data, $request);
+        $data['harga'] = str_replace(',', '', $data['harga']);
         $project = Project::create($data);
         foreach ($data['target_jml_product_each_days'] as $target) {
             $project->targets()->create($target);
@@ -149,6 +150,7 @@ class ProjectController extends Controller
         ]);
 
         $data = $this->olahData($data, $request);
+        $data['harga'] = str_replace(',', '', $data['harga']);
         $project->update($data);
         $project->targets()->delete();
         foreach ($data['target_jml_product_each_days'] as $target) {

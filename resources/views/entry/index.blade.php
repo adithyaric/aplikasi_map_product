@@ -32,7 +32,7 @@
                             @foreach ($projects as $value)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td></td>
+                                    <td>{{ $value->customer->name }}</td>
                                     <td>{{ $value->product->name }}</td>
                                     <td>{{ $value->jml_product }}</td>
                                     <td>

@@ -30,6 +30,7 @@ class PembelianController extends Controller
     public function store(PembelianRequest $request)
     {
         $data = $request->validated();
+        $data['harga'] = str_replace(',', '', $data['harga']);
         Pembelian::create($data);
         $bahanBaku = BahanBaku::find($request->bahan_baku_id);
         $bahanBaku->stock += $request->jumlah;
@@ -55,6 +56,7 @@ class PembelianController extends Controller
     public function update(PembelianRequest $request, Pembelian $pembelian)
     {
         $data = $request->validated();
+        $data['harga'] = str_replace(',', '', $data['harga']);
         $pembelian->update($data);
 
         return redirect(route('pembelian.index'))->with('toast_success', 'Berhasil Menyimpan Data!');

@@ -27,6 +27,7 @@ class BahanBakuController extends Controller
     public function store(BahanBakuRequest $request)
     {
         $data = $request->validated();
+        $data['harga'] = str_replace(',', '', $data['harga']);
         BahanBaku::create($data);
 
         return redirect(route('bahanbaku.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
@@ -49,6 +50,7 @@ class BahanBakuController extends Controller
     public function update(BahanBakuRequest $request, $bahanBaku)
     {
         $data = $request->validated();
+        $data['harga'] = str_replace(',', '', $data['harga']);
         $bahanBaku = BahanBaku::find($bahanBaku);
         $bahanBaku->update($data);
 
