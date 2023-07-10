@@ -20,7 +20,7 @@
                             <thead>
                                 <tr>
                                     <td>No</td>
-                                    <td>Nama Kustomer</td>
+                                    <td>Nama Customer</td>
                                     <td>Nama Product</td>
                                     <td>Jumlah Product</td>
                                     <td>Durasi</td>
@@ -47,7 +47,9 @@
                                     <td>{{ $value->keterangan }}</td>
                                     <td>{{ $value->entries->sum('capaian') }}</td>
                                     <td>
+                                        @if(auth()->user()->role != 'Owner')
                                         <a class="btn btn-primary" href="{{ route('entry.create', ['project_id' => $value->id]) }}">Input</a>
+                                        @endif
                                         <a class="btn btn-info" href="{{ route('entry.show', $value->id) }}">Show</a>
                                     </td>
                                 </tr>

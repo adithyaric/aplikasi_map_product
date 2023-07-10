@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Route::middleware('auth')->group(function () {
@@ -65,15 +65,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/pengiriman-solar-update/{pengiriman}', [PengirimanController::class, 'solarUpdate'])->name('pengiriman.solar.update');
     Route::resource('/stock', StockController::class);
 
-    Route::get('/pembelianexport', function () {
-        return view('pembelian.export');
-    })->name('pembelian.exp');
-    Route::get('/projectexport', function () {
-        return view('project.export');
-    })->name('project.exp');
-    Route::get('/pengirimanexport', function () {
-        return view('pengiriman.export');
-    })->name('pengiriman.exp');
+    Route::get('/pembelianexport', [PembelianController::class, 'indexReport'])->name('pembelian.exp');
+    Route::get('/projectexport', [ProjectController::class, 'indexReport'])->name('project.exp');
+    Route::get('/pengirimanexport', [PengirimanController::class, 'indexReport'])->name('pengiriman.exp');
 
     Route::get('/projects/{project}/data', function (Project $project) {
         return [

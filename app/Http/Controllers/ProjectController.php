@@ -58,6 +58,13 @@ class ProjectController extends Controller
         return view('project.index', compact('projects'));
     }
 
+    public function indexReport()
+    {
+        $projects = Project::get();
+
+        return view('project.export', compact('projects'));
+    }
+
     public function create()
     {
         return view('project.create', [

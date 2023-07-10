@@ -12,7 +12,15 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">Tambah Entry</h3>
                     </div><!-- /.box-header -->
-                    <table id="example1" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Nama Customer</th>
+                            <td>{{ $project->customer->name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Product</th>
+                            <td>{{ $project->product->name }} ({{ $project->product->category->name }})</td>
+                        </tr>
                         <tr>
                             <th>Durasi</th>
                             <td>
@@ -34,42 +42,52 @@
                             <td>{{ $project->jml_product }}</td>
                         </tr>
                         <tr>
-                            <th>No</th>
-                            <th>Tanggal</th>
-                            <th>Banyak Capaian</th>
-                            <th>Aksi</th>
-                        </tr>
-                        @foreach ($project->entries->sortBy('day') as $value)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <th>
-                                    {{ \Carbon\Carbon::parse($value->day)->format('d-m-Y') }}
-                                </th>
-                                <td>
-                                    {{ $value->capaian }}
-                                </td>
-                                <td>
-                                    <form action="{{ route('entry.destroy', $value->id) }}" method="post"
-                                        style="display: inline;">
-                                        @method('delete')
-                                        @csrf
-                                        <button class="border-0 btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you sure?')">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                        <tr>
-                            <th colspan="2">Total</th>
-                            <td>{{ $project->entries->sum('capaian') }}</td>
+                            <th>Total Capaian</th>
+                            <td colspan="3">{{ $project->entries->sum('capaian') }}</td>
                         </tr>
                         <tr>
-                            <th colspan="2">Produk Tersisa</th>
-                            <td>
+                            <th>Produk Terkirim</th>
+                            <td colspan="3">
+                                {{ $project->penjualan->sum('total_barang') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Produk Tersisa</th>
+                            <td colspan="3">
                                 {{ $project->entries->sum('capaian') - $project->penjualan->sum('total_barang') }}
                             </td>
                         </tr>
-                    </table>
+                    </table><br />
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Banyak Capaian</th>
+                                <th>Aksi</th>
+                            </thead>
+                            @foreach ($project->entries->sortBy('day') as $value)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <th>
+                                        {{ \Carbon\Carbon::parse($value->day)->format('d-m-Y') }}
+                                    </th>
+                                    <td>
+                                        {{ $value->capaian }}
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('entry.destroy', $value->id) }}" method="post"
+                                            style="display: inline;">
+                                            @method('delete')
+                                            @csrf
+                                            <button class="border-0 btn btn-sm btn-danger"
+                                                onclick="return confirm('Are you sure?')">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
 
                     <!-- form start -->
                     <form action="{{ route('entry.store') }}" method="POST">

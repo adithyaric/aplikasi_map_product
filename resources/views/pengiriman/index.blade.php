@@ -48,7 +48,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->penjualan->no_invoice }}</td>
                                     <td>{{ $value->driver->name }}</td>
-                                    <td>{{ $value->status }}</td>
+                                    <td>{{ strtoupper($value->status) }}</td>
                                     <td>
                                         <a class="btn btn-warning"
                                             href="{{ route('pengiriman.edit', $value->id) }}">Edit</a>

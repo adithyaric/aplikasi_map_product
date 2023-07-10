@@ -20,7 +20,7 @@
         <ul class="sidebar-menu">
             <!-- Optionally, you can add icons to the links -->
             <li class=""><a href="/dashboard"><i class="fa fa-tachometer"></i> <span>Dashboard</span></a></li>
-
+        @if(auth()->user()->role == 'Administrasi')
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-server"></i> <span>Master Data</span> <i class="fa fa-angle-left pull-right"></i>
@@ -45,16 +45,18 @@
                 </ul>
             </li>
 
-            <li><a href="{{ route('pembelian.index') }}"><i class="fa fa-exchange"></i> Purchase</a></li>
+            <li><a href="{{ route('pembelian.index') }}"><i class="fa fa-exchange"></i> <span>Purchase</span></a></li>
 
-            <li><a href="{{ route('penjualan.index') }}"><i class="fa fa-shopping-cart"></i> Orders</a></li>
+            <li><a href="{{ route('penjualan.index') }}"><i class="fa fa-shopping-cart"></i> <span>Orders</span></a></li>
 
-            <li><a href="{{ route('pengiriman.index') }}"><i class="fa fa-send"></i> Delivery</a></li>
+            <li><a href="{{ route('pengiriman.index') }}"><i class="fa fa-send"></i> <span>Delivery</span></a></li>
+            @endif
+        @if(auth()->user()->role == 'Administrasi' || auth()->user()->role == 'Owner')
+            <li><a href="{{ route('project.index') }}"><i class="fa fa-bookmark"></i> <span>Projects</span></a></li>
 
-            <li><a href="{{ route('project.index') }}"><i class="fa fa-bookmark"></i> Projects</a></li>
-
-            <li><a href="{{ route('entry.index') }}"><i class="fa fa-bar-chart"></i> Daily Targets</a></li>
-
+            <li><a href="{{ route('entry.index') }}"><i class="fa fa-bar-chart"></i> <span>Daily Targets</span></a></li>
+        @endif
+        @if(auth()->user()->role == 'Administrasi' || auth()->user()->role == 'Finance')
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-print"></i> <span>Report</span> <i class="fa fa-angle-left pull-right"></i>
@@ -66,6 +68,7 @@
                     <li><a href="{{ route('pengiriman.inout') }}"><i class="fa fa-print"></i> Export Delivery In Out</a></li>
                 </ul>
             </li>
+            @endif
 
         </ul><!-- /.sidebar-menu -->
     </section>

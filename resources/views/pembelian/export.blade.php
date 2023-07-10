@@ -15,12 +15,56 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-                    <form action="{{ route('pembelian.export') }}" method="GET">
-                        <div class="form-group">
-                            <input type="text" name="tanggal" id="tanggal" class="" value="{{ old('tanggal') }}" />
-                            <button class="btn btn-primary" type="submit">Export</button>
+                    <!--Modals Satu-->
+                    <button class="btn btn-success" data-toggle="modal" data-target="#myModal"><i class="fa fa-print"></i> Purchase Report</button>
+                    <div id="myModal" class="modal fade" role="dialog">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title">Purchase Report</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+                          <div class="modal-body">
+                            <p>Pilih Tanggal Untuk Mencetak Laporan</p>
+                            
+                            <form action="{{ route('pembelian.export') }}" method="GET">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Pilih Tanggal" name="tanggal" id="tanggal" class="form-control" value="{{ old('tanggal') }}" />
+                                    </div>
+                          </div>
+                          <div class="modal-footer">
+                              
+                              <button class="btn btn-primary" type="submit">Export</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                                </form>
+                          </div>
                         </div>
-                    </form>
+                      </div>
+                    </div>
+                    <!--End Modal Satu-->
+                    
+                    <div class="box-body table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td>No</td>
+                                    <td>Nama Bahan Baku</td>
+                                    <td>Jumlah</td>
+                                    <td>Keterangan</td>
+                                    <td>Tgl</td>
+                                </tr>
+                            </thead>
+                            @foreach ($pembelians as $value)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $value->bahanbaku->name }}</td>
+                                    <td>{{ $value->jumlah }}</td>
+                                    <td>{{ $value->keterangan }}</td>
+                                    <td>{{ $value->tgl_dibuat }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div><!-- /.box-body -->
                 </div><!-- /.box -->
             </div><!-- /.col -->
         </div><!-- /.row -->

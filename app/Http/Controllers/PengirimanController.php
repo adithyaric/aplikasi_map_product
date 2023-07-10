@@ -25,6 +25,13 @@ class PengirimanController extends Controller
         return view('pengiriman.index', compact('pengirimans'));
     }
 
+    public function indexReport()
+    {
+        $pengirimans = Pengiriman::get();
+
+        return view('pengiriman.export', compact('pengirimans'));
+    }
+
     public function create()
     {
         return view('pengiriman.create', [

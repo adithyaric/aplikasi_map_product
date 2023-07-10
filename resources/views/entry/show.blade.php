@@ -19,6 +19,56 @@
                     </div><!-- /.box-header -->
                     <div class="box-body">
                         <!--<div id="chartTarget"></div>-->
+                        <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Nama Customer</th>
+                            <td>{{ $project->customer->name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Product</th>
+                            <td>{{ $project->product->name }} ({{ $project->product->category->name }})</td>
+                        </tr>
+                        <tr>
+                            <th>Harga Project</th>
+                            <td>{{ $project->harga }}</td>
+                        </tr>
+                        <tr>
+                            <th>Durasi</th>
+                            <td>
+                                @php
+                                    $dates = explode(' - ', $project->durasi);
+                                    $start_date = \Carbon\Carbon::parse($dates[0])->format('d-m-Y');
+                                    $end_date = \Carbon\Carbon::parse($dates[1])->format('d-m-Y');
+                                @endphp
+
+                                {{ $start_date }} - {{ $end_date }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Banyak Hari Toleransi</th>
+                            <td>{{ count(json_decode($project->hari_toleransi)) }}</td>
+                        </tr>
+                        <tr>
+                            <th>Target Keseluruhan</th>
+                            <td>{{ $project->jml_product }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total Capaian</th>
+                            <td colspan="3">{{ $project->entries->sum('capaian') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Produk Terkirim</th>
+                            <td colspan="3">
+                                {{ $project->penjualan->sum('total_barang') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Produk Tersisa</th>
+                            <td colspan="3">
+                                {{ $project->entries->sum('capaian') - $project->penjualan->sum('total_barang') }}
+                            </td>
+                        </tr>
+                    </table><br />
                         <div id="chartCapaian"></div>
                     </div><!-- /.box-body -->
                     <div class="box-footer">

@@ -19,6 +19,13 @@ class PembelianController extends Controller
         return view('pembelian.index', compact('pembelians'));
     }
 
+    public function indexReport()
+    {
+        $pembelians = Pembelian::get();
+
+        return view('pembelian.export', compact('pembelians'));
+    }
+
     public function create()
     {
         return view('pembelian.create', [
