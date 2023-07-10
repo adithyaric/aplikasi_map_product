@@ -30,7 +30,9 @@
                                 <tr>
                                     <td>No</td>
                                     <td>Nama Bahan Baku</td>
+                                    <td>Jumlah</td>
                                     <td>Keterangan</td>
+                                    <td>Tgl</td>
                                     <td>Aksi</td>
                                 </tr>
                             </thead>
@@ -38,7 +40,9 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->bahanbaku->name }}</td>
+                                    <td>{{ $value->jumlah }}</td>
                                     <td>{{ $value->keterangan }}</td>
+                                    <td>{{ $value->tgl_dibuat }}</td>
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('pembelian.edit', $value->id) }}">Edit</a>
                                         <form action="{{ route('pembelian.destroy', $value->id) }}" method="post"

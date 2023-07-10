@@ -14,7 +14,7 @@ class ExportStockInOut implements FromView
     {
         // dd(Pengiriman::get()->groupBy('tgl_pengiriman')->toArray());
         return view('stock.export', [
-            'pengirimans' => Pengiriman::get(),
+            'pengirimans' => Pengiriman::get()->sortBy('tgl_pengiriman'),
             'categories' => Category::get(),
             'bahanbakus' => BahanBaku::get(),
         ]);

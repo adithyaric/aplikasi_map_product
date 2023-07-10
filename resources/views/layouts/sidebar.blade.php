@@ -61,8 +61,9 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="{{ route('pembelian.exp') }}"><i class="fa fa-print"></i> Export Purchase</a></li>
-                    <li><a href="{{ route('pengiriman.exp') }}"><i class="fa fa-print"></i> Export Delivery</a></li>
                     <li><a href="{{ route('project.exp') }}"><i class="fa fa-print"></i> Export Projects</a></li>
+                    <li><a href="{{ route('pengiriman.exp') }}"><i class="fa fa-print"></i> Export Delivery</a></li>
+                    <li><a href="{{ route('pengiriman.inout') }}"><i class="fa fa-print"></i> Export Delivery In Out</a></li>
                 </ul>
             </li>
 
