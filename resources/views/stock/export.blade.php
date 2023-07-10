@@ -23,6 +23,7 @@
                 <th rowspan="2">TGL</th>
                 <th rowspan="2">PROD KE</th>
                 <th rowspan="2">RIT</th>
+                <th rowspan="2">No. TM</th>
                 <th rowspan="2">No. Order Penjualan</th>
                 <th rowspan="2">Jam Pengiriman</th>
                 <th colspan="{{ $categories->count() }}">Mutu (M3)</th>
@@ -59,6 +60,7 @@
                     @endif
                     <td>{{ $counter++ }}</td>
                     <td>{{ $pengiriman->rit }}</td>
+                    <td>{{ $pengiriman->driver->no_plat }}</td>
                     <td>{{ $pengiriman->penjualan->no_invoice }}</td>
                     <td>{{ $pengiriman->jam }}</td>
                     @foreach ($categories as $category)

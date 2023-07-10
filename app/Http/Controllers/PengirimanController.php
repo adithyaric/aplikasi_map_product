@@ -119,7 +119,7 @@ class PengirimanController extends Controller
 
     public function pengirimanDaily(Request $request)
     {
-        return Excel::download(new ExportDaily($request->input('tanggal')), 'pengiriman.xlsx');
+        return Excel::download(new ExportDaily($request->input('tanggal')), 'pengiriman_'.Carbon::parse($request->tanggal)->format('d-m-Y').'.xlsx');
     }
 
     public function pengirimaninout(Request $request)

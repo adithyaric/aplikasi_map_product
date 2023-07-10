@@ -3,11 +3,13 @@
 namespace App\Exports;
 
 use App\Models\Pembelian;
-use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 
-class ExportPembelian implements FromQuery, WithHeadings, WithMapping
+class ExportPembelian implements FromView, WithEvents
 {
     protected $startDate;
 
@@ -19,41 +21,72 @@ class ExportPembelian implements FromQuery, WithHeadings, WithMapping
         $this->endDate = $endDate;
     }
 
-    public function query()
+    public function view(): View
     {
-        return Pembelian::query()
-            ->with(['bahanbaku', 'category'])
-            ->whereBetween('tgl_dibuat', [$this->startDate, $this->endDate]);
+        return view('pembelians.export', [
+            'pembelians' => Pembelian::query()
+                ->with(['bahanbaku', 'category'])
+                ->whereBetween('tgl_dibuat', [$this->startDate, $this->endDate])
+                ->get(),
+            'startDate' => Carbon::parse($this->startDate)->format('d-m-Y'),
+            'endDate' => Carbon::parse($this->endDate)->format('d-m-Y'),
+        ]);
     }
 
-    public function headings(): array
+    public function registerEvents(): array
     {
-        return [
-            'Tanggal : '.$this->startDate.' - '.$this->endDate,
-            'No',
-            'TGL',
-            'Nama Bahan Baku',
-            'Jumlah',
-            'Satuan',
-            'Harga',
-            'Total',
-            'Ket',
+        $sheetRanges = [
+            'A1:H9', //Center
+            'A2:H2', //Bold
+            'A6:H6', //Bold
+            'A9:H9', //Fill blue
         ];
-    }
 
-    public function map($Pembelian): array
-    {
-        // dd($Pembelian->bahanbaku->product->toArray());
         return [
-            '',
-            $Pembelian->id,
-            $Pembelian->tgl_dibuat,
-            $Pembelian->bahanbaku->name,
-            $Pembelian->jumlah,
-            $Pembelian->bahanbaku->satuan->name,
-            $Pembelian->harga,
-            $Pembelian->harga * $Pembelian->jumlah,
-            $Pembelian->keterangan,
+            AfterSheet::class => function (AfterSheet $event) use ($sheetRanges) {
+                $lastRow = $event->sheet->getHighestRow();
+                $event->sheet->getStyle("A8:H{$lastRow}")
+                    ->applyFromArray([
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            ],
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[0])
+                    ->applyFromArray([
+                        'alignment' => [
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[1])
+                    ->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 18,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[2])
+                    ->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 18,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[3])
+                    ->applyFromArray([
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'color' => [
+                                'argb' => '9dc3e6',
+                            ],
+                        ],
+                    ]);
+            },
         ];
     }
 }

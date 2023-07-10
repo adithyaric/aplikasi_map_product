@@ -11,6 +11,14 @@
 <body>
     <table>
         <thead>
+            <tr><td colspan="{{ 7 + $categories->count() }}"></td></tr>
+            <tr><td colspan="{{ 7 + $categories->count() }}">PT. TUBAN PRIMA ENERGI</td></tr>
+            <tr><td colspan="{{ 7 + $categories->count() }}">GENERAL CONTRACTOR DAN SUPPLIER</td></tr>
+            <tr><td colspan="{{ 7 + $categories->count() }}">Jl. Sunan Drajat No. 06 Tuban</td></tr>
+            <tr><td colspan="{{ 7 + $categories->count() }}"></td></tr>
+            <tr><td colspan="{{ 7 + $categories->count() }}"><h1>PROJECT REPORT</h1></td></tr>
+            <tr><td colspan="{{ 7 + $categories->count() }}"></td></tr>
+            <tr><td>Tanggal</td><td colspan="{{ 6 + $categories->count() }}">{{ $tanggal }}</td></tr>
             <tr>
                 <th rowspan="2">No</th>
                 <th rowspan="2">Customer</th>

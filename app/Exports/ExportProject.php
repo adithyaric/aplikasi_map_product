@@ -3,11 +3,13 @@
 namespace App\Exports;
 
 use App\Models\Project;
-use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 
-class ExportProject implements FromQuery, WithHeadings, WithMapping
+class ExportProject implements FromView, WithEvents
 {
     protected $startDate;
 
@@ -19,36 +21,71 @@ class ExportProject implements FromQuery, WithHeadings, WithMapping
         $this->endDate = $endDate;
     }
 
-    public function query()
+    public function view(): View
     {
-        return Project::query()->whereBetween('created_at', [$this->startDate, $this->endDate]);
+        return view('projects.export', [
+            'projects' => Project::query()
+                ->whereBetween('created_at', [$this->startDate, $this->endDate])
+                ->get(),
+            'startDate' => Carbon::parse($this->startDate)->format('d-m-Y'),
+            'endDate' => Carbon::parse($this->endDate)->format('d-m-Y'),
+        ]);
     }
 
-    public function headings(): array
+    public function registerEvents(): array
     {
-        return [
-            'Tanggal : '.$this->startDate.' - '.$this->endDate,
-            'No',
-            'Customer',
-            'TGL',
-            'Produk Diminta',
-            'Produk Dibuat',
-            'Harga Project',
-            'Ket',
+        $sheetRanges = [
+            'A1:G9', //Center
+            'A2:G2', //Bold
+            'A6:G6', //Bold
+            'A9:G9', //Fill blue
         ];
-    }
 
-    public function map($project): array
-    {
         return [
-            '',
-            $project->id,
-            $project->customer->name,
-            $project->created_at,
-            $project->jml_product,
-            $project->entries->sum('capaian'),
-            $project->harga,
-            $project->keterangan,
+            AfterSheet::class => function (AfterSheet $event) use ($sheetRanges) {
+                $lastRow = $event->sheet->getHighestRow();
+                $event->sheet->getStyle("A8:G{$lastRow}")
+                    ->applyFromArray([
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            ],
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[0])
+                    ->applyFromArray([
+                        'alignment' => [
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[1])
+                    ->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 18,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[2])
+                    ->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 18,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[3])
+                    ->applyFromArray([
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'color' => [
+                                'argb' => '9dc3e6',
+                            ],
+                        ],
+                    ]);
+            },
         ];
     }
 }

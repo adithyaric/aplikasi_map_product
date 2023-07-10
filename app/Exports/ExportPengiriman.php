@@ -3,11 +3,13 @@
 namespace App\Exports;
 
 use App\Models\Pengiriman;
-use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 
-class ExportPengiriman implements FromQuery, WithHeadings, WithMapping
+class ExportPengiriman implements FromView, WithEvents
 {
     protected $startDate;
 
@@ -19,38 +21,71 @@ class ExportPengiriman implements FromQuery, WithHeadings, WithMapping
         $this->endDate = $endDate;
     }
 
-    public function query()
+    public function view(): View
     {
-        return Pengiriman::query()->whereBetween('tgl_pengiriman', [$this->startDate, $this->endDate]);
+        return view('pengirimans.export', [
+            'pengirimans' => Pengiriman::query()
+                ->whereBetween('tgl_pengiriman', [$this->startDate, $this->endDate])
+                ->get(),
+            'startDate' => Carbon::parse($this->startDate)->format('d-m-Y'),
+            'endDate' => Carbon::parse($this->endDate)->format('d-m-Y'),
+        ]);
     }
 
-    public function headings(): array
+    public function registerEvents(): array
     {
-        return [
-            'Tanggal : '.$this->startDate.' - '.$this->endDate,
-            'No',
-            'TGL',
-            'No. POL',
-            'Driver',
-            'No. Order Penjualan',
-            'Jarak Tempuh (KM)',
-            'Total Solar Digunakan (L)',
-            'Ket',
+        $sheetRanges = [
+            'A1:H9', //Center
+            'A2:H2', //Bold
+            'A6:H6', //Bold
+            'A9:H9', //Fill blue
         ];
-    }
 
-    public function map($pengiriman): array
-    {
         return [
-            '',
-            $pengiriman->id,
-            $pengiriman->tgl_pengiriman,
-            $pengiriman->driver->no_plat,
-            $pengiriman->driver->name,
-            $pengiriman->penjualan->no_invoice,
-            $pengiriman->jarak,
-            $pengiriman->solar,
-            $pengiriman->penjualan->project->keterangan,
+            AfterSheet::class => function (AfterSheet $event) use ($sheetRanges) {
+                $lastRow = $event->sheet->getHighestRow();
+                $event->sheet->getStyle("A8:H{$lastRow}")
+                    ->applyFromArray([
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            ],
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[0])
+                    ->applyFromArray([
+                        'alignment' => [
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[1])
+                    ->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 18,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[2])
+                    ->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'size' => 18,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle($sheetRanges[3])
+                    ->applyFromArray([
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'color' => [
+                                'argb' => '9dc3e6',
+                            ],
+                        ],
+                    ]);
+            },
         ];
     }
 }
