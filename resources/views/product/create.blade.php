@@ -52,7 +52,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Total</label>
-                                        <input type="number" required class="form-control" name="bahanbaku[0][total]">
+                                        <input type="text" required class="form-control" name="bahanbaku[0][total]">
                                     </div>
                                 </div>
 
@@ -117,7 +117,7 @@
         </div>
         <div class="form-group">
             <label>Total</label>
-            <input type="number" required class="form-control" name="bahanbaku[${bahanbakuIndex}][total]">
+            <input type="text" required class="form-control" name="bahanbaku[${bahanbakuIndex}][total]">
         </div>
     `;
             $('#bahanbaku-repeater').append(bahanbakuTemplate);

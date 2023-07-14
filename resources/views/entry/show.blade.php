@@ -62,12 +62,12 @@
                                 {{ $project->penjualan->sum('total_barang') }}
                             </td>
                         </tr>
-                        <tr>
-                            <th>Produk Tersisa</th>
-                            <td colspan="3">
-                                {{ $project->entries->sum('capaian') - $project->penjualan->sum('total_barang') }}
-                            </td>
-                        </tr>
+                        <!--<tr>-->
+                        <!--    <th>Produk Tersisa</th>-->
+                        <!--    <td colspan="3">-->
+                        <!--        {{ $project->entries->sum('capaian') - $project->penjualan->sum('total_barang') }}-->
+                        <!--    </td>-->
+                        <!--</tr>-->
                     </table><br />
                         <div id="chartCapaian"></div>
                     </div><!-- /.box-body -->

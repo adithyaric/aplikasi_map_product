@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/projects/{project}/data', function (Project $project) {
         return [
+            'name' => $project->customer->name,
             'harga' => $project->product->harga,
             'capaian' => $project->entries->sum('capaian'),
         ];

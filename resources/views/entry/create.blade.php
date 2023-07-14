@@ -51,12 +51,12 @@
                                 {{ $project->penjualan->sum('total_barang') }}
                             </td>
                         </tr>
-                        <tr>
-                            <th>Produk Tersisa</th>
-                            <td colspan="3">
-                                {{ $project->entries->sum('capaian') - $project->penjualan->sum('total_barang') }}
-                            </td>
-                        </tr>
+                        <!--<tr>-->
+                        <!--    <th>Produk Tersisa</th>-->
+                        <!--    <td colspan="3">-->
+                        <!--        {{ $project->entries->sum('capaian') - $project->penjualan->sum('total_barang') }}-->
+                        <!--    </td>-->
+                        <!--</tr>-->
                     </table><br />
                     <div class="table-responsive">
                         <table id="example1" class="table table-bordered table-striped">

@@ -39,6 +39,7 @@
                                     <td>No</td>
                                     <td>No Invoice Penjualan</td>
                                     <td>Nama Driver</td>
+                                    <td>Tanggal</td>
                                     <td>Status</td>
                                     <td>Aksi</td>
                                 </tr>
@@ -48,6 +49,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->penjualan->no_invoice }}</td>
                                     <td>{{ $value->driver->name }}</td>
+                                    <td>{{ $value->created_at->format('d-m-Y') }}</td>
                                     <td>{{ strtoupper($value->status) }}</td>
                                     <td>
                                         <a class="btn btn-warning"

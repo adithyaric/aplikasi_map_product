@@ -61,7 +61,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Total</label>
-                                            <input type="number" required class="form-control"
+                                            <input type="text" required class="form-control"
                                                 name="bahanbaku[{{ $key }}][total]"
                                                 value="{{ $bb->pivot->total }}">
                                         </div>
@@ -129,7 +129,7 @@
         </div>
         <div class="form-group">
             <label>Total</label>
-            <input type="number" required class="form-control" name="bahanbaku[${bahanbakuIndex}][total]">
+            <input type="text" required class="form-control" name="bahanbaku[${bahanbakuIndex}][total]">
         </div>
     `;
             $('#bahanbaku-repeater').append(bahanbakuTemplate);

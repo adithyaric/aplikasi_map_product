@@ -20,7 +20,7 @@ class PengirimanRequest extends FormRequest
             'customer_id' => 'nullable',
             'project_id' => 'nullable',
             'jml_product' => 'required',
-            'jam' => 'required',
+            'jam' => 'nullable',
             'jarak' => 'required',
             'waktu_tempuh' => 'required',
             'untuk_pengecoran' => 'nullable',

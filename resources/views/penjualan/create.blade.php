@@ -27,18 +27,18 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group">
-                                <label>Customer</label>
-                                <select required class="form-control select2" name="customer_id"
-                                    data-placeholder="Pilih Customer" style="width: 100%;">
-                                    @foreach ($customers as $customer)
-                                        <option value="{{ $customer->id }}"
-                                            {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
-                                            {{ $customer->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            {{-- <div class="form-group"> --}}
+                            {{-- <label>Customer</label> --}}
+                            {{-- <select required class="form-control select2" name="customer_id" --}}
+                            {{-- data-placeholder="Pilih Customer" style="width: 100%;"> --}}
+                            {{-- @foreach ($customers as $customer) --}}
+                            {{-- <option value="{{ $customer->id }}" --}}
+                            {{-- {{ old('customer_id') == $customer->id ? 'selected' : '' }}> --}}
+                            {{-- {{ $customer->name }} --}}
+                            {{-- </option> --}}
+                            {{-- @endforeach --}}
+                            {{-- </select> --}}
+                            {{-- </div> --}}
                             <div class="form-group">
                                 <label>Project</label>
                                 <select required class="form-control select2" name="project_id"
@@ -53,13 +53,16 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label for="">Nama Customer</label>
+                                <input type="text" name="customer-name" id="customer-name" class="form-control" readonly>
+                            </div>
+                            <div class="form-group">
                                 <label for="">Total Capaian</label>
-                                <input type="number" name="capaian" id="project-capaian" class="form-control" readonly>
+                                <input type="text" name="capaian" id="project-capaian" class="form-control" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="">Harga Product</label>
-                                <input type="number" name="harga" id="product-price" class="form-control"
-                                    readonly>
+                                <input type="text" name="harga" id="product-price" class="form-control" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="">Total Barang</label>
@@ -149,6 +152,7 @@
                 var projectId = $(this).val();
 
                 $.get('/projects/' + projectId + '/data', function(data) {
+                    $('#customer-name').val(data.name);
                     $('#product-price').val(data.harga);
                     $('#project-capaian').val(data.capaian);
                 });

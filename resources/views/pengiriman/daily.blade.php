@@ -16,7 +16,8 @@
             <tr><td colspan="{{ 7 + $categories->count() }}">GENERAL CONTRACTOR DAN SUPPLIER</td></tr>
             <tr><td colspan="{{ 7 + $categories->count() }}">Jl. Sunan Drajat No. 06 Tuban</td></tr>
             <tr><td colspan="{{ 7 + $categories->count() }}"></td></tr>
-            <tr><td colspan="{{ 7 + $categories->count() }}"><h1>PROJECT REPORT</h1></td></tr>
+            <tr><td colspan="{{ 7 + $categories->count() }}"><h1>DAILY REPORT</h1></td></tr>
+            <tr><td colspan="{{ 7 + $categories->count() }}"><h1>PENGIRIMAN READYMIX</h1></td></tr>
             <tr><td colspan="{{ 7 + $categories->count() }}"></td></tr>
             <tr><td>Tanggal</td><td colspan="{{ 6 + $categories->count() }}">{{ $tanggal }}</td></tr>
             <tr>

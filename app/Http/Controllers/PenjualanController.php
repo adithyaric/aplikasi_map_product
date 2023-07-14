@@ -33,6 +33,7 @@ class PenjualanController extends Controller
     public function store(PenjualanRequest $request)
     {
         $project = Project::find($request->project_id);
+        $data['customer_id'] = $project->customer_id;
         $data = $request->validated();
         Penjualan::create($data);
         foreach ($project->product->bahanbaku as $bahanbaku) {
@@ -59,7 +60,9 @@ class PenjualanController extends Controller
 
     public function update(PenjualanRequest $request, Penjualan $penjualan)
     {
+        $project = Project::find($request->project_id);
         $data = $request->validated();
+        $data['customer_id'] = $project->customer_id;
         $penjualan->update($data);
 
         return redirect(route('penjualan.index'))->with('toast_success', 'Berhasil Menyimpan Data!');

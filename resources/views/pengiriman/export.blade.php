@@ -79,6 +79,7 @@
                                     <td>No Order Penjualan</td>
                                     <td>Nama Driver</td>
                                     <td>Solar</td>
+                                    <td>Tanggal</td>
                                     <td>Status</td>
                                 </tr>
                             </thead>
@@ -88,6 +89,7 @@
                                     <td>{{ $value->penjualan->no_invoice }}</td>
                                     <td>{{ $value->driver->name }}</td>
                                     <td>{{ $value->solar ?? '0' }} L</td>
+                                    <td>{{ $value->created_at->format('d-m-Y') }}</td>
                                     <td>{{ strtoupper($value->status) }}</td>
                                 </tr>
                             @endforeach

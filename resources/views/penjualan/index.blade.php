@@ -27,6 +27,7 @@
                                     <td>Nama Kustomer</td>
                                     <td>Nama Project</td>
                                     <td>Nama Produk</td>
+                                    <td>Tanggal</td>
                                     <td>Total</td>
                                     <td>Aksi</td>
                                 </tr>
@@ -38,6 +39,7 @@
                                     <td>{{ $value->customer->name }}</td>
                                     <td>{{ $value->project->keterangan }}</td>
                                     <td>{{ $value->project->product->name }}</td>
+                                    <td>{{ $value->created_at->format('d-m-Y') }}</td>
                                     <td>@currency($value->total)</td>
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('penjualan.edit', $value->id) }}">Edit</a>

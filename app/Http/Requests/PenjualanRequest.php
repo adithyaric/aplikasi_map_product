@@ -16,7 +16,7 @@ class PenjualanRequest extends FormRequest
         return [
             'no_invoice' => 'required',
             'tgl_penjualan' => 'required',
-            'customer_id' => 'required',
+            // 'customer_id' => 'nullable',
             'project_id' => 'required',
             'total_barang' => 'required',
             'harga' => 'required',
