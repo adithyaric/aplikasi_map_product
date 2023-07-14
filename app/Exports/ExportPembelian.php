@@ -36,16 +36,17 @@ class ExportPembelian implements FromView, WithEvents
     public function registerEvents(): array
     {
         $sheetRanges = [
-            'A1:H9', //Center
-            'A2:H2', //Bold
-            'A6:H6', //Bold
-            'A9:H9', //Fill blue
+            'A1:J9', //Center
+            'A2:J2', //Bold
+            'A6:J6', //Bold
+            'A9:J9', //Fill blue
         ];
 
         return [
             AfterSheet::class => function (AfterSheet $event) use ($sheetRanges) {
                 $lastRow = $event->sheet->getHighestRow();
-                $event->sheet->getStyle("A8:H{$lastRow}")
+                $total = $event->sheet->getHighestRow() - 3;
+                $event->sheet->getStyle("A8:J{$lastRow}")
                     ->applyFromArray([
                         'borders' => [
                             'allBorders' => [
@@ -55,6 +56,13 @@ class ExportPembelian implements FromView, WithEvents
                     ]);
 
                 $event->sheet->getStyle($sheetRanges[0])
+                    ->applyFromArray([
+                        'alignment' => [
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        ],
+                    ]);
+
+                $event->sheet->getStyle("A{$total}:F{$lastRow}")
                     ->applyFromArray([
                         'alignment' => [
                             'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,

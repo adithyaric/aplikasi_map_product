@@ -14,6 +14,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectEntryController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Models\Penjualan;
 use App\Models\Project;
@@ -43,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::resource('/satuan', SatuanController::class);
     Route::resource('/category', CategoryController::class);
+    Route::resource('/supplier', SupplierController::class);
     Route::resource('/customer', CustomerController::class);
     Route::resource('/driver', DriverController::class);
     Route::resource('/bahanbaku', BahanBakuController::class);
@@ -54,6 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/project-export', [ProjectController::class, 'projectExport'])->name('project.export');
     Route::resource('/entry', ProjectEntryController::class);
     Route::resource('/pembelian', PembelianController::class);
+    Route::patch('/pembelians/{pembelian}/updateStatus', [PembelianController::class, 'updateStatus'])->name('pembelians.updateStatus');
     Route::get('/pembelian-export', [PembelianController::class, 'pembelianExport'])->name('pembelian.export');
     Route::resource('/penjualan', PenjualanController::class);
     Route::resource('/pengiriman', PengirimanController::class);
@@ -86,7 +89,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/optimize-clear', function () {
+Route::get('/optimize', function () {
     Artisan::call('optimize:clear');
 
     return redirect('/login')->with(['success' => 'Optimization Berhasil']);

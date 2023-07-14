@@ -12,9 +12,11 @@ class Pembelian extends Model
     protected $fillable = [
         'tgl_dibuat',
         'bahan_baku_id',
+        'supplier_id',
         'category_id',
         'harga',
         'jumlah',
+        'status',
         'keterangan',
     ];
 
@@ -26,5 +28,10 @@ class Pembelian extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
     }
 }

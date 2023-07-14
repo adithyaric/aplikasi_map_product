@@ -16,6 +16,7 @@ class PembelianRequest extends FormRequest
         return [
             'tgl_dibuat' => 'required',
             'bahan_baku_id' => 'required',
+            'supplier_id' => 'required',
             'category_id' => 'nullable',
             'harga' => 'required',
             'jumlah' => 'required',

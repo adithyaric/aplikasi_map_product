@@ -28,6 +28,7 @@
                 <ul class="treeview-menu">
                     <li><a href="{{ route('satuan.index') }}"><i class="fa fa-suitcase"></i> Units</a></li>
                     <li><a href="{{ route('category.index') }}"><i class="fa fa-reorder"></i> Categories</a></li>
+                    <li><a href="{{ route('supplier.index') }}"><i class="fa fa-user"></i> Supplier</a></li>
                     <li><a href="{{ route('customer.index') }}"><i class="fa fa-users"></i> Customers</a></li>
                     <li><a href="{{ route('driver.index') }}"><i class="fa fa-users"></i> Drivers</a></li>
                     <li><a href="{{ route('users.index') }}"><i class="fa fa-user"></i> Users</a></li>

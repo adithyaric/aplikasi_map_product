@@ -32,6 +32,7 @@
                                     <td>Nama Bahan Baku</td>
                                     <td>Jumlah</td>
                                     <td>Keterangan</td>
+                                    <td>Status</td>
                                     <td>Tgl</td>
                                     <td>Aksi</td>
                                 </tr>
@@ -42,9 +43,25 @@
                                     <td>{{ $value->bahanbaku->name }}</td>
                                     <td>{{ $value->jumlah }}</td>
                                     <td>{{ $value->keterangan }}</td>
+                                    <td>
+                                        @if (auth()->user()->role == 'Owner')
+                                            <button
+                                                class="border-0 btn btn-{{ $value->status === 'blm_lunas' ? 'primary' : 'success' }}"
+                                                type="submit">{{ $value->status === 'blm_lunas' ? 'BELUM LUNAS' : 'LUNAS' }}</button>
+                                        @else
+                                            <form action="{{ route('pembelians.updateStatus', $value->id) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button
+                                                    class="border-0 btn btn-{{ $value->status === 'blm_lunas' ? 'primary' : 'success' }}"
+                                                    type="submit">{{ $value->status === 'blm_lunas' ? 'BELUM LUNAS' : 'LUNAS' }}</button>
+                                            </form>
+                                        @endif
+                                    </td>
                                     <td>{{ $value->tgl_dibuat }}</td>
                                     <td>
-                                        <a class="btn btn-warning" href="{{ route('pembelian.edit', $value->id) }}">Edit</a>
+                                        <a class="btn btn-warning"
+                                            href="{{ route('pembelian.edit', $value->id) }}">Edit</a>
                                         <form action="{{ route('pembelian.destroy', $value->id) }}" method="post"
                                             style="display: inline;">
                                             @method('delete')

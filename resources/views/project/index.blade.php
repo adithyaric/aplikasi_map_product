@@ -22,8 +22,8 @@
                     {{-- </div> --}}
                     {{-- </form> --}}
                     <div class="box-header">
-                        @if(auth()->user()->role != 'Owner')
-                        <a href="{{ route('project.create') }}" class="btn btn-md bg-green">Tambah</a>
+                        @if (auth()->user()->role != 'Owner')
+                            <a href="{{ route('project.create') }}" class="btn btn-md bg-green">Tambah</a>
                         @endif
                     </div><!-- /.box-header -->
                     <div class="box-body table-responsive">
@@ -57,33 +57,34 @@
                                     </td>
                                     <td>{{ $value->keterangan }}</td>
                                     <td>
-                                        @if(auth()->user()->role == 'Owner')
+                                        @if (auth()->user()->role == 'Owner')
                                             <button
                                                 class="border-0 btn btn-{{ $value->status === 'proses' ? 'primary' : 'success' }}"
                                                 type="submit">{{ strtoupper($value->status) }}</button>
                                         @else
-                                        <form action="{{ route('projects.updateStatus', $value->id) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button
-                                                class="border-0 btn btn-{{ $value->status === 'proses' ? 'primary' : 'success' }}"
-                                                type="submit">{{ strtoupper($value->status) }}</button>
-                                        </form>
+                                            <form action="{{ route('projects.updateStatus', $value->id) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button
+                                                    class="border-0 btn btn-{{ $value->status === 'proses' ? 'primary' : 'success' }}"
+                                                    type="submit">{{ strtoupper($value->status) }}</button>
+                                            </form>
                                         @endif
                                     </td>
                                     <td>
-                                        @if(auth()->user()->role != 'Owner')
-                                        <a class="btn btn-warning" href="{{ route('project.edit', $value->id) }}">Edit</a>
+                                        @if (auth()->user()->role != 'Owner')
+                                            <a class="btn btn-warning"
+                                                href="{{ route('project.edit', $value->id) }}">Edit</a>
                                         @endif
                                         <a class="btn btn-info" href="{{ route('project.show', $value->id) }}">Show</a>
-                                        @if(auth()->user()->role != 'Owner')
-                                        <form action="{{ route('project.destroy', $value->id) }}" method="post"
-                                            style="display: inline;">
-                                            @method('delete')
-                                            @csrf
-                                            <button class="border-0 btn btn-danger"
-                                                onclick="return confirm('Are you sure?')">Hapus</button>
-                                        </form>
+                                        @if (auth()->user()->role != 'Owner')
+                                            <form action="{{ route('project.destroy', $value->id) }}" method="post"
+                                                style="display: inline;">
+                                                @method('delete')
+                                                @csrf
+                                                <button class="border-0 btn btn-danger"
+                                                    onclick="return confirm('Are you sure?')">Hapus</button>
+                                            </form>
                                         @endif
                                     </td>
                                 </tr>

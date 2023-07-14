@@ -7,6 +7,7 @@ use App\Http\Requests\PembelianRequest;
 use App\Models\BahanBaku;
 use App\Models\Category;
 use App\Models\Pembelian;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -31,6 +32,7 @@ class PembelianController extends Controller
         return view('pembelian.create', [
             'bahan_bakus' => BahanBaku::get(),
             'categories' => Category::get(),
+            'suppliers' => Supplier::get(),
         ]);
     }
 
@@ -57,6 +59,7 @@ class PembelianController extends Controller
             'pembelian' => $pembelian,
             'bahan_bakus' => BahanBaku::get(),
             'categories' => Category::get(),
+            'suppliers' => Supplier::get(),
         ]);
     }
 
@@ -74,6 +77,14 @@ class PembelianController extends Controller
         $pembelian->delete();
 
         return redirect(route('pembelian.index'))->with('toast_error', 'Berhasil Menghapus Data!');
+    }
+
+    public function updateStatus(Pembelian $pembelian)
+    {
+        $newStatus = $pembelian->status === 'blm_lunas' ? 'lunas' : 'blm_lunas';
+        $pembelian->update(['status' => $newStatus]);
+
+        return redirect()->back();
     }
 
     public function pembelianExport(Request $request)

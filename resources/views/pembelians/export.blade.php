@@ -11,14 +11,14 @@
 <body>
     <table>
         <thead>
-            <tr><td colspan="8"></td></tr>
-            <tr><td colspan="8">PT. TUBAN PRIMA ENERGI</td></tr>
-            <tr><td colspan="8">GENERAL CONTRACTOR DAN SUPPLIER</td></tr>
-            <tr><td colspan="8">Jl. Sunan Drajat No. 06 Tuban</td></tr>
-            <tr><td colspan="8"></td></tr>
-            <tr><td colspan="8"><h1>LAPORAN PEMBELIAN</h1></td></tr>
-            <tr><td colspan="8"></td></tr>
-            <tr><td>Tanggal</td><td colspan="7">{{ $startDate }} - {{ $endDate }}</td></tr>
+            <tr><td colspan="10"></td></tr>
+            <tr><td colspan="10">PT. TUBAN PRIMA ENERGI</td></tr>
+            <tr><td colspan="10">GENERAL CONTRACTOR DAN SUPPLIER</td></tr>
+            <tr><td colspan="10">Jl. Sunan Drajat No. 06 Tuban</td></tr>
+            <tr><td colspan="10"></td></tr>
+            <tr><td colspan="10"><h1>LAPORAN PEMBELIAN</h1></td></tr>
+            <tr><td colspan="10"></td></tr>
+            <tr><td>Tanggal</td><td colspan="9">{{ $startDate }} - {{ $endDate }}</td></tr>
             <tr>
                 <th>No</th>
                 <th>TGL</th>
@@ -27,6 +27,8 @@
                 <th>Satuan</th>
                 <th>Harga</th>
                 <th>Total</th>
+                <th>Status</th>
+                <th>Supplier</th>
                 <th>Ket</th>
             </tr>
         </thead>
@@ -40,9 +42,23 @@
                     <td>{{ $pembelian->bahanbaku->satuan->name }}</td>
                     <td>{{ $pembelian->harga }}</td>
                     <td>{{ $pembelian->harga * $pembelian->jumlah }}</td>
+                    <td>{{ $pembelian->status == 'lunas' ? 'LUNAS' : 'BELUM LUNAS' }}</td>
+                    <td>{{ $pembelian->supplier->name ?? '~' }}</td>
                     <td>{{ $pembelian->keterangan }}</td>
                 </tr>
-            @endforeach
+                @endforeach
+                <tr>
+                    <td colspan="6">Total</td>
+                    <td>{{ $pembelians->reduce(function ($carry, $item) { return $carry + $item->harga * $item->jumlah; }, 0) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="6">Total Lunas</td>
+                    <td>{{ $pembelians->where('status', 'lunas')->reduce(function ($carry, $item) { return $carry + $item->harga * $item->jumlah; }, 0) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="6">Total Belum Lunas</td>
+                    <td>{{ $pembelians->where('status', '!=', 'lunas')->reduce(function ($carry, $item) { return $carry + $item->harga * $item->jumlah; }, 0) }}</td>
+                </tr>
         </tbody>
     </table>
 </body>

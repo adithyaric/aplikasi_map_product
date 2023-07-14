@@ -30,6 +30,18 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label>Supplier</label>
+                                <select required class="form-control select2" name="supplier_id"
+                                    data-placeholder="Pilih Supplier" style="width: 100%;">
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}"
+                                            {{ old('supplier_id', $pembelian->supplier_id) == $supplier->id ? 'selected' : '' }}>
+                                            {{ $supplier->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="">Harga</label>
                                 <input required type="text" class="numeral-mask form-control" name="harga"
                                     value="{{ old('harga', $pembelian->harga) }}" placeholder="Masukkan Harga">
