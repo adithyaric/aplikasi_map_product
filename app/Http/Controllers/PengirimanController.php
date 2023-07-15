@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ExportDaily;
+use App\Exports\ExportDailyFilter;
 use App\Exports\ExportPengiriman;
 use App\Exports\ExportStockInOut;
 use App\Http\Requests\PengirimanRequest;
@@ -29,8 +30,9 @@ class PengirimanController extends Controller
     public function indexReport()
     {
         $pengirimans = Pengiriman::get();
+        $customers = Customer::get();
 
-        return view('pengiriman.export', compact('pengirimans'));
+        return view('pengiriman.export', compact('pengirimans', 'customers'));
     }
 
     public function create()
@@ -123,6 +125,11 @@ class PengirimanController extends Controller
     public function pengirimanDaily(Request $request)
     {
         return Excel::download(new ExportDaily($request->input('tanggal')), 'daily_'.Carbon::parse($request->tanggal)->format('d-m-Y').'.xlsx');
+    }
+
+    public function pengirimanDailyFilter(Request $request)
+    {
+        return Excel::download(new ExportDailyFilter($request->input('tanggal'), $request->input('customer_id')), 'daily_'.Carbon::parse($request->tanggal)->format('d-m-Y').'.xlsx');
     }
 
     public function pengirimaninout(Request $request)

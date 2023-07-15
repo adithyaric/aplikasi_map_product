@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengiriman-export', [PengirimanController::class, 'pengirimanExport'])->name('pengiriman.export');
     Route::get('/pengiriman-inout', [PengirimanController::class, 'pengirimaninout'])->name('pengiriman.inout');
     Route::get('/pengiriman-daily', [PengirimanController::class, 'pengirimanDaily'])->name('pengiriman.daily');
+    Route::get('/pengiriman-daily-filter', [PengirimanController::class, 'pengirimanDailyFilter'])->name('pengiriman.dailyFilter');
     Route::get('/pengiriman-nota', [PengirimanController::class, 'pengirimanNota'])->name('pengiriman.nota');
     Route::get('/pengiriman-solar', [PengirimanController::class, 'solar'])->name('pengiriman.solar');
     Route::put('/pengiriman-solar-update/{pengiriman}', [PengirimanController::class, 'solarUpdate'])->name('pengiriman.solar.update');
