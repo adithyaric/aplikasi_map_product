@@ -30,6 +30,7 @@
                     <li><a href="{{ route('category.index') }}"><i class="fa fa-reorder"></i> Categories</a></li>
                     <li><a href="{{ route('supplier.index') }}"><i class="fa fa-user"></i> Supplier</a></li>
                     <li><a href="{{ route('customer.index') }}"><i class="fa fa-users"></i> Customers</a></li>
+                    <li><a href="{{ route('truck.index') }}"><i class="fa fa-car"></i> No Kendaraan</a></li>
                     <li><a href="{{ route('driver.index') }}"><i class="fa fa-users"></i> Drivers</a></li>
                     <li><a href="{{ route('users.index') }}"><i class="fa fa-user"></i> Users</a></li>
                 </ul>

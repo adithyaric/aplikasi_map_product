@@ -15,6 +15,7 @@ use App\Http\Controllers\ProjectEntryController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TruckController;
 use App\Http\Controllers\UserController;
 use App\Models\Penjualan;
 use App\Models\Project;
@@ -47,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/supplier', SupplierController::class);
     Route::resource('/customer', CustomerController::class);
     Route::resource('/driver', DriverController::class);
+    Route::resource('/truck', TruckController::class);
     Route::resource('/bahanbaku', BahanBakuController::class);
     Route::resource('/product', ProductController::class);
     Route::resource('/project', ProjectController::class);
@@ -58,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/pembelian', PembelianController::class);
     Route::patch('/pembelians/{pembelian}/updateStatus', [PembelianController::class, 'updateStatus'])->name('pembelians.updateStatus');
     Route::get('/pembelian-export', [PembelianController::class, 'pembelianExport'])->name('pembelian.export');
+    Route::get('/pembelian-export-filter', [PembelianController::class, 'pembelianExportFilter'])->name('pembelian.exportFilter');
     Route::resource('/penjualan', PenjualanController::class);
     Route::resource('/pengiriman', PengirimanController::class);
     Route::get('/pengiriman-export', [PengirimanController::class, 'pengirimanExport'])->name('pengiriman.export');

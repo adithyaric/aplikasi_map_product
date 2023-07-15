@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DriverRequest extends FormRequest
+class TruckRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,8 +14,7 @@ class DriverRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            // 'no_plat' => 'required',
+            'no_plat' => 'required',
         ];
     }
 }

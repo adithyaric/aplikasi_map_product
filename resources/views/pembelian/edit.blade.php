@@ -62,6 +62,10 @@
                                 @enderror
                             </div>
                             <div class="form-group">
+                                <label for="">Konversi M³ ke Kg</label>
+                                <input required type="text" class="form-control" name="konversi" value="{{ old('konversi') }}" placeholder="Masukkan Konversi M³ ke Kg">
+                            </div>
+                            <div class="form-group">
                                 <label for="">Keterangan</label>
                                 <input required type="text" class="form-control" name="keterangan"
                                     value="{{ old('keterangan', $pembelian->keterangan) }}" placeholder="Masukkan Keterangan">

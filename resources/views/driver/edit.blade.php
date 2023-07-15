@@ -27,16 +27,6 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Nomor Plat</label>
-                                <input required type="text" class="form-control" name="no_plat"
-                                    value="{{ old('no_plat', $driver->no_plat) }}" placeholder="Masukkan Nomor Plat">
-                                @error('no_plat')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
                         </div><!-- /.box-body -->
 
                         <div class="box-footer">

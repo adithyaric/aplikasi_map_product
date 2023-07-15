@@ -27,6 +27,10 @@ class ExportPengiriman implements FromView, WithEvents
             'pengirimans' => Pengiriman::query()
                 ->whereBetween('tgl_pengiriman', [$this->startDate, $this->endDate])
                 ->get(),
+            'pengirimansGroupedByTruck' => Pengiriman::query()
+                ->whereBetween('tgl_pengiriman', [$this->startDate, $this->endDate])
+                ->get()
+                ->groupBy(['truck.no_plat', 'driver.name']),
             'startDate' => Carbon::parse($this->startDate)->format('d-m-Y'),
             'endDate' => Carbon::parse($this->endDate)->format('d-m-Y'),
         ]);

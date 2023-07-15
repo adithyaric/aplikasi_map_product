@@ -11,6 +11,7 @@ use App\Models\Driver;
 use App\Models\Pengiriman;
 use App\Models\Penjualan;
 use App\Models\Project;
+use App\Models\Truck;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -37,6 +38,7 @@ class PengirimanController extends Controller
         return view('pengiriman.create', [
             'customers' => Customer::get(),
             'drivers' => Driver::get(),
+            'trucks' => Truck::get(),
             'projects' => Project::get(),
             'penjualans' => Penjualan::get(),
         ]);
@@ -70,6 +72,7 @@ class PengirimanController extends Controller
             'pengiriman' => $pengiriman,
             'customers' => Customer::get(),
             'drivers' => Driver::get(),
+            'trucks' => Truck::get(),
             'projects' => Project::get(),
             'penjualans' => Penjualan::get(),
         ]);
@@ -119,7 +122,7 @@ class PengirimanController extends Controller
 
     public function pengirimanDaily(Request $request)
     {
-        return Excel::download(new ExportDaily($request->input('tanggal')), 'pengiriman_'.Carbon::parse($request->tanggal)->format('d-m-Y').'.xlsx');
+        return Excel::download(new ExportDaily($request->input('tanggal')), 'daily_'.Carbon::parse($request->tanggal)->format('d-m-Y').'.xlsx');
     }
 
     public function pengirimaninout(Request $request)

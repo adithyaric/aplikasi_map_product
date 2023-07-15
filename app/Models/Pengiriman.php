@@ -12,6 +12,7 @@ class Pengiriman extends Model
     protected $fillable = [
         'tgl_pengiriman',
         'driver_id',
+        'truck_id',
         'penjualan_id',
         'jml_product',
         'jam',
@@ -32,6 +33,11 @@ class Pengiriman extends Model
     public function driver()
     {
         return $this->belongsTo(Driver::class);
+    }
+
+    public function truck()
+    {
+        return $this->belongsTo(Truck::class);
     }
 
     public function penjualan()

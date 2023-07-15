@@ -42,6 +42,18 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label>Truck/No Kendaraan</label>
+                                <select required class="form-control select2" name="truck_id"
+                                    data-placeholder="Pilih Truck/No Kendaraan" style="width: 100%;">
+                                    @foreach ($trucks as $truck)
+                                        <option value="{{ $truck->id }}"
+                                            {{ old('truck_id') == $truck->id ? 'selected' : '' }}>
+                                            {{ $truck->no_plat }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="">Jumlah Product</label>
                                 <input required type="text" class="form-control" id="jml_product" name="jml_product"
                                     value="{{ old('jml_product') }}" placeholder="Masukkan Jumlah Product" readonly>

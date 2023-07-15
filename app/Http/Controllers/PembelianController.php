@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ExportPembelian;
+use App\Exports\ExportPembelianFilterSupplier;
 use App\Http\Requests\PembelianRequest;
 use App\Models\BahanBaku;
 use App\Models\Category;
@@ -23,8 +24,9 @@ class PembelianController extends Controller
     public function indexReport()
     {
         $pembelians = Pembelian::get();
+        $suppliers = Supplier::get();
 
-        return view('pembelian.export', compact('pembelians'));
+        return view('pembelian.export', compact(['pembelians', 'suppliers']));
     }
 
     public function create()
@@ -40,9 +42,10 @@ class PembelianController extends Controller
     {
         $data = $request->validated();
         $data['harga'] = str_replace(',', '', $data['harga']);
+        BahanBaku::find($request->bahan_baku_id)->name == 'Pasir' ? $data['jumlah'] = $request->konversi * $request->jumlah : $request->jumlah;
         Pembelian::create($data);
         $bahanBaku = BahanBaku::find($request->bahan_baku_id);
-        $bahanBaku->stock += $request->jumlah;
+        $bahanBaku->stock += BahanBaku::find($request->bahan_baku_id)->name == 'Pasir' ? $data['jumlah'] = $request->konversi * $request->jumlah : $request->jumlah;
         $bahanBaku->save();
 
         return redirect(route('pembelian.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
@@ -67,6 +70,7 @@ class PembelianController extends Controller
     {
         $data = $request->validated();
         $data['harga'] = str_replace(',', '', $data['harga']);
+        BahanBaku::find($request->bahan_baku_id)->name == 'Pasir' ? $data['jumlah'] = $request->konversi * $request->jumlah : $request->jumlah;
         $pembelian->update($data);
 
         return redirect(route('pembelian.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
@@ -94,5 +98,14 @@ class PembelianController extends Controller
         $dateEnd = $tanggal[1];
 
         return Excel::download(new ExportPembelian($dateStart, $dateEnd), 'pembelian.xlsx');
+    }
+
+    public function pembelianExportFilter(Request $request)
+    {
+        $tanggal = explode(' - ', $request->input('tanggal'));
+        $dateStart = $tanggal[0];
+        $dateEnd = $tanggal[1];
+
+        return Excel::download(new ExportPembelianFilterSupplier($dateStart, $dateEnd, $request->supplier_id), 'pembelian.xlsx');
     }
 }

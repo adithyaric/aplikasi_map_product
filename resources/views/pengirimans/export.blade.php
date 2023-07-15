@@ -33,9 +33,9 @@
         <tbody>
             @foreach ($pengirimans as $pengiriman)
                 <tr>
-                    <td>{{ $pengiriman->id }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $pengiriman->tgl_pengiriman }}</td>
-                    <td>{{ $pengiriman->driver->no_plat }}</td>
+                    <td>{{ $pengiriman->truck->no_plat }}</td>
                     <td>{{ $pengiriman->driver->name }}</td>
                     <td>{{ $pengiriman->penjualan->no_invoice }}</td>
                     <td>{{ $pengiriman->jarak }}</td>
@@ -43,6 +43,26 @@
                     <td>{{ $pengiriman->penjualan->project->keterangan }}</td>
                 </tr>
             @endforeach
+                <tr>
+                    <th>No</th>
+                    <th>No. Pol</th>
+                    <th>Driver</th>
+                    <th>Jumlah Ritase</th>
+                    <th>Jumlah Pemakaian Solar</th>
+                    <th>Jumlah Jarak Tempuh</th>
+                </tr>
+                @foreach ($pengirimansGroupedByTruck as $noPlat => $groupedByNoPlat)
+                    @foreach ($groupedByNoPlat as $driver => $groupedByDriver)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $noPlat }}</td>
+                            <td>{{ $driver }}</td>
+                            <td>{{ $groupedByDriver->count() }}</td>
+                            <td>{{ $groupedByDriver->sum('solar') }}</td>
+                            <td>{{ $groupedByDriver->sum('jarak') }}</td>
+                        </tr>
+                    @endforeach
+                @endforeach
         </tbody>
     </table>
 </body>

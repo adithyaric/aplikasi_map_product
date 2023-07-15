@@ -17,6 +17,7 @@ class PengirimanRequest extends FormRequest
             'tgl_pengiriman' => 'required',
             'penjualan_id' => 'nullable',
             'driver_id' => 'required',
+            'truck_id' => 'required',
             'customer_id' => 'nullable',
             'project_id' => 'nullable',
             'jml_product' => 'required',

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Tambah Driver')
+@section('title', 'Edit Truck')
 
 @section('container')
     <section class="content">
@@ -10,17 +10,18 @@
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Tambah Driver</h3>
+                        <h3 class="box-title">Edit Truck</h3>
                     </div><!-- /.box-header -->
                     <!-- form start -->
-                    <form action="{{ route('driver.store') }}" method="POST">
+                    <form action="{{ route('truck.update', $truck->id) }}" method="POST">
+                        @method('PUT')
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
-                                <label for="">Nama Driver</label>
-                                <input required type="text" class="form-control" name="name"
-                                    value="{{ old('name') }}" placeholder="Masukkan Nama Driver">
-                                @error('name')
+                                <label for="exampleInputEmail1">Nomor Plat</label>
+                                <input required type="text" class="form-control" name="no_plat"
+                                    value="{{ old('no_plat', $truck->no_plat) }}" placeholder="Masukkan Nomor Plat">
+                                @error('no_plat')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -29,7 +30,7 @@
                         </div><!-- /.box-body -->
 
                         <div class="box-footer">
-                            <a href="{{ route('driver.index') }}" class="btn btn-default">Kembali</a>
+                            <a href="{{ route('truck.index') }}" class="btn btn-default">Kembali</a>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
