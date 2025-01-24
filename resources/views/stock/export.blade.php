@@ -36,9 +36,9 @@
                     <th>{{ $category->name }}</th>
                 @endforeach
                 @foreach ($bahanbakus as $bahanbaku)
-                    <th>Stock</th>
                     <th>In</th>
                     <th>Out</th>
+                    <th>Stock</th>
                 @endforeach
             </tr>
         </thead>
@@ -47,6 +47,14 @@
                 $currentDate = null;
                 $counter = 1;
             @endphp
+            <tr>
+                <td colspan="{{ 6+$categories->count() }}"></td>
+                @foreach($bahanbakus as $bahanbaku)
+                    <td></td>
+                    <td></td>
+                    <td>{{ $bahanbaku->stock }}</td>
+                @endforeach
+            </tr>
             @foreach ($pengirimans as $pengiriman)
                 <tr>
                     @if ($pengiriman->tgl_pengiriman != $currentDate)
@@ -71,28 +79,23 @@
                         </td>
                     @endforeach
                     @foreach ($bahanbakus as $bahanbaku)
-                        <td>
-                            {{-- {{ $bahanbaku->stock - $bahanbaku->product()->withPivot('total')->get()->sum('pivot.total') }} --}}
-                            {{ $bahanbaku->stock - $pengiriman->penjualan->project->product->bahanbaku()->withPivot('total')->get()->sum('pivot.total') }}
-                        </td>
-                        <td>
-                            {{-- {{ $bahanbaku->pembelian->sum('jumlah') }} --}}
-                            @php
-                                $pengirimanBahanBakus = $pengiriman->penjualan->project->product->bahanbaku;
-                                if ($pengirimanBahanBakus->contains($bahanbaku)) {
-                                    echo $bahanbaku
-                                        ->pembelian()
-                                        ->where('tgl_dibuat', $pengiriman->tgl_pengiriman)
-                                        ->sum('jumlah');
-                                } else {
-                                    echo $bahanbaku->pembelian->where('tgl_dibuat', $pengiriman->tgl_pengiriman)->sum('jumlah');
-                                }
-                            @endphp
-                        </td>
-                        <td>
-                            {{-- {{ $bahanbaku->product()->withPivot('total')->get()->sum('pivot.total') }} --}}
-                            {{ $pengiriman->penjualan->project->product->bahanbaku()->withPivot('total')->get()->sum('pivot.total') }}
-                        </td>
+                        @php
+                            // Calculate stock, in, and out values
+                            $in = $bahanbaku
+                                ->pembelian()
+                                ->where('tgl_dibuat', $pengiriman->tgl_pengiriman)
+                                ->sum('jumlah');
+                            $out = $pengiriman->penjualan->project->product
+                                ->bahanbaku()
+                                ->where('bahan_baku_id', $bahanbaku->id)
+                                ->sum('total');
+                            $stock = $bahanbaku->stock + $in - $out;
+                            // Update stock value for next row
+                            $bahanbaku->stock = $stock;
+                        @endphp
+                        <td>{{ $in }}</td>
+                        <td>{{ $out }}</td>
+                        <td>{{ $stock }}</td>
                     @endforeach
                 </tr>
             @endforeach
@@ -101,4 +104,4 @@
 </body>
 
 </html>
-{{-- {{ die() }} --}}
+{{ die() }}
