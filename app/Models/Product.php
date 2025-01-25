@@ -29,4 +29,11 @@ class Product extends Model
     {
         return $this->hasMany(Project::class);
     }
+
+    public function locations()
+    {
+        return $this->belongsToMany(Location::class, 'location_product')
+        ->withPivot('quantity')
+        ->withTimestamps();
+    }
 }

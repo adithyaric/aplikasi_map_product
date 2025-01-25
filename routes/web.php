@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PengirimanController;
 use App\Http\Controllers\PenjualanController;
@@ -98,3 +99,4 @@ Route::get('/optimize', function () {
 
     return redirect('/login')->with(['success' => 'Optimization Berhasil']);
 });
+Route::get('/locations/{type}/{parentId?}', [LocationController::class, 'getLocationProductMapping'])->name('locations');
