@@ -42,54 +42,56 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/users', UserController::class);
-    Route::resource('/satuan', SatuanController::class);
-    Route::resource('/category', CategoryController::class);
-    Route::resource('/supplier', SupplierController::class);
-    Route::resource('/customer', CustomerController::class);
-    Route::resource('/driver', DriverController::class);
-    Route::resource('/truck', TruckController::class);
-    Route::resource('/bahanbaku', BahanBakuController::class);
     Route::resource('/product', ProductController::class);
-    Route::resource('/project', ProjectController::class);
-    Route::patch('/projects/{project}/updateStatus', [ProjectController::class, 'updateStatus'])->name('projects.updateStatus');
-    Route::get('get-target', [ProjectController::class, 'target'])->name('getTarget');
-    Route::get('get-capaian', [ProjectController::class, 'capaian'])->name('getCapaian');
-    Route::get('/project-export', [ProjectController::class, 'projectExport'])->name('project.export');
-    Route::resource('/entry', ProjectEntryController::class);
-    Route::resource('/pembelian', PembelianController::class);
-    Route::patch('/pembelians/{pembelian}/updateStatus', [PembelianController::class, 'updateStatus'])->name('pembelians.updateStatus');
-    Route::get('/pembelian-export', [PembelianController::class, 'pembelianExport'])->name('pembelian.export');
-    Route::get('/pembelian-export-filter', [PembelianController::class, 'pembelianExportFilter'])->name('pembelian.exportFilter');
-    Route::resource('/penjualan', PenjualanController::class);
-    Route::resource('/pengiriman', PengirimanController::class);
-    Route::get('/pengiriman-export', [PengirimanController::class, 'pengirimanExport'])->name('pengiriman.export');
-    Route::get('/pengiriman-inout', [PengirimanController::class, 'pengirimaninout'])->name('pengiriman.inout');
-    Route::get('/pengiriman-daily', [PengirimanController::class, 'pengirimanDaily'])->name('pengiriman.daily');
-    Route::get('/pengiriman-daily-filter', [PengirimanController::class, 'pengirimanDailyFilter'])->name('pengiriman.dailyFilter');
-    Route::get('/pengiriman-nota', [PengirimanController::class, 'pengirimanNota'])->name('pengiriman.nota');
-    Route::get('/pengiriman-solar', [PengirimanController::class, 'solar'])->name('pengiriman.solar');
-    Route::put('/pengiriman-solar-update/{pengiriman}', [PengirimanController::class, 'solarUpdate'])->name('pengiriman.solar.update');
-    Route::resource('/stock', StockController::class);
+    Route::resource('/locations', LocationController::class)->except('show');
+    Route::get('/locations/{type}/{parentId?}', [LocationController::class, 'getLocationProductMapping'])->name('locations');
+    // Route::resource('/satuan', SatuanController::class);
+    // Route::resource('/category', CategoryController::class);
+    // Route::resource('/supplier', SupplierController::class);
+    // Route::resource('/customer', CustomerController::class);
+    // Route::resource('/driver', DriverController::class);
+    // Route::resource('/truck', TruckController::class);
+    // Route::resource('/bahanbaku', BahanBakuController::class);
+    // Route::resource('/project', ProjectController::class);
+    // Route::patch('/projects/{project}/updateStatus', [ProjectController::class, 'updateStatus'])->name('projects.updateStatus');
+    // Route::get('get-target', [ProjectController::class, 'target'])->name('getTarget');
+    // Route::get('get-capaian', [ProjectController::class, 'capaian'])->name('getCapaian');
+    // Route::get('/project-export', [ProjectController::class, 'projectExport'])->name('project.export');
+    // Route::resource('/entry', ProjectEntryController::class);
+    // Route::resource('/pembelian', PembelianController::class);
+    // Route::patch('/pembelians/{pembelian}/updateStatus', [PembelianController::class, 'updateStatus'])->name('pembelians.updateStatus');
+    // Route::get('/pembelian-export', [PembelianController::class, 'pembelianExport'])->name('pembelian.export');
+    // Route::get('/pembelian-export-filter', [PembelianController::class, 'pembelianExportFilter'])->name('pembelian.exportFilter');
+    // Route::resource('/penjualan', PenjualanController::class);
+    // Route::resource('/pengiriman', PengirimanController::class);
+    // Route::get('/pengiriman-export', [PengirimanController::class, 'pengirimanExport'])->name('pengiriman.export');
+    // Route::get('/pengiriman-inout', [PengirimanController::class, 'pengirimaninout'])->name('pengiriman.inout');
+    // Route::get('/pengiriman-daily', [PengirimanController::class, 'pengirimanDaily'])->name('pengiriman.daily');
+    // Route::get('/pengiriman-daily-filter', [PengirimanController::class, 'pengirimanDailyFilter'])->name('pengiriman.dailyFilter');
+    // Route::get('/pengiriman-nota', [PengirimanController::class, 'pengirimanNota'])->name('pengiriman.nota');
+    // Route::get('/pengiriman-solar', [PengirimanController::class, 'solar'])->name('pengiriman.solar');
+    // Route::put('/pengiriman-solar-update/{pengiriman}', [PengirimanController::class, 'solarUpdate'])->name('pengiriman.solar.update');
+    // Route::resource('/stock', StockController::class);
 
-    Route::get('/pembelianexport', [PembelianController::class, 'indexReport'])->name('pembelian.exp');
-    Route::get('/projectexport', [ProjectController::class, 'indexReport'])->name('project.exp');
-    Route::get('/pengirimanexport', [PengirimanController::class, 'indexReport'])->name('pengiriman.exp');
+    // Route::get('/pembelianexport', [PembelianController::class, 'indexReport'])->name('pembelian.exp');
+    // Route::get('/projectexport', [ProjectController::class, 'indexReport'])->name('project.exp');
+    // Route::get('/pengirimanexport', [PengirimanController::class, 'indexReport'])->name('pengiriman.exp');
 
-    Route::get('/projects/{project}/data', function (Project $project) {
-        return [
-            'name' => $project->customer->name,
-            'harga' => $project->product->harga,
-            'capaian' => $project->entries->sum('capaian'),
-        ];
-    });
+    // Route::get('/projects/{project}/data', function (Project $project) {
+    //     return [
+    //         'name' => $project->customer->name,
+    //         'harga' => $project->product->harga,
+    //         'capaian' => $project->entries->sum('capaian'),
+    //     ];
+    // });
 
-    Route::get('/penjualans/{penjualan}/data', function (Penjualan $penjualan) {
-        return [
-            'total_barang' => $penjualan->total_barang,
-        ];
-    });
+    // Route::get('/penjualans/{penjualan}/data', function (Penjualan $penjualan) {
+    //     return [
+    //         'total_barang' => $penjualan->total_barang,
+    //     ];
+    // });
 });
 
 require __DIR__.'/auth.php';
@@ -99,4 +101,3 @@ Route::get('/optimize', function () {
 
     return redirect('/login')->with(['success' => 'Optimization Berhasil']);
 });
-Route::get('/locations/{type}/{parentId?}', [LocationController::class, 'getLocationProductMapping'])->name('locations');

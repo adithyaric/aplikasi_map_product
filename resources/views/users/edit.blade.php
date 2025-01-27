@@ -39,6 +39,16 @@
                                 @enderror
                             </div>
                             <div class="form-group">
+                                <label for="">No Whatsapp</label>
+                                <input required type="text" class="form-control" name="phone"
+                                    value="{{ old('phone', $user->phone) }}" placeholder="Masukkan No Whatsapp">
+                                @error('phone')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <label for="">Email User</label>
                                 <input required type="email" class="form-control" name="email"
                                     value="{{ old('email', $user->email) }}" placeholder="Masukkan Kode User">

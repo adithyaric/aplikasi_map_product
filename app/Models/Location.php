@@ -9,7 +9,12 @@ class Location extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'type', 'parent_id', 'coordinates'];
+    protected $fillable = [
+        'name',
+        'type', // ['provinsi', 'kabupaten', 'kecamatan', 'desa', 'dusun']
+        'parent_id', // To establish hierarchy
+        'coordinates', // Polygon coordinates
+    ];
 
     public function parent()
     {
@@ -23,8 +28,6 @@ class Location extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'location_product')
-            ->withPivot('quantity')
-            ->withTimestamps();
+        return $this->belongsToMany(Product::class, 'location_product')->withPivot('quantity')->withTimestamps();
     }
 }

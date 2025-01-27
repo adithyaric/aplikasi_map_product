@@ -2,11 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LocationRequest;
 use App\Models\Location;
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
+    public function index()
+    {
+        return view('location.index', [
+            'locations' => Location::get()
+        ]);
+    }
+
+    public function create()
+    {
+        return view('location.create');
+    }
+
+    public function store(LocationRequest $request)
+    {
+        $data = $request->validated();
+        Location::create($data);
+
+        return redirect(route('locations.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
+    }
+
+    public function edit(Location $location)
+    {
+        return view('location.edit', compact('location'));
+    }
+
+    public function update(LocationRequest $request, Location $location)
+    {
+        $data = $request->validated();
+        $location->update($data);
+
+        return redirect(route('locations.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
+    }
+
+    public function destroy(Location $location)
+    {
+        $location->delete();
+
+        return redirect(route('locations.index'))->with('toast_error', 'Berhasil Menghapus Data!');
+    }
+
     public function getLocationProductMapping($type, $parentId = null)
     {
         $locations = Location::where('type', $type)
@@ -21,8 +62,9 @@ class LocationController extends Controller
             $totalQuantity = $location->products->sum('pivot.quantity');
 
             // Calculate percentage for each product
-            $productsData = $location->products->mapWithKeys(function ($product) use ($totalQuantity) {
-                $quantity = $product->pivot->quantity;
+            $productsData = $location->products->mapWithKeys(function ($product) use ($totalQuantity, $location) {
+                // $quantity = $product->pivot->quantity;
+                $quantity = $location->products->where('id', $product->id)->sum('pivot.quantity');
                 $percentage = $totalQuantity > 0 ? round(($quantity / $totalQuantity) * 100, 2) : 0;
 
                 // return [$product->name => $percentage . '%'];
@@ -48,7 +90,8 @@ class LocationController extends Controller
 
         if (isset($data[0]['coordinates'])) {
             return view('map.index', [
-                'data' => $data
+                'data' => $data,
+                'lokasi' => $locations[0]->type
             ]);
         }else{
             return response()->json($data);

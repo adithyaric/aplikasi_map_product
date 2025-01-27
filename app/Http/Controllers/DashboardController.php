@@ -24,7 +24,7 @@ class DashboardController extends Controller
         // }])->get());
 
         return view('dashboard.index', [
-            'projects' => Project::where('status', '!=', 'selesai')->get(),
+            // 'projects' => Project::where('status', '!=', 'selesai')->get(),
         ]);
     }
 }
