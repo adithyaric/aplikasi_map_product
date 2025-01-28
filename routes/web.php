@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/product', ProductController::class);
     Route::resource('/locations', LocationController::class)->except('show');
     Route::get('/locations/{type}/{parentId?}', [LocationController::class, 'getLocationProductMapping'])->name('locations');
+    Route::get('/locations-parent', [LocationController::class, 'getParents'])->name('locations.getParents');
     // Route::resource('/satuan', SatuanController::class);
     // Route::resource('/category', CategoryController::class);
     // Route::resource('/supplier', SupplierController::class);

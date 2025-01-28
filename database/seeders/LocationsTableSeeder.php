@@ -103,7 +103,7 @@ class LocationsTableSeeder extends Seeder
                 [110.9519298781251, -8.059816287014641],
                 [110.92429954267186, -8.107981999236998],
                 [110.90307923519572, -8.153646337185194],
-                [110.90663928663696, -8.209942144176352]
+                [110.90663928663696, -8.209942144176352],
             ]),
         ]);
 
@@ -384,7 +384,7 @@ class LocationsTableSeeder extends Seeder
                 [111.44367169806361, -7.780528340576581],
                 [111.44716888286564, -7.779852244541303],
                 [111.44836304352862, -7.7789226107128115],
-                [111.44996154505782, -7.778818142280926]
+                [111.44996154505782, -7.778818142280926],
             ]),
         ]);
 
@@ -413,7 +413,7 @@ class LocationsTableSeeder extends Seeder
         foreach ($kecamatan as $name) {
             Location::create([
                 'parent_id' => $kabupatenMagetan->id,
-                'name' => "Kecamatan " . $name,
+                'name' => 'Kecamatan '.$name,
                 'type' => 'kecamatan',
             ]);
         }

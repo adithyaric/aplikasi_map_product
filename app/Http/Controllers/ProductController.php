@@ -28,14 +28,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['harga'] = str_replace(',', '', $data['harga']);
-        $product = Product::create([
-            'name' => $data['name'],
-            'harga' => $data['harga'],
-            'category_id' => $data['category_id'],
-        ]);
-
-        $product->bahanbaku()->attach($data['bahanbaku']);
+        Product::create(['name' => $data['name']]);
 
         return redirect(route('product.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }
@@ -48,8 +41,6 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return view('product.edit', [
-            'bahanbakus' => BahanBaku::get(),
-            'categories' => Category::get(),
             'product' => $product,
         ]);
     }
@@ -57,15 +48,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->all();
-        $data['harga'] = str_replace(',', '', $data['harga']);
-        $product->update([
-            'name' => $data['name'],
-            'harga' => $data['harga'],
-            'category_id' => $data['category_id'],
-        ]);
-
-        $product->bahanbaku()->detach();
-        $product->bahanbaku()->sync($data['bahanbaku']);
+        $product->update(['name' => $data['name']]);
 
         return redirect(route('product.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }

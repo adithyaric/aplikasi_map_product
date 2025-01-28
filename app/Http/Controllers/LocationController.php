@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LocationRequest;
 use App\Models\Location;
+use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
@@ -29,7 +30,22 @@ class LocationController extends Controller
 
     public function edit(Location $location)
     {
-        return view('location.edit', compact('location'));
+        $parentType = match ($location->type) {
+            'kabupaten' => 'provinsi',
+            'kecamatan' => 'kabupaten',
+            'desa' => 'kecamatan',
+            'dusun' => 'desa',
+            default => null,
+        };
+
+        $parentLocations = $parentType
+            ? Location::where('type', $parentType)->get()
+            : collect(); // Empty collection for 'provinsi'
+
+        return view('location.edit', [
+            'location' => $location,
+            'parentLocations' => $parentLocations,
+        ]);
     }
 
     public function update(LocationRequest $request, Location $location)
@@ -97,6 +113,14 @@ class LocationController extends Controller
         }
     }
 
+    public function getParents(Request $request)
+    {
+        $type = $request->get('type');
+        $locations = Location::where('type', $type)->get(['id', 'name']);
+
+        return response()->json($locations);
+    }
+
     private function getColor($totalQuantity)
     {
         // Define color thresholds
@@ -106,11 +130,11 @@ class LocationController extends Controller
             // 15  => "#00008B", // Dark Blue
             // 20  => "#000080", // More Darker Blue
             // 25  => "#000033", // Darkest Blue
-            5   => "blue", // Light Blue
-            10  => "orange", // Blue
-            15  => "red", // Dark Blue
-            20  => "green", // More Darker Blue
-            25  => "black", // Darkest Blue
+            5 => 'blue', // Light Blue
+            10 => 'orange', // Blue
+            15 => 'red', // Dark Blue
+            20 => 'green', // More Darker Blue
+            25 => 'black', // Darkest Blue
         ];
 
         // Find the appropriate color based on the thresholds
@@ -121,7 +145,7 @@ class LocationController extends Controller
         }
 
         // Default color if above all thresholds
-        return "#0000FF"; // Blue
+        return '#0000FF'; // Blue
     }
 
     private function getnextRoute($type)
