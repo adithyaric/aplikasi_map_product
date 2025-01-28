@@ -75,7 +75,7 @@ class LocationController extends Controller
                 'name' => $location->name,
                 'data' => $productsData,
                 'coordinates' => json_decode($location->coordinates),
-                'color' => $this->getColor($location->type),
+                'color' => $this->getColor($totalQuantity),
                 'nextRoute' => route('locations', ['type' => $this->getnextRoute($location->type), 'parentId' => $location->id]),
                 'children' => $location->children->map(function ($child) {
                     return [
@@ -97,17 +97,26 @@ class LocationController extends Controller
         }
     }
 
-    private function getColor($type)
+    private function getColor($totalQuantity)
     {
+        // Define color thresholds
         $colors = [
-            'provinsi' => 'blue',
-            'kabupaten' => 'green',
-            'kecamatan' => 'red',
-            'desa' => 'yellow',
-            'dusun' => 'purple',
+            5   => "#ADD8E6", // Light Blue
+            10  => "#0000FF", // Blue
+            15  => "#00008B", // Dark Blue
+            20  => "#000080", // More Darker Blue
+            25  => "#000033", // Darkest Blue
         ];
 
-        return $colors[$type] ?? 'gray';
+        // Find the appropriate color based on the thresholds
+        foreach ($colors as $threshold => $color) {
+            if ($totalQuantity <= $threshold) {
+                return $color;
+            }
+        }
+
+        // Default color if above all thresholds
+        return "#0000FF"; // Blue
     }
 
     private function getnextRoute($type)
