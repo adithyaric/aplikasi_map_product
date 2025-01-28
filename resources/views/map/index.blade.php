@@ -15,7 +15,7 @@
 @section('page-script')
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map').setView([-7.431, 112.886], 9.11);
+        const map = L.map('map').setView([-7.697, 112.745], 9.11);
 
         // Add a base map layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

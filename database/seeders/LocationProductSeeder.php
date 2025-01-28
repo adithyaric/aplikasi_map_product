@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Location;
 use App\Models\Product;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class LocationProductSeeder extends Seeder
@@ -23,12 +22,10 @@ class LocationProductSeeder extends Seeder
         // Define sample quantities for each location and product
         $sampleQuantities = [
             'Provinsi Jawa Timur' => ['Product A' => 8, 'Product B' => 8, 'Product C' => 3],
-            'Kabupaten Madiun' => ['Product A' => 5, 'Product B' => 4, 'Product C' => 1],
-            'Kabupaten Pacitan' => ['Product A' => 3, 'Product B' => 4, 'Product C' => 2],
-            'Kecamatan Dopo' => ['Product A' => 2, 'Product B' => 1, 'Product C' => 0],
-            'Kecamatan Geger' => ['Product A' => 3, 'Product B' => 3, 'Product C' => 1],
-            'Kecamatan Arjosari' => ['Product A' => 2, 'Product B' => 3, 'Product C' => 1],
-            'Desa Munggut' => ['Product A' => 5, 'Product B' => 3, 'Product C' => 2],
+            'Kabupaten Magetan' => ['Product A' => 5, 'Product B' => 4, 'Product C' => 1],
+            'Kecamatan Magetan' => ['Product A' => 2, 'Product B' => 1, 'Product C' => 0],
+            'Kecamatan Barat' => ['Product A' => 3, 'Product B' => 3, 'Product C' => 1],
+            'Kecamatan Bendo' => ['Product A' => 2, 'Product B' => 3, 'Product C' => 1],
         ];
 
         foreach ($locations as $location) {

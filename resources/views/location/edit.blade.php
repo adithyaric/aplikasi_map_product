@@ -22,9 +22,14 @@
                                 <input required type="text" class="form-control" name="name"
                                     value="{{ old('name', $location->name) }}" placeholder="Masukkan Nama Lokasi">
                                 @error('name')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Koordinat Lokasi</label>
+                                    <textarea name="coordinates" class="form-control" id="coordinates" cols="30" rows="10">{{ old('coordinates', $location->coordinates) }}</textarea>
+                                @error('coordinates')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div><!-- /.box-body -->
