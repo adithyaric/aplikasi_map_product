@@ -101,11 +101,16 @@ class LocationController extends Controller
     {
         // Define color thresholds
         $colors = [
-            5   => "#ADD8E6", // Light Blue
-            10  => "#0000FF", // Blue
-            15  => "#00008B", // Dark Blue
-            20  => "#000080", // More Darker Blue
-            25  => "#000033", // Darkest Blue
+            // 5   => "#ADD8E6", // Light Blue
+            // 10  => "#0000FF", // Blue
+            // 15  => "#00008B", // Dark Blue
+            // 20  => "#000080", // More Darker Blue
+            // 25  => "#000033", // Darkest Blue
+            5   => "blue", // Light Blue
+            10  => "orange", // Blue
+            15  => "red", // Dark Blue
+            20  => "green", // More Darker Blue
+            25  => "black", // Darkest Blue
         ];
 
         // Find the appropriate color based on the thresholds
