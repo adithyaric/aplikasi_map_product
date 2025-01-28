@@ -145,7 +145,7 @@ class LocationController extends Controller
         }
 
         // Default color if above all thresholds
-        return '#0000FF'; // Blue
+        return 'yellow'; // Blue
     }
 
     private function getnextRoute($type)

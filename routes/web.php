@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
     // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/users', UserController::class);
     Route::resource('/product', ProductController::class);
+    Route::get('/product-penyebaran', [ProductController::class, 'showInputForm'])->name('product.input.form');
+    Route::post('/product-quantity', [ProductController::class, 'inputProductQuantity'])->name('product.input.quantity');
     Route::resource('/locations', LocationController::class)->except('show');
     Route::get('/locations/{type}/{parentId?}', [LocationController::class, 'getLocationProductMapping'])->name('locations');
     Route::get('/locations-parent', [LocationController::class, 'getParents'])->name('locations.getParents');

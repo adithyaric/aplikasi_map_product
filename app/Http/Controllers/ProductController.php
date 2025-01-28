@@ -6,6 +6,7 @@ use App\Models\BahanBaku;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -60,6 +61,15 @@ class ProductController extends Controller
         return redirect(route('product.index'))->with('toast_error', 'Berhasil Menghapus Data!');
     }
 
+    public function showInputForm()
+    {
+        $users = User::get();
+        $locations = Location::get();
+        $products = Product::get();
+
+        return view('inputpenyebaran', compact('users', 'locations', 'products'));
+    }
+
     // TODO Input product quantity for a specific user, location, and date
     public function inputProductQuantity(Request $request)
     {
@@ -78,7 +88,7 @@ class ProductController extends Controller
             $validatedData['location_id'],
             [
                 'quantity' => $validatedData['quantity'],
-                'user_id' => $validatedData['user_id'],
+                // 'user_id' => $validatedData['user_id'],
                 // 'date' => $validatedData['date'],
             ]
         );
