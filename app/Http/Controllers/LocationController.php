@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LocationRequest;
 use App\Models\Location;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
@@ -69,21 +70,55 @@ class LocationController extends Controller
             ->when($parentId, function ($query) use ($parentId) {
                 $query->where('parent_id', $parentId);
             })
-            ->with(['products', 'children'])
+            ->with(['products', 'children.children.children.children.products']) // Load all child levels
             ->get();
 
         $data = $locations->map(function ($location) {
-            // Total quantity of all products in this location
-            $totalQuantity = $location->products->sum('pivot.quantity');
+            // Get all products from this location and its children recursively
+            switch ($location->type) {
+                case 'dusun':
+                    $allProducts = $location->products;
+                    break;
+
+                case 'desa':
+                    $dusunLocations = $location->children; // Get dusun locations
+                    $allProducts = $dusunLocations->flatMap->products;
+                    break;
+
+                case 'kecamatan':
+                    $desaLocations = $location->children; // Get desa locations
+                    $dusunLocations = $desaLocations->flatMap->children; // Get dusun under desa
+                    $allProducts = $dusunLocations->flatMap->products;
+                    break;
+
+                case 'kabupaten':
+                    $kecamatanLocations = $location->children; // Get kecamatan locations
+                    $desaLocations = $kecamatanLocations->flatMap->children; // Get desa under kecamatan
+                    $dusunLocations = $desaLocations->flatMap->children; // Get dusun under desa
+                    $allProducts = $dusunLocations->flatMap->products;
+                    break;
+
+                case 'provinsi':
+                    $kabupatenLocations = $location->children; // Get kabupaten locations
+                    $kecamatanLocations = $kabupatenLocations->flatMap->children; // Get kecamatan under kabupaten
+                    $desaLocations = $kecamatanLocations->flatMap->children; // Get desa under kecamatan
+                    $dusunLocations = $desaLocations->flatMap->children; // Get dusun under desa
+                    $allProducts = $dusunLocations->flatMap->products;
+                    break;
+
+                default:
+                    $allProducts = collect(); // Empty collection for unknown types
+            }
+
+            $totalQuantity = $allProducts->sum('pivot.quantity');
 
             // Calculate percentage for each product
-            $productsData = $location->products->mapWithKeys(function ($product) use ($totalQuantity, $location) {
-                // $quantity = $product->pivot->quantity;
-                $quantity = $location->products->where('id', $product->id)->sum('pivot.quantity');
+            $productsData = $allProducts->groupBy('id')->mapWithKeys(function ($group, $productId) use ($totalQuantity) {
+                $productName = $group->first()->name;
+                $quantity = $group->sum('pivot.quantity');
                 $percentage = $totalQuantity > 0 ? round(($quantity / $totalQuantity) * 100, 2) : 0;
 
-                // return [$product->name => $percentage . '%'];
-                return [$product->name => $percentage];
+                return [$productName => $percentage.'%'.' - '.$quantity.' item'];
             });
 
             return [
@@ -121,6 +156,24 @@ class LocationController extends Controller
         return response()->json($locations);
     }
 
+    public function getDesa($user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        // Get desa locations linked to this user
+        $desaLocations = $user->locations()->where('type', 'desa')->get();
+
+        return response()->json($desaLocations);
+    }
+
+    public function getDusun($desa_id)
+    {
+        // Get dusun locations under selected desa
+        $dusunLocations = Location::where('parent_id', $desa_id)->where('type', 'dusun')->get();
+
+        return response()->json($dusunLocations);
+    }
+
     private function getColor($totalQuantity)
     {
         // Define color thresholds
@@ -155,6 +208,7 @@ class LocationController extends Controller
             'kabupaten' => 'kecamatan',
             'kecamatan' => 'desa',
             'desa' => 'dusun',
+            'dusun' => ' ',
         ];
 
         return $next[$type] ?? null;

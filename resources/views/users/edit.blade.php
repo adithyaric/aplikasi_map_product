@@ -19,8 +19,8 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label>Level User</label>
-                                <select required class="form-control select2" name="role" data-placeholder="Pilih Level User"
-                                    style="width: 100%;">
+                                <select required class="form-control select2" name="role"
+                                    data-placeholder="Pilih Level User" style="width: 100%;">
                                     @foreach ($levels as $level)
                                         <option value="{{ $level }}"
                                             {{ old('role', $user->role) == $level ? 'selected' : '' }}>{{ $level }}

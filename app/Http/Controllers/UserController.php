@@ -19,7 +19,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $levels = ['Owner', 'Administrasi', 'Finance'];
+        $levels = ['admin', 'sales'];
 
         return view('users.create', compact('levels'));
     }
@@ -39,7 +39,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $levels = ['Owner', 'Administrasi', 'Finance'];
+        $levels = ['admin', 'sales'];
 
         return view('users.edit', compact('user', 'levels'));
     }

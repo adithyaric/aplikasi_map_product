@@ -26,25 +26,26 @@
                             @enderror
                         </div>
 
+                        <!-- Desa Dropdown (Dependent on User) -->
                         <div class="form-group">
-                            <label for="location_id">Pilih Lokasi</label>
-                            <select name="location_id" id="location_id" class="form-control select2" required style="width: 100%;">
-                                <option value="" disabled selected>-- Pilih Lokasi --</option>
-                                @foreach ($locations as $location)
-                                    <option value="{{ $location->id }}"
-                                        {{ old('location_id') == $location->id ? 'selected' : '' }}>
-                                        {{ $location->name }}
-                                    </option>
-                                @endforeach
+                            <label for="desa_id">Pilih Desa</label>
+                            <select name="desa_id" id="desa_id" class="form-control select2" required disabled>
+                                <option value="" disabled selected>-- Pilih Desa --</option>
                             </select>
-                            @error('location_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        </div>
+
+                        <!-- Dusun Dropdown (Dependent on Desa) -->
+                        <div class="form-group">
+                            <label for="dusun_id">Pilih Dusun</label>
+                            <select name="location_id" id="dusun_id" class="form-control select2" required disabled>
+                                <option value="" disabled selected>-- Pilih Dusun --</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
                             <label for="product_id">Pilih Produk</label>
-                            <select name="product_id" id="product_id" class="form-control select2" required style="width: 100%;">
+                            <select name="product_id" id="product_id" class="form-control select2" required
+                                style="width: 100%;">
                                 <option value="" disabled selected>-- Pilih Produk --</option>
                                 @foreach ($products as $product)
                                     <option value="{{ $product->id }}"
@@ -87,4 +88,39 @@
             </div>
         </div>
     </section>
+@endsection
+@section('page-script')
+    <script>
+        $(document).ready(function() {
+            $('#user_id').change(function() {
+                let userId = $(this).val();
+                $('#desa_id').html('<option value="" disabled selected>Loading...</option>').prop(
+                    'disabled', true);
+                $('#dusun_id').html('<option value="" disabled selected>-- Pilih Dusun --</option>').prop(
+                    'disabled', true);
+
+                $.get('/get-desa/' + userId, function(data) {
+                    let options = '<option value="" disabled selected>-- Pilih Desa --</option>';
+                    data.forEach(function(desa) {
+                        options += `<option value="${desa.id}">${desa.name}</option>`;
+                    });
+                    $('#desa_id').html(options).prop('disabled', false);
+                });
+            });
+
+            $('#desa_id').change(function() {
+                let desaId = $(this).val();
+                $('#dusun_id').html('<option value="" disabled selected>Loading...</option>').prop(
+                    'disabled', true);
+
+                $.get('/get-dusun/' + desaId, function(data) {
+                    let options = '<option value="" disabled selected>-- Pilih Dusun --</option>';
+                    data.forEach(function(dusun) {
+                        options += `<option value="${dusun.id}">${dusun.name}</option>`;
+                    });
+                    $('#dusun_id').html(options).prop('disabled', false);
+                });
+            });
+        });
+    </script>
 @endsection

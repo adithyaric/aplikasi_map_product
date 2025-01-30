@@ -21,8 +21,8 @@ class ProductController extends Controller
     public function create()
     {
         return view('product.create', [
-            'bahanbakus' => BahanBaku::get(),
-            'categories' => Category::get(),
+            // 'bahanbakus' => BahanBaku::get(),
+            // 'categories' => Category::get(),
         ]);
     }
 
@@ -63,11 +63,18 @@ class ProductController extends Controller
 
     public function showInputForm()
     {
-        $users = User::get();
-        $locations = Location::get();
+        $authUser = auth()->user();
+
+        // If user is admin, show users with role 'sales', otherwise show only the logged-in user
+        $users = $authUser->role === 'admin'
+            ? User::where('role', 'sales')->get()
+            : User::where('id', $authUser->id)->get();
+
+        // $locations = Location::whereIn('type', ['desa', 'dusun'])->get();
+
         $products = Product::get();
 
-        return view('inputpenyebaran', compact('users', 'locations', 'products'));
+        return view('inputpenyebaran', compact('users', 'products'));
     }
 
     // TODO Input product quantity for a specific user, location, and date
@@ -95,7 +102,7 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Product quantity successfully added/updated.',
-            'data' => $product,
+            'data' => $product->locations,
         ]);
     }
 }

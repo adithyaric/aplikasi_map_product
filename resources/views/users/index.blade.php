@@ -25,6 +25,7 @@
                                     <td>No</td>
                                     <td>Nama Users</td>
                                     <td>No Whatsapp</td>
+                                    <td>Role</td>
                                     <td>Aksi</td>
                                 </tr>
                             </thead>
@@ -33,6 +34,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->phone }}</td>
+                                    <td>{{ $value->role }}</td>
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('users.edit', $value->id) }}">Edit</a>
                                         <form action="{{ route('users.destroy', $value->id) }}" method="post"

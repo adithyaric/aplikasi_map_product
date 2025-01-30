@@ -35,13 +35,13 @@
             // Add a popup with peta name and product percentages
             polygon.bindPopup(() => {
                 const products = Object.entries(peta.data)
-                    .map(([product, percentage]) => `${product}: ${percentage}%`)
+                    .map(([product, percentage]) => `${product}: ${percentage}`)
                     .join('<br>');
 
                 return `
                     <b>${peta.name}</b><br>
                     ${products}<br>
-                    <a target="_blank" href="${peta.nextRoute}">View Detail</a>
+                    <a href="${peta.nextRoute}">View Detail</a>
                 `;
             });
         });
