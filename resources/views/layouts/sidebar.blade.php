@@ -19,7 +19,7 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             <!-- Optionally, you can add icons to the links -->
-            <li><a href="#"><i class="fa fa-tachometer"></i> <span>Dashboard</span></a></li>
+            <li><a href="{{ route('dashboard') }}"><i class="fa fa-tachometer"></i> <span>Dashboard</span></a></li>
             <li><a href="{{ route('locations', ['type' => 'provinsi']) }}"><i class="fa fa-map"></i> <span>Peta</span></a></li>
             <li><a href="{{ route('locations.index') }}"><i class="fa fa-map-marker"></i> <span>Area</span></a></li>
             <li><a href="#"><i class="fa fa-bar-chart"></i> Statitstik</a></li>

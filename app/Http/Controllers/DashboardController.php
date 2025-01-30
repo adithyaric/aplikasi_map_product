@@ -16,52 +16,21 @@ class DashboardController extends Controller
 
     public function getChartData(Request $request)
     {
-        $parentId = $request->id;
-        $locations = Location::where('type', $request->type)
-            ->when($parentId, function ($query) use ($parentId) {
-                // $query->where('parent_id', $parentId);
-                $query->where('id', $parentId);
+        $type = $request->type;
+        $id = $request->id;
+
+        // Fetch the selected location and its children recursively
+        $locations = Location::where('type', $type)
+            ->when($id, function ($query) use ($id) {
+                $query->where('id', $id);
             })
             ->with(['products', 'children.children.children.children.products'])
             ->get();
+
+        // Map the data to include product quantities
         $data = $locations->map(function ($location) {
-            // Get all products from this location and its children recursively
-            switch ($location->type) {
-                case 'dusun':
-                    $allProducts = $location->products;
-                    break;
-
-                case 'desa':
-                    $dusunLocations = $location->children;
-                    $allProducts = $dusunLocations->flatMap->products;
-                    break;
-
-                case 'kecamatan':
-                    $desaLocations = $location->children;
-                    $dusunLocations = $desaLocations->flatMap->children;
-                    $allProducts = $dusunLocations->flatMap->products;
-                    break;
-
-                case 'kabupaten':
-                    $kecamatanLocations = $location->children;
-                    $desaLocations = $kecamatanLocations->flatMap->children;
-                    $dusunLocations = $desaLocations->flatMap->children;
-                    $allProducts = $dusunLocations->flatMap->products;
-                    break;
-
-                case 'provinsi':
-                    $kabupatenLocations = $location->children;
-                    $kecamatanLocations = $kabupatenLocations->flatMap->children;
-                    $desaLocations = $kecamatanLocations->flatMap->children;
-                    $dusunLocations = $desaLocations->flatMap->children;
-                    $allProducts = $dusunLocations->flatMap->products;
-                    break;
-
-                default:
-                    $allProducts = collect();
-            }
-
-            // $totalQuantity = $allProducts->sum('pivot.quantity');
+            $allProducts = $this->getAllProducts($location);
+            $totalQuantity = $allProducts->sum('pivot.quantity');
 
             // Group products by name and sum their quantities
             $productsData = $allProducts->groupBy('name')->map(function ($group) {
@@ -74,8 +43,49 @@ class DashboardController extends Controller
             ];
         });
 
-        // dd($data->toArray(), $locations->toArray());
         return response()->json($data);
+    }
+
+    // Helper function to get all products recursively
+    private function getAllProducts($location)
+    {
+        $allProducts = collect();
+
+        switch ($location->type) {
+            case 'dusun':
+                $allProducts = $location->products;
+                break;
+
+            case 'desa':
+                $allProducts = $location->children->flatMap->products;
+                break;
+
+            case 'kecamatan':
+                $allProducts = $location->children->flatMap(function ($child) {
+                    return $child->children->flatMap->products;
+                });
+                break;
+
+            case 'kabupaten':
+                $allProducts = $location->children->flatMap(function ($child) {
+                    return $child->children->flatMap(function ($grandChild) {
+                        return $grandChild->children->flatMap->products;
+                    });
+                });
+                break;
+
+            case 'provinsi':
+                $allProducts = $location->children->flatMap(function ($child) {
+                    return $child->children->flatMap(function ($grandChild) {
+                        return $grandChild->children->flatMap(function ($greatGrandChild) {
+                            return $greatGrandChild->children->flatMap->products;
+                        });
+                    });
+                });
+                break;
+        }
+
+        return $allProducts;
     }
 
     public function getChildLocations($type, $parentId)

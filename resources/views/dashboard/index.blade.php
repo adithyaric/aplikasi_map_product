@@ -41,6 +41,7 @@
                     </div>
 
                     <div id="productLocationChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    <div id="productPieChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div><!-- /.box -->
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -56,9 +57,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const chartElement = document.getElementById('productLocationChart');
-            let chart;
+            const pieChartElement = document.getElementById('productPieChart');
+            let chart, pieChart;
 
-            // Initialize the chart
+            // Initialize the column chart
             function initChart(data) {
                 chart = Highcharts.chart(chartElement, {
                     chart: {
@@ -97,12 +99,50 @@
                 });
             }
 
-            // Update the chart with new data
+            // Initialize the pie chart
+            function initPieChart(data) {
+                pieChart = Highcharts.chart(pieChartElement, {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Product Distribution'
+                    },
+                    series: [{
+                        name: 'Quantity',
+                        data: data
+                    }],
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.y} ({point.percentage:.2f}%)'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y}</b>'
+                    }
+                });
+            }
+
+            // Update the column chart with new data
             function updateChart(data) {
                 if (chart) {
                     chart.series[0].setData(data);
                 } else {
                     initChart(data);
+                }
+            }
+
+            // Update the pie chart with new data
+            function updatePieChart(data) {
+                if (pieChart) {
+                    pieChart.series[0].setData(data);
+                } else {
+                    initPieChart(data);
                 }
             }
 
@@ -118,24 +158,7 @@
                             }))
                         );
                         updateChart(chartData);
-                    });
-            }
-
-            // Fetch child locations dynamically
-            function fetchChildLocations(type, parentId, targetSelectId) {
-                fetch(`/child-locations/${type}/${parentId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const targetSelect = document.getElementById(targetSelectId);
-                        targetSelect.innerHTML = '<option value="">Pilih ' + type.charAt(0).toUpperCase() + type
-                            .slice(1) + '</option>';
-                        data.forEach(location => {
-                            const option = document.createElement('option');
-                            option.value = location.id;
-                            option.textContent = location.name;
-                            targetSelect.appendChild(option);
-                        });
-                        targetSelect.disabled = false;
+                        updatePieChart(chartData);
                     });
             }
 
@@ -168,6 +191,24 @@
                 const dusunId = this.value;
                 fetchChartData('dusun', dusunId);
             });
+
+            // Fetch child locations dynamically
+            function fetchChildLocations(type, parentId, targetSelectId) {
+                fetch(`/child-locations/${type}/${parentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const targetSelect = document.getElementById(targetSelectId);
+                        targetSelect.innerHTML = '<option value="">Pilih ' + type.charAt(0).toUpperCase() + type
+                            .slice(1) + '</option>';
+                        data.forEach(location => {
+                            const option = document.createElement('option');
+                            option.value = location.id;
+                            option.textContent = location.name;
+                            targetSelect.appendChild(option);
+                        });
+                        targetSelect.disabled = false;
+                    });
+            }
         });
     </script>
 @endsection
