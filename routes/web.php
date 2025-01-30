@@ -42,7 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/chart-data', [DashboardController::class, 'getChartData']);
+    Route::get('/child-locations/{type}/{parentId}', [DashboardController::class, 'getChildLocations']);
     Route::resource('/users', UserController::class);
     Route::resource('/product', ProductController::class);
     Route::get('/product-penyebaran', [ProductController::class, 'showInputForm'])->name('product.input.form');
