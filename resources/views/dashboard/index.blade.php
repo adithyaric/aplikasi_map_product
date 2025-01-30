@@ -13,9 +13,10 @@
                     <div class="mb-4 filters">
                         <label for="provinsi">Provinsi:</label>
                         <select id="provinsi" class="form-control">
-                            <option value="">Pilih Provinsi</option>
                             @foreach ($provinces as $province)
-                                <option value="{{ $province->id }}">{{ $province->name }}</option>
+                                <option value="{{ $province->id }}" {{ $loop->first ? 'selected' : '' }}>
+                                    {{ $province->name }}
+                                </option>
                             @endforeach
                         </select>
 
@@ -162,11 +163,18 @@
                     });
             }
 
-            // Event listeners for filters
-            document.getElementById('provinsi').addEventListener('change', function() {
-                const provinsiId = this.value;
-                fetchChartData('provinsi', provinsiId);
-                fetchChildLocations('kabupaten', provinsiId, 'kabupaten');
+            let provinsiSelect = document.getElementById("provinsi");
+            let firstProvinsi = provinsiSelect.value;
+
+            if (firstProvinsi) {
+                fetchChartData("provinsi", firstProvinsi);
+                fetchChildLocations("kabupaten", firstProvinsi, "kabupaten");
+            }
+
+            // Event listener for dropdown change
+            provinsiSelect.addEventListener("change", function() {
+                fetchChartData("provinsi", this.value);
+                fetchChildLocations("kabupaten", this.value, "kabupaten");
             });
 
             document.getElementById('kabupaten').addEventListener('change', function() {
