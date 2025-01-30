@@ -22,7 +22,7 @@
             <li><a href="{{ route('dashboard') }}"><i class="fa fa-tachometer"></i> <span>Dashboard</span></a></li>
             <li><a href="{{ route('locations', ['type' => 'provinsi']) }}"><i class="fa fa-map"></i> <span>Peta</span></a></li>
             <li><a href="{{ route('locations.index') }}"><i class="fa fa-map-marker"></i> <span>Area</span></a></li>
-            <li><a href="#"><i class="fa fa-bar-chart"></i> Statitstik</a></li>
+            <li><a href="{{ route('dashboard.statistik') }}"><i class="fa fa-bar-chart"></i> Statitstik</a></li>
             <li><a href="{{ route('product.index') }}"><i class="fa fa-cube"></i> Product</a></li>
             <li><a href="{{ route('product.input.form') }}"><i class="fa fa-cubes"></i> Penyebaran Product</a></li>
             <li><a href="{{ route('users.index') }}"><i class="fa fa-user"></i> Users</a></li>

@@ -9,24 +9,6 @@
     <section class="content">
         <div class="row">
             <div class="col-xs-12">
-                @foreach ($products as $index => $product)
-                    @php
-                        $bgColor = $colors[$index % count($colors)];
-                    @endphp
-                    <div class="col-lg-4 col-md-4 col-sm-12">
-                        <div class="small-box" style="background-color: {{ $bgColor }};">
-                            <div class="inner">
-                                <h3>{{ $product->locations->sum('pivot.quantity') }}</h3>
-                                <p>{{ $product->name }}</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fa fa-pie-chart"></i>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            <div class="col-xs-12">
                 <div class="box">
                     <div class="mb-4 filters">
                         <label for="provinsi">Provinsi:</label>
@@ -60,7 +42,27 @@
                     </div>
 
                     <div id="productLocationChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                    <div id="productPieChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    <div class="box-body table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td>No</td>
+                                    <td>Nama Product</td>
+                                    {{-- <td>Kategori Product</td> --}}
+                                    <td>Banyak Penyebaran (qty)</td>
+                                </tr>
+                            </thead>
+                            @foreach ($products as $value)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $value->name }}</td>
+                                    {{-- <td>{{ $value->category->name }}</td> --}}
+                                    <td>{{ $value->locations->sum('pivot.quantity') }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div><!-- /.box-body -->
+
                 </div><!-- /.box -->
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -76,7 +78,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const chartElement = document.getElementById('productLocationChart');
-            const pieChartElement = document.getElementById('productPieChart');
+            // const pieChartElement = document.getElementById('productPieChart');
             let chart, pieChart;
 
             // Initialize the column chart
@@ -118,50 +120,12 @@
                 });
             }
 
-            // Initialize the pie chart
-            function initPieChart(data) {
-                pieChart = Highcharts.chart(pieChartElement, {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'Product Distribution'
-                    },
-                    series: [{
-                        name: 'Quantity',
-                        data: data
-                    }],
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.y} ({point.percentage:.2f}%)'
-                            }
-                        }
-                    },
-                    tooltip: {
-                        pointFormat: '<b>{point.y}</b>'
-                    }
-                });
-            }
-
             // Update the column chart with new data
             function updateChart(data) {
                 if (chart) {
                     chart.series[0].setData(data);
                 } else {
                     initChart(data);
-                }
-            }
-
-            // Update the pie chart with new data
-            function updatePieChart(data) {
-                if (pieChart) {
-                    pieChart.series[0].setData(data);
-                } else {
-                    initPieChart(data);
                 }
             }
 
@@ -178,7 +142,6 @@
                             }))
                         );
                         updateChart(chartData);
-                        updatePieChart(chartData);
                     });
             }
 
