@@ -10,7 +10,7 @@
             </div>
             <div class="pull-left info">
                 <p>{{ Auth::user()->name }}</p>
-                <p>PT. TUBAN PRIMA ENERGI</p>
+                <p>MAPPING PRODUCT</p>
                 <!-- Status -->
                 {{-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> --}}
             </div>

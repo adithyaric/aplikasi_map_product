@@ -12,7 +12,7 @@
     <table>
         <thead>
             <tr><td colspan="{{ 7 + $categories->count() }}"></td></tr>
-            <tr><td colspan="{{ 7 + $categories->count() }}">PT. TUBAN PRIMA ENERGI</td></tr>
+            <tr><td colspan="{{ 7 + $categories->count() }}">MAPPING PRODUCT</td></tr>
             <tr><td colspan="{{ 7 + $categories->count() }}">GENERAL CONTRACTOR DAN SUPPLIER</td></tr>
             <tr><td colspan="{{ 7 + $categories->count() }}">Jl. Sunan Drajat No. 06 Tuban</td></tr>
             <tr><td colspan="{{ 7 + $categories->count() }}"></td></tr>

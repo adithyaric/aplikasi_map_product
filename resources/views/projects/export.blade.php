@@ -12,7 +12,7 @@
     <table border="1">
         <thead>
             <tr><td colspan="7"></td></tr>
-            <tr><td colspan="7">PT. TUBAN PRIMA ENERGI</td></tr>
+            <tr><td colspan="7">MAPPING PRODUCT</td></tr>
             <tr><td colspan="7">GENERAL CONTRACTOR DAN SUPPLIER</td></tr>
             <tr><td colspan="7">Jl. Sunan Drajat No. 06 Tuban</td></tr>
             <tr><td colspan="7"></td></tr>
