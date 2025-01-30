@@ -28,6 +28,16 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label for="desa_id">Pilih Desa</label>
+                                <select name="desa_id[]" id="desa_id" class="form-control select2" multiple required>
+                                    @foreach ($desas as $desa)
+                                        <option value="{{ $desa->id }}" {{ in_array($desa->id, $selectedDesa ?? []) ? 'selected' : '' }}>
+                                            {{ $desa->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="">Nama User</label>
                                 <input required type="text" class="form-control" name="name"
                                     value="{{ old('name') }}" placeholder="Masukkan Nama User">

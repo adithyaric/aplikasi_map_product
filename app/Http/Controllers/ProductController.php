@@ -100,9 +100,10 @@ class ProductController extends Controller
             ]
         );
 
-        return response()->json([
-            'message' => 'Product quantity successfully added/updated.',
-            'data' => $product->locations,
-        ]);
+        return redirect(route('product.input.form'))->with('toast_success', 'Berhasil Menyimpan Data!');
+        // return response()->json([
+        //     'message' => 'Product quantity successfully added/updated.',
+        //     'data' => $product->locations,
+        // ]);
     }
 }

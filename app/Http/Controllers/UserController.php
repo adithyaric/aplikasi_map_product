@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -20,14 +21,20 @@ class UserController extends Controller
     public function create()
     {
         $levels = ['admin', 'sales'];
+        $desas = Location::where('type', 'desa')->get();
 
-        return view('users.create', compact('levels'));
+        return view('users.create', compact('levels', 'desas'));
     }
 
     public function store(UserRequest $request)
     {
         $data = $request->validated();
-        User::create($data);
+        $user = User::create($data);
+
+        // Attach desa location
+        if ($request->filled('desa_id')) {
+            $user->locations()->attach($request->desa_id);
+        }
 
         return redirect(route('users.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }
@@ -40,8 +47,10 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $levels = ['admin', 'sales'];
+        $desas = Location::where('type', 'desa')->get();
+        $selectedDesa = $user->locations()->pluck('locations.id')->toArray();
 
-        return view('users.edit', compact('user', 'levels'));
+        return view('users.edit', compact('user', 'levels', 'desas', 'selectedDesa'));
     }
 
     public function update(Request $request, User $user)
@@ -61,6 +70,9 @@ class UserController extends Controller
         }
 
         $user->update($data);
+
+        // Sync desa locations
+        $user->locations()->sync($request->desa_id ?? []);
 
         return redirect(route('users.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }

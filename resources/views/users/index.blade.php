@@ -26,6 +26,7 @@
                                     <td>Nama Users</td>
                                     <td>No Whatsapp</td>
                                     <td>Role</td>
+                                    <td>Lokasi</td>
                                     <td>Aksi</td>
                                 </tr>
                             </thead>
@@ -35,6 +36,15 @@
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->phone }}</td>
                                     <td>{{ $value->role }}</td>
+                                    <td>
+                                        @if (isset($value->locations))
+                                            <ul>
+                                            @foreach ($value->locations as $location)
+                                                <li>{{ $location->name }}</li>
+                                            @endforeach
+                                            </ul>
+                                        @endif
+                                    </td>
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('users.edit', $value->id) }}">Edit</a>
                                         <form action="{{ route('users.destroy', $value->id) }}" method="post"
