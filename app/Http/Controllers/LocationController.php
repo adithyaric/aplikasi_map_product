@@ -64,7 +64,7 @@ class LocationController extends Controller
         return redirect(route('locations.index'))->with('toast_error', 'Berhasil Menghapus Data!');
     }
 
-    public function getLocationProductMapping($type, $parentId = null)
+    public function getLocationProductMapping($type = 'provinsi', $parentId = null)
     {
         $locations = Location::where('type', $type)
             ->when($parentId, function ($query) use ($parentId) {
