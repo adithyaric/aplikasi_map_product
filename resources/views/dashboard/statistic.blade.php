@@ -3,6 +3,13 @@
 @section('title', 'Dashboard')
 
 @section('container')
+    <style>
+        .active-button {
+            background-color: #4CAF50;
+            /* Green background for active button */
+            color: white;
+        }
+    </style>
     <section class="content-header">
         <h1>Dashboard</h1>
     </section>
@@ -41,7 +48,15 @@
                         </select>
                     </div>
 
+                    <!-- Buttons to switch between charts -->
+                    <div style="text-align: center; margin-bottom: 10px;margin-top: 10px;">
+                        <button id="showLocationChart" class="btn btn-secondary">Show Location Chart</button>
+                        <button id="showPieChart" class="btn btn-secondary">Show Pie Chart</button>
+                    </div>
+
+                    <!-- Charts -->
                     <div id="productLocationChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    <div id="productPieChart" style="min-width: 310px; height: 400px; margin: 0 auto; display: none;"></div>
                     <div class="box-body table-responsive">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
@@ -74,11 +89,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/10.3.3/modules/exporting.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/10.3.3/modules/export-data.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/10.3.3/modules/accessibility.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // By default, show the location chart and hide the pie chart
+            $('#productLocationChart').show();
+            $('#productPieChart').hide();
+            $('#showLocationChart').addClass('active-button');
 
+            // Button to show the location chart
+            $('#showLocationChart').click(function() {
+                $('#productLocationChart').show();
+                $('#productPieChart').hide();
+                $(this).addClass('active-button');
+                $('#showPieChart').removeClass('active-button');
+            });
+
+            // Button to show the pie chart
+            $('#showPieChart').click(function() {
+                $('#productLocationChart').hide();
+                $('#productPieChart').show();
+                $(this).addClass('active-button');
+                $('#showLocationChart').removeClass('active-button');
+            });
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const chartElement = document.getElementById('productLocationChart');
-            // const pieChartElement = document.getElementById('productPieChart');
+            const pieChartElement = document.getElementById('productPieChart');
             let chart, pieChart;
 
             // Initialize the column chart
@@ -120,12 +158,50 @@
                 });
             }
 
+            // Initialize the pie chart
+            function initPieChart(data) {
+                pieChart = Highcharts.chart(pieChartElement, {
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Product Distribution'
+                    },
+                    series: [{
+                        name: 'Quantity',
+                        data: data
+                    }],
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.y} ({point.percentage:.2f}%)'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y}</b>'
+                    }
+                });
+            }
+
             // Update the column chart with new data
             function updateChart(data) {
                 if (chart) {
                     chart.series[0].setData(data);
                 } else {
                     initChart(data);
+                }
+            }
+
+            // Update the pie chart with new data
+            function updatePieChart(data) {
+                if (pieChart) {
+                    pieChart.series[0].setData(data);
+                } else {
+                    initPieChart(data);
                 }
             }
 
@@ -142,6 +218,7 @@
                             }))
                         );
                         updateChart(chartData);
+                        updatePieChart(chartData);
                     });
             }
 
