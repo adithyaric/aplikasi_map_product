@@ -25,7 +25,7 @@
                                     <td>No</td>
                                     <td>Nama Lokasi</td>
                                     <td>Tipe</td>
-                                    <td>Banyak Penyebaran (qty)</td>
+                                    {{-- <td>Banyak Penyebaran (qty)</td> --}}
                                     <td>Aksi</td>
                                 </tr>
                             </thead>
@@ -34,7 +34,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->type }}</td>
-                                    <td>{{ $value->products->sum('pivot.quantity') }}</td>
+                                    {{-- <td>{{ $value->products->sum('pivot.quantity') }}</td> --}}
                                     <td>
                                         <a class="btn btn-warning" href="{{ route('locations.edit', $value->id) }}">Edit</a>
                                         <form action="{{ route('locations.destroy', $value->id) }}" method="post"

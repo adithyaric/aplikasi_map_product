@@ -179,6 +179,7 @@
                         );
                         updateChart(chartData);
                         updatePieChart(chartData);
+                        console.log(chartData);
                     });
             }
 
