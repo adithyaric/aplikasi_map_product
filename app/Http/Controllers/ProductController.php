@@ -77,33 +77,39 @@ class ProductController extends Controller
         return view('inputpenyebaran', compact('users', 'products'));
     }
 
-    // TODO Input product quantity for a specific user, location, and date
     public function inputProductQuantity(Request $request)
     {
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'location_id' => 'required|exists:locations,id',
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            // 'date' => 'required|date',
+            'product_id' => 'required|array',
+            'product_id.*' => 'exists:products,id',
+            'quantity' => 'required|array',
+            'quantity.*' => 'integer|min:0', // Allow 0, but we'll filter it later
+            'created_at' => 'required|date',
         ]);
 
-        $product = Product::findOrFail($validatedData['product_id']);
+        $filteredProducts = collect($validatedData['product_id'])
+            ->zip($validatedData['quantity']) // Pair product_id with quantity
+            ->filter(fn ($pair) => $pair[1] > 0); // Remove products with quantity 0
 
-        // Attach new data to the pivot table
-        $product->locations()->attach(
-            $validatedData['location_id'],
-            [
-                'quantity' => $validatedData['quantity'],
-                // 'user_id' => $validatedData['user_id'],
-                // 'date' => $validatedData['date'],
-            ]
-        );
+        if ($filteredProducts->isEmpty()) {
+            return redirect()->back()->withErrors(['quantity' => 'Minimal satu produk harus memiliki jumlah lebih dari 0.']);
+        }
 
-        return redirect(route('product.input.form'))->with('toast_success', 'Berhasil Menyimpan Data!');
-        // return response()->json([
-        //     'message' => 'Product quantity successfully added/updated.',
-        //     'data' => $product->locations,
-        // ]);
+        foreach ($filteredProducts as [$productId, $quantity]) {
+            $product = Product::findOrFail($productId);
+
+            $product->locations()->attach(
+                $validatedData['location_id'],
+                [
+                    'user_id' => $validatedData['user_id'],
+                    'quantity' => $quantity,
+                    'date' => $validatedData['created_at'],
+                ]
+            );
+        }
+
+        return redirect()->route('product.input.form')->with('toast_success', 'Berhasil Menyimpan Data!');
     }
 }
