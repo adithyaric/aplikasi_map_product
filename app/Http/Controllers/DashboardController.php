@@ -20,6 +20,7 @@ class DashboardController extends Controller
     {
         $data = $this->locationService->getLocationProductMapping($type, $parentId);
         $leaderboard = $this->locationService->getLeaderboard();
+        $productLeaderboard = $this->locationService->getProductLeaderboard();
         $colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
         $products = Product::select('id', 'name')->get();
 
@@ -30,6 +31,7 @@ class DashboardController extends Controller
             'data' => $data,
             'lokasi' => $type,
             'leaderboard' => $leaderboard,
+            'productLeaderboard' => $productLeaderboard,
         ]);
     }
 

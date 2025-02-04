@@ -91,6 +91,29 @@ class LocationService
         return $leaderboardQuery->orderByDesc('total_sales')->limit(10)->get();
     }
 
+    public function getProductLeaderboard()
+    {
+        $products = Product::select('id', 'name')
+            ->whereNull('deleted_at')
+            ->get();
+
+        $leaderboardQuery = Location::select('locations.id', 'locations.name', DB::raw('SUM(location_product.quantity) as total_sales'))
+            ->join('location_product', function ($join) {
+                $join->on('locations.id', '=', 'location_product.location_id')
+                    ->join('products', function ($productJoin) {
+                        $productJoin->on('location_product.product_id', '=', 'products.id')
+                            ->whereNull('products.deleted_at');
+                    });
+            })
+            ->groupBy('locations.id', 'locations.name');
+
+        foreach ($products as $product) {
+            $leaderboardQuery->addSelect(DB::raw("SUM(CASE WHEN location_product.product_id = {$product->id} THEN location_product.quantity ELSE 0 END) as product_{$product->id}"));
+        }
+
+        return $leaderboardQuery->orderByDesc('total_sales')->limit(10)->get();
+    }
+
     private function getAllProducts($location)
     {
         switch ($location->type) {

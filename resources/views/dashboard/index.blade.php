@@ -66,12 +66,12 @@
                         <table id="example0" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Rank</th>
-                                    <th>Salesperson</th>
-                                    <th>Total Sales</th>
+                                    <th>No</th>
+                                    <th>Nama Sales</th>
                                     @foreach ($products as $product)
                                         <th>{{ $product->name }}</th>
                                     @endforeach
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,10 +79,10 @@
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $user->name }}</td>
-                                        <td>{{ number_format($user->total_sales) }}</td>
                                         @foreach ($products as $product)
                                             <td>{{ number_format($user->{'product_' . $product->id}) }}</td>
                                         @endforeach
+                                        <td>{{ number_format($user->total_sales) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -92,7 +92,34 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="box">Area Penjualan Product A Terbanyak (TOP 10 Per Product)</div>
+                <div class="box">
+                    <div class="box-body table-responsive">
+                        <table id="example3" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Product</th>
+                                    @foreach ($products as $product)
+                                        <th>{{ $product->name }}</th>
+                                    @endforeach
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($productLeaderboard as $index => $location)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $location->name }}</td>
+                                        @foreach ($products as $product)
+                                            <td>{{ $location->{'product_' . $product->id} ?? 0 }}</td>
+                                        @endforeach
+                                        <td>{{ $location->total_sales }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div class="col-md-12">
                 <div class="box">
