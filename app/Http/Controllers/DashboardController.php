@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Location;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -84,12 +86,35 @@ class DashboardController extends Controller
 
         $colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
 
+        // Fetch all products to dynamically create columns in the table
+        $products = Product::select('id', 'name')->get();
+
+        // Build the query for leaderboard with total sales and product-wise sales
+        $leaderboardQuery = User::select('users.id', 'users.name', DB::raw('SUM(location_product.quantity) as total_sales'))
+            ->join('location_product', function ($join) {
+                $join->on('users.id', '=', 'location_product.user_id')
+                    ->join('products', function ($productJoin) {
+                        $productJoin->on('location_product.product_id', '=', 'products.id')
+                            ->whereNull('products.deleted_at'); // Ignore deleted products
+                    });
+            })
+            ->where('users.role', 'sales')
+            ->groupBy('users.id', 'users.name');
+
+        // Dynamically add product-specific sales columns
+        foreach ($products as $product) {
+            $leaderboardQuery->addSelect(DB::raw("SUM(CASE WHEN location_product.product_id = {$product->id} THEN location_product.quantity ELSE 0 END) as product_{$product->id}"));
+        }
+
+        $leaderboard = $leaderboardQuery->orderByDesc('total_sales')->limit(10)->get();
+
         return view('dashboard.index', [
             'provinces' => Location::where('type', 'provinsi')->get(),
-            'products' => Product::get(),
+            'products' => $products,
             'colors' => $colors,
             'data' => $data,
             'lokasi' => $locations[0]->type,
+            'leaderboard' => $leaderboard,
         ]);
     }
 
@@ -126,13 +151,13 @@ class DashboardController extends Controller
         return $next[$type] ?? null;
     }
 
-    public function statistic()
+    public function statistic(Request $request)
     {
         $colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
 
         return view('dashboard.statistic', [
             'provinces' => Location::where('type', 'provinsi')->get(),
-            'products' => Product::get(),
+            // 'products' => Product::get(),
             'colors' => $colors,
         ]);
     }

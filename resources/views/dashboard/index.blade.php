@@ -12,7 +12,7 @@
                 @php
                     $bgColor = $colors[$index % count($colors)];
                 @endphp
-                <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="small-box" style="background-color: {{ $bgColor }};">
                         <div class="inner">
                             <h3>{{ $product->locations->sum('pivot.quantity') }}</h3>
@@ -26,7 +26,7 @@
             @endforeach
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="box">
                     <div class="mb-4 filters">
                         <label for="provinsi">Provinsi:</label>
@@ -60,10 +60,39 @@
                     </div>
                 </div><!-- /.box -->
             </div><!-- /.col -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="box">
-                    Leaderboard Sales (TOP 10 Penjualan Tertinggi)
+                    <div class="box-body table-responsive">
+                        <table id="example0" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Salesperson</th>
+                                    <th>Total Sales</th>
+                                    @foreach ($products as $product)
+                                        <th>{{ $product->name }}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($leaderboard as $index => $user)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ number_format($user->total_sales) }}</td>
+                                        @foreach ($products as $product)
+                                            <td>{{ number_format($user->{'product_' . $product->id}) }}</td>
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box">Area Penjualan Product A Terbanyak (TOP 10 Per Product)</div>
             </div>
             <div class="col-md-12">
                 <div class="box">
@@ -87,9 +116,6 @@
                 <div class="box">
                     <div id="productPieChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="box">Area Penjualan Product A Terbanyak (TOP 10 Per Product)</div>
             </div>
         </div><!-- /.row -->
     </section><!-- /.content -->

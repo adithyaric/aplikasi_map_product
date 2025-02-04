@@ -58,25 +58,17 @@
                     <div id="productLocationChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     <div id="productPieChart" style="min-width: 310px; height: 400px; margin: 0 auto; display: none;"></div>
                     <div class="box-body table-responsive">
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="example0" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <td>No</td>
-                                    <td>Nama Product</td>
-                                    {{-- <td>Kategori Product</td> --}}
-                                    <td>Banyak Penyebaran (qty)</td>
+                                    <th>No</th>
+                                    <th>Nama Product</th>
+                                    <th>Banyak Penyebaran (qty)</th>
                                 </tr>
                             </thead>
-                            @foreach ($products as $value)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $value->name }}</td>
-                                    {{-- <td>{{ $value->category->name }}</td> --}}
-                                    <td>{{ $value->locations->sum('pivot.quantity') }}</td>
-                                </tr>
-                            @endforeach
+                            <tbody></tbody>
                         </table>
-                    </div><!-- /.box-body -->
+                    </div>
 
                 </div><!-- /.box -->
             </div><!-- /.col -->
@@ -205,6 +197,24 @@
                 }
             }
 
+function updateTable(data) {
+    console.log(data);
+const tableBody = document.querySelector("#example0 tbody");
+tableBody.innerHTML = ''; // Clear the table body before populating
+
+let no = 1;
+data.forEach(location => {
+Object.entries(location.data).forEach(([product, quantity]) => {
+const row = document.createElement('tr');
+row.innerHTML = `
+<td>${no++}</td>
+<td>${product}</td>
+<td>${quantity}</td>
+`;
+tableBody.appendChild(row);
+});
+});
+}
             // Fetch data based on selected location
             function fetchChartData(type, id) {
                 fetch(`/chart-data?type=${type}&id=${id}`)
@@ -219,6 +229,7 @@
                         );
                         updateChart(chartData);
                         updatePieChart(chartData);
+                        updateTable(data);
                     });
             }
 

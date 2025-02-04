@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('location_product', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->nullable()->after('location_id');
-            $table->date('date')->nullable()->after('user_id');
+            $table->date('date')->default(today())->nullable()->after('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
@@ -19,7 +19,8 @@ return new class extends Migration
     {
         Schema::table('location_product', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
-            $table->dropColumn(['user_id', 'date']);
+            $table->dropColumn('user_id');
+            $table->dropColumn('date');
         });
     }
 };
