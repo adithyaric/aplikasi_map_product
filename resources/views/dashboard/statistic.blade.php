@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-                    <div class="mb-4 filters">
+                    <div class="box-body filters">
                         <label for="provinsi">Provinsi:</label>
                         <select id="provinsi" class="form-control" style="width: 100%;">
                             @foreach ($provinces as $province)
@@ -197,24 +197,24 @@
                 }
             }
 
-function updateTable(data) {
-    console.log(data);
-const tableBody = document.querySelector("#example0 tbody");
-tableBody.innerHTML = ''; // Clear the table body before populating
+            function updateTable(data) {
+                console.log(data);
+                const tableBody = document.querySelector("#example0 tbody");
+                tableBody.innerHTML = ''; // Clear the table body before populating
 
-let no = 1;
-data.forEach(location => {
-Object.entries(location.data).forEach(([product, quantity]) => {
-const row = document.createElement('tr');
-row.innerHTML = `
-<td>${no++}</td>
-<td>${product}</td>
-<td>${quantity}</td>
-`;
-tableBody.appendChild(row);
-});
-});
-}
+                let no = 1;
+                data.forEach(location => {
+                    Object.entries(location.data).forEach(([product, quantity]) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                                        <td>${no++}</td>
+                                        <td>${product}</td>
+                                        <td>${quantity}</td>
+                                        `;
+                        tableBody.appendChild(row);
+                    });
+                });
+            }
             // Fetch data based on selected location
             function fetchChartData(type, id) {
                 fetch(`/chart-data?type=${type}&id=${id}`)
