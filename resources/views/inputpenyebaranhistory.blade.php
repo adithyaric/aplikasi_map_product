@@ -12,6 +12,7 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th>No</th>
+                                <th>Tanggal</th>
                                 <th>Nama Sales (User)</th>
                                 <th>Nama Lokasi</th>
                                 <th>Nama Produk</th>
@@ -23,6 +24,7 @@
                             @foreach ($locationProducts as $index => $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d/M/Y') : '-' }}</td>
                                     <td>{{ $item->user_name }}</td>
                                     <td>{{ $item->location_name }}</td>
                                     <td>{{ $item->product_name }}</td>
