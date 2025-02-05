@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Dashboard')
+@section('title', 'Statistik')
 
 @section('container')
     <style>
@@ -233,6 +233,41 @@
                     });
             }
 
+            /** urls **/
+            const urlParams = new URLSearchParams(window.location.search);
+
+            function updateURL(type, id) {
+                urlParams.set(type, id);
+                window.history.pushState({}, '', '?' + urlParams.toString());
+            }
+
+            function restoreSelections() {
+                ['provinsi', 'kabupaten', 'kecamatan', 'desa', 'dusun'].forEach(type => {
+                    const value = urlParams.get(type);
+                    if (value) {
+                        document.getElementById(type).value = value;
+                        if (type !== 'dusun') {
+                            fetchChildLocations(type, value, getNextType(type));
+                        }
+                        fetchChartData(type, value);
+                    }
+                });
+            }
+
+            function getNextType(type) {
+                switch (type) {
+                    case 'provinsi':
+                        return 'kabupaten';
+                    case 'kabupaten':
+                        return 'kecamatan';
+                    case 'kecamatan':
+                        return 'desa';
+                    case 'desa':
+                        return 'dusun';
+                    default:
+                        return null;
+                }
+            }
             let provinsiSelect = document.getElementById("provinsi");
             let firstProvinsi = provinsiSelect.value;
 
@@ -241,43 +276,110 @@
                 fetchChildLocations("kabupaten", firstProvinsi, "kabupaten");
             }
 
-            // Event listener for dropdown change
-            provinsiSelect.addEventListener("change", function() {
-                fetchChartData("provinsi", this.value);
-                fetchChildLocations("kabupaten", this.value, "kabupaten");
+            // Add change event listeners
+            provinsiSelect.addEventListener('change', async function() {
+                const value = this.value;
+                urlParams.set('provinsi', value);
+                // Clear other params
+                ['kabupaten', 'kecamatan', 'desa', 'dusun'].forEach(param => urlParams.delete(param));
+                window.history.pushState({}, '', `?${urlParams.toString()}`);
+                await fetchAndPopulateDropdown('kabupaten', value, 'kabupaten');
+            });
+            document.getElementById("kabupaten").addEventListener("change", function() {
+                const value = this.value;
+                updateURL("kabupaten", value);
+                fetchChartData("kabupaten", value);
+                fetchChildLocations("kecamatan", value, "kecamatan");
             });
 
-            document.getElementById('kabupaten').addEventListener('change', function() {
-                const kabupatenId = this.value;
-                fetchChartData('kabupaten', kabupatenId);
-                fetchChildLocations('kecamatan', kabupatenId, 'kecamatan');
+            document.getElementById("kecamatan").addEventListener("change", function() {
+                const value = this.value;
+                updateURL("kecamatan", value);
+                fetchChartData("kecamatan", value);
+                fetchChildLocations("desa", value, "desa");
             });
 
-            document.getElementById('kecamatan').addEventListener('change', function() {
-                const kecamatanId = this.value;
-                fetchChartData('kecamatan', kecamatanId);
-                fetchChildLocations('desa', kecamatanId, 'desa');
+            document.getElementById("desa").addEventListener("change", function() {
+                const value = this.value;
+                updateURL("desa", value);
+                fetchChartData("desa", value);
+                fetchChildLocations("dusun", value, "dusun");
             });
 
-            document.getElementById('desa').addEventListener('change', function() {
-                const desaId = this.value;
-                fetchChartData('desa', desaId);
-                fetchChildLocations('dusun', desaId, 'dusun');
+            document.getElementById("dusun").addEventListener("change", function() {
+                const value = this.value;
+                updateURL("dusun", value);
+                fetchChartData("dusun", value);
             });
 
-            document.getElementById('dusun').addEventListener('change', function() {
-                const dusunId = this.value;
-                fetchChartData('dusun', dusunId);
-            });
+            async function fetchAndPopulateDropdown(type, parentId, selectId) {
+                try {
+                    const response = await fetch(`/child-locations/${type}/${parentId}`);
+                    const data = await response.json();
+                    const select = document.getElementById(selectId);
 
+                    select.innerHTML = `<option value="">Pilih ${selectId}</option>`;
+                    data.forEach(location => {
+                        const option = new Option(location.name, location.id);
+                        select.add(option);
+                    });
+
+                    // Enable the dropdown
+                    select.disabled = false;
+
+                    // Set value from URL if exists
+                    const urlValue = urlParams.get(selectId);
+                    if (urlValue) {
+                        select.value = urlValue;
+                        return true; // indicate we found and set a value
+                    }
+                    return false;
+                } catch (error) {
+                    console.error(`Error fetching ${type}:`, error);
+                    return false;
+                }
+            }
+
+            // Initial load
+            async function initializeDropdowns() {
+                // Get provinsi value
+                const provinsiSelect = document.getElementById('provinsi');
+                const provinsiValue = urlParams.get('provinsi') || provinsiSelect.value;
+
+                if (provinsiValue) {
+                    // Set provinsi if from URL
+                    if (urlParams.get('provinsi')) {
+                        provinsiSelect.value = provinsiValue;
+                    }
+
+                    // Load kabupaten
+                    if (await fetchAndPopulateDropdown('kabupaten', provinsiValue, 'kabupaten')) {
+                        const kabValue = urlParams.get('kabupaten');
+                        // Load kecamatan
+                        if (await fetchAndPopulateDropdown('kecamatan', kabValue, 'kecamatan')) {
+                            const kecValue = urlParams.get('kecamatan');
+                            // Load desa
+                            if (await fetchAndPopulateDropdown('desa', kecValue, 'desa')) {
+                                const desaValue = urlParams.get('desa');
+                                // Load dusun
+                                await fetchAndPopulateDropdown('dusun', desaValue, 'dusun');
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Call initialization
+            restoreSelections();
+            initializeDropdowns();
             // Fetch child locations dynamically
             function fetchChildLocations(type, parentId, targetSelectId) {
                 fetch(`/child-locations/${type}/${parentId}`)
                     .then(response => response.json())
                     .then(data => {
                         const targetSelect = document.getElementById(targetSelectId);
-                        targetSelect.innerHTML = '<option value="">Pilih ' + type.charAt(0).toUpperCase() + type
-                            .slice(1) + '</option>';
+                        targetSelect.innerHTML =
+                            `<option value="">Pilih ${type.charAt(0).toUpperCase() + type.slice(1)}</option>`;
                         data.forEach(location => {
                             const option = document.createElement('option');
                             option.value = location.id;

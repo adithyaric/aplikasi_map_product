@@ -123,15 +123,6 @@ class DashboardController extends Controller
         return $this->locationService->getChartData($request->type, $request->id);
     }
 
-    public function getChildLocations($type, $parentId)
-    {
-        $locations = Location::where('type', $type)
-            ->where('parent_id', $parentId)
-            ->get();
-
-        return response()->json($locations);
-    }
-
     private function getColor($totalQuantity)
     {
         // Define color thresholds

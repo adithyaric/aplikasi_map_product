@@ -42,18 +42,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::get('/dashboard/{type?}/{parentId?}', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/statistic', [DashboardController::class, 'statistic'])->name('dashboard.statistik');
     Route::get('/chart-data', [DashboardController::class, 'getChartData']);
-    Route::get('/child-locations/{type}/{parentId}', [DashboardController::class, 'getChildLocations']);
+
     Route::resource('/users', UserController::class);
     Route::resource('/product', ProductController::class);
     Route::get('/product-penyebaran', [ProductController::class, 'showInputForm'])->name('product.input.form');
     Route::get('/product-penyebaran-history', [ProductController::class, 'inputProductQuantityHistory'])->name('product.input.history');
     Route::post('/product-quantity', [ProductController::class, 'inputProductQuantity'])->name('product.input.quantity');
+
     Route::resource('/locations', LocationController::class)->except('show');
     Route::get('/locations/{type}/{parentId?}', [LocationController::class, 'getLocationProductMapping'])->name('locations');
     Route::get('/locations-parent', [LocationController::class, 'getParents'])->name('locations.getParents');
+    Route::get('/child-locations/{type}/{parentId}', [LocationController::class, 'getChildLocations']);
     Route::get('/get-desa/{user_id}', [LocationController::class, 'getDesa']);
     Route::get('/get-dusun/{desa_id}', [LocationController::class, 'getDusun']);
     // Route::resource('/satuan', SatuanController::class);

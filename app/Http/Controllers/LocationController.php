@@ -156,6 +156,15 @@ class LocationController extends Controller
         return response()->json($locations);
     }
 
+    public function getChildLocations($type, $parentId)
+    {
+        $locations = Location::where('type', $type)
+            ->where('parent_id', $parentId)
+            ->get();
+
+        return response()->json($locations);
+    }
+
     public function getDesa($user_id)
     {
         $user = User::findOrFail($user_id);
