@@ -8,6 +8,7 @@ use App\Models\Location;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -111,5 +112,24 @@ class ProductController extends Controller
         }
 
         return redirect()->route('product.input.form')->with('toast_success', 'Berhasil Menyimpan Data!');
+    }
+
+    public function inputProductQuantityHistory()
+    {
+        $locationProducts = DB::table('location_product')
+            ->join('users', 'location_product.user_id', '=', 'users.id')
+            ->join('locations', 'location_product.location_id', '=', 'locations.id')
+            ->join('products', 'location_product.product_id', '=', 'products.id')
+            ->select(
+                'location_product.*',
+                'users.name as user_name',
+                'locations.name as location_name',
+                'products.name as product_name'
+            )
+            ->orderBy('location_product.date', 'desc')
+            ->get();
+        // ->paginate(10);
+
+        return view('inputpenyebaranhistory', compact('locationProducts'));
     }
 }

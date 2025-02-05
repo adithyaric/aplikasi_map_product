@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::resource('/product', ProductController::class);
     Route::get('/product-penyebaran', [ProductController::class, 'showInputForm'])->name('product.input.form');
+    Route::get('/product-penyebaran-history', [ProductController::class, 'inputProductQuantityHistory'])->name('product.input.history');
     Route::post('/product-quantity', [ProductController::class, 'inputProductQuantity'])->name('product.input.quantity');
     Route::resource('/locations', LocationController::class)->except('show');
     Route::get('/locations/{type}/{parentId?}', [LocationController::class, 'getLocationProductMapping'])->name('locations');

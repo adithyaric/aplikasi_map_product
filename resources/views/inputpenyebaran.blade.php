@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Tambah Product')
+@section('title', 'Input Penyebaran Product')
 
 @section('container')
     <section class="content">
