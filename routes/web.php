@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectEntryController;
+use App\Http\Controllers\RequestInputController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
@@ -59,6 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/child-locations/{type}/{parentId}', [LocationController::class, 'getChildLocations']);
     Route::get('/get-desa/{user_id}', [LocationController::class, 'getDesa']);
     Route::get('/get-dusun/{desa_id}', [LocationController::class, 'getDusun']);
+
+    Route::post('/request-input', [RequestInputController::class, 'store'])->name('request.input.store');
+    Route::put('/request-input/{requestInput}/approve', [RequestInputController::class, 'approve'])->name('request.input.approve');
+
     // Route::resource('/satuan', SatuanController::class);
     // Route::resource('/category', CategoryController::class);
     // Route::resource('/supplier', SupplierController::class);

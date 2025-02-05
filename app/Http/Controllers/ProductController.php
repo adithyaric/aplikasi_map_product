@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\BahanBaku;
 use App\Models\Category;
-use App\Models\Location;
 use App\Models\Product;
+use App\Models\RequestInput;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -65,17 +65,14 @@ class ProductController extends Controller
     public function showInputForm()
     {
         $authUser = auth()->user();
-
-        // If user is admin, show users with role 'sales', otherwise show only the logged-in user
-        $users = $authUser->role === 'admin'
-            ? User::where('role', 'sales')->get()
-            : User::where('id', $authUser->id)->get();
-
-        // $locations = Location::whereIn('type', ['desa', 'dusun'])->get();
-
+        $users = $authUser->role === 'admin' ? User::where('role', 'sales')->get() : User::where('id', $authUser->id)->get();
         $products = Product::get();
 
-        return view('inputpenyebaran', compact('users', 'products'));
+        if ($authUser->role === 'sales') {
+            return view('sales.inputpenyebaran', compact('users', 'products'));
+        } else {
+            return view('inputpenyebaran', compact('users', 'products'));
+        }
     }
 
     public function inputProductQuantity(Request $request)
@@ -130,6 +127,12 @@ class ProductController extends Controller
             ->get();
         // ->paginate(10);
 
-        return view('inputpenyebaranhistory', compact('locationProducts'));
+        if (auth()->user()->role === 'admin') {
+            $requestInputs = RequestInput::with(['user', 'location'])->latest()->get();
+
+            return view('inputpenyebaranhistory', ['requestInputs' => $requestInputs]);
+        } else {
+            return view('sales.inputpenyebaranhistory', compact('locationProducts'));
+        }
     }
 }

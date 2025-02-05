@@ -11,27 +11,27 @@
                     <table id="example1" class="table table-bordered">
                         <thead class="thead-dark">
                             <tr>
-                                <th>No</th>
-                                <th>Tanggal</th>
-                                <th>Nama Sales (User)</th>
-                                <th>Nama Lokasi</th>
-                                <th>Nama Produk</th>
-                                <th>Banyak Penyebaran (Qty)</th>
-                                <th>Aksi</th>
+                                <th>Nama</th>
+                                <th>Lokasi</th>
+                                <th>Tanggal Request</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($locationProducts as $index => $item)
+                            @foreach ($requestInputs as $request)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('d/M/Y') : '-' }}</td>
-                                    <td>{{ $item->user_name }}</td>
-                                    <td>{{ $item->location_name }}</td>
-                                    <td>{{ $item->product_name }}</td>
-                                    <td>{{ $item->quantity }}</td>
+                                    <td>{{ $request->user->name }}</td>
+                                    <td>{{ $request->location->name }}</td>
+                                    <td>{{ $request->requested_at }}</td>
+                                    <td>{{ ucfirst($request->status) }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-primary">Edit</a>
-                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                                        @if ($request->status === 'waiting')
+                                            <form action="{{ route('request.input.approve', $request->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="btn btn-success">Approve</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
