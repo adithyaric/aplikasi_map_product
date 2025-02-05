@@ -1,12 +1,12 @@
-@extends('layouts.master')
+@extends('layouts.user.master')
 
 @section('title', 'Tambah Product')
 
 @section('container')
     <section class="content">
         <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
+            <div class="card col-md-12">
+                <div class="card-body">
                     <h2 class="mb-3">History Penyebaran Produk</h2>
                     <table id="example1" class="table table-bordered">
                         <thead class="thead-dark">
@@ -17,7 +17,6 @@
                                 <th>Nama Lokasi</th>
                                 <th>Nama Produk</th>
                                 <th>Banyak Penyebaran (Qty)</th>
-                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,10 +28,6 @@
                                     <td>{{ $item->location_name }}</td>
                                     <td>{{ $item->product_name }}</td>
                                     <td>{{ $item->quantity }}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-primary">Edit</a>
-                                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

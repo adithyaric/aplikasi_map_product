@@ -1,4 +1,5 @@
-@extends('layouts.master')
+@extends('layouts.user.master')
+{{-- @extends('layouts.master') --}}
 
 @section('title', 'Input Penyebaran Product')
 
@@ -15,8 +16,8 @@
         @endif
         <div class="row">
             <!-- left column -->
-            <div class="col-md-12">
-                <div class="box box-primary">
+            <div class="card col-md-12">
+                <div class="card-body">
                     <h1>Input Penyebaran Product</h1>
                     <form action="{{ route('request.input.store') }}" method="POST">
                         @csrf
@@ -77,7 +78,7 @@
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
-                </div><!-- /.box -->
+                </div><!-- /.card -->
             </div>
         </div>
     </section>

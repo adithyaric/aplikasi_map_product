@@ -18,6 +18,9 @@ class DashboardController extends Controller
 
     public function index($type = 'provinsi', $parentId = null)
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('product.input.form');
+        }
         // $data = $this->locationService->getLocationProductMapping($type, $parentId);
         $locations = Location::where('type', $type)
             ->when($parentId, function ($query) use ($parentId) {

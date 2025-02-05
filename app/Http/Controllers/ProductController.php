@@ -130,9 +130,40 @@ class ProductController extends Controller
         if (auth()->user()->role === 'admin') {
             $requestInputs = RequestInput::with(['user', 'location'])->latest()->get();
 
-            return view('inputpenyebaranhistory', ['requestInputs' => $requestInputs]);
+            return view('inputpenyebaranhistory', ['requestInputs' => $requestInputs, 'locationProducts' => $locationProducts]);
         } else {
             return view('sales.inputpenyebaranhistory', compact('locationProducts'));
         }
+    }
+
+    public function editProductQuantity($id)
+    {
+        $locationProduct = DB::table('location_product')
+            ->where('id', $id)
+            ->first();
+
+        if (! $locationProduct) {
+            return redirect()->back()->withErrors(['msg' => 'Data tidak ditemukan.']);
+        }
+
+        return view('inputpenyebaranedit', compact('locationProduct'));
+    }
+
+    public function updateProductQuantity(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'quantity' => 'required|integer|min:0',
+            'date' => 'required|date',
+        ]);
+
+        DB::table('location_product')
+            ->where('id', $id)
+            ->update([
+                'quantity' => $validatedData['quantity'],
+                'date' => $validatedData['date'],
+                'updated_at' => now(),
+            ]);
+
+        return redirect()->route('product.input.history')->with('toast_success', 'Data berhasil diperbarui!');
     }
 }
