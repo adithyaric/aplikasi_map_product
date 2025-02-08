@@ -21,10 +21,8 @@ class DashboardController extends Controller
         if (auth()->user()->role !== 'admin') {
             return redirect()->route('product.input.form');
         }
-        $data = $this->locationService->getLocationProductMapping($type, $parentId);
+        $data = $this->locationService->getLocationProductMapping($type, $parentId, $request);
 
-        // $leaderboard = $this->locationService->getLeaderboard();
-        // $productLeaderboard = $this->locationService->getProductLeaderboard();
         $colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
         $products = Product::select('id', 'name')->get();
 
@@ -38,8 +36,6 @@ class DashboardController extends Controller
             'colors' => $colors,
             'data' => $data,
             'lokasi' => $type,
-            // 'leaderboard' => $leaderboard,
-            // 'productLeaderboard' => $productLeaderboard,
         ]);
     }
 

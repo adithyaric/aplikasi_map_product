@@ -10,15 +10,25 @@ use Illuminate\Support\Facades\DB;
 
 class LocationService
 {
-    public function getLocationProductMapping($type, $parentId)
+    public function getLocationProductMapping($type, $parentId, $request)
     {
+        $tanggal = $request->query('tanggal');
+        if ($tanggal) {
+            [$startDate, $endDate] = explode(' - ', $tanggal);
+            $startDate = Carbon::parse($startDate);
+            $endDate = Carbon::parse($endDate);
+        } else {
+            $startDate = Carbon::minValue();
+            $endDate = Carbon::maxValue();
+        }
+
         $locations = Location::where('type', $type)
             ->when($parentId, fn ($query) => $query->where('parent_id', $parentId))
             ->with(['products', 'children.children.children.children.products'])
             ->get();
 
-        return $locations->map(function ($location) {
-            $allProducts = $this->getAllProducts($location);
+        return $locations->map(function ($location) use ($startDate, $endDate) {
+            $allProducts = $this->getAllProducts($location, $startDate, $endDate);
             $totalQuantity = $allProducts->sum('pivot.quantity');
 
             $productsData = $allProducts->groupBy('id')->mapWithKeys(function ($group, $productId) use ($totalQuantity) {
@@ -46,6 +56,24 @@ class LocationService
                 ]),
             ];
         });
+    }
+
+    private function getAllProducts($location, $startDate, $endDate)
+    {
+        switch ($location->type) {
+            case 'dusun':
+                return $location->products()->whereBetween('location_product.date', [$startDate, $endDate])->get();
+            case 'desa':
+                return $location->children->flatMap(fn ($child) => $child->products()->whereBetween('location_product.date', [$startDate, $endDate])->get());
+            case 'kecamatan':
+                return $location->children->flatMap(fn ($child) => $child->children->flatMap(fn ($grandChild) => $grandChild->products()->whereBetween('location_product.date', [$startDate, $endDate])->get()));
+            case 'kabupaten':
+                return $location->children->flatMap(fn ($child) => $child->children->flatMap(fn ($grandChild) => $grandChild->children->flatMap(fn ($greatGrandChild) => $greatGrandChild->products()->whereBetween('location_product.date', [$startDate, $endDate])->get())));
+            case 'provinsi':
+                return $location->children->flatMap(fn ($child) => $child->children->flatMap(fn ($grandChild) => $grandChild->children->flatMap(fn ($greatGrandChild) => $greatGrandChild->children->flatMap(fn ($greatGreatGrandChild) => $greatGreatGrandChild->products()->whereBetween('location_product.date', [$startDate, $endDate])->get()))));
+            default:
+                return collect();
+        }
     }
 
     public function getChartData($request)
@@ -176,24 +204,6 @@ class LocationService
         }
 
         return $leaderboardQuery->orderByDesc('total_sales')->limit(10)->get();
-    }
-
-    private function getAllProducts($location)
-    {
-        switch ($location->type) {
-            case 'dusun':
-                return $location->products;
-            case 'desa':
-                return $location->children->flatMap->products;
-            case 'kecamatan':
-                return $location->children->flatMap(fn ($child) => $child->children->flatMap->products);
-            case 'kabupaten':
-                return $location->children->flatMap(fn ($child) => $child->children->flatMap(fn ($grandChild) => $grandChild->children->flatMap->products));
-            case 'provinsi':
-                return $location->children->flatMap(fn ($child) => $child->children->flatMap(fn ($grandChild) => $grandChild->children->flatMap(fn ($greatGrandChild) => $greatGrandChild->children->flatMap->products)));
-            default:
-                return collect();
-        }
     }
 
     private function getColor($totalQuantity)

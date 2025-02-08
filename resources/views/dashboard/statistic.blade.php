@@ -19,72 +19,83 @@
                 <div class="box">
                     <div class="box-body filters">
                         <form id="filterForm" method="GET" action="{{ route('dashboard.statistik') }}">
-                            <div class="form-group">
-                                <label for="tanggal">Tanggal:</label>
-                                <input type="text" name="tanggal" placeholder="Pilih Tanggal" id="tanggal"
-                                    class="form-control" value="{{ request('tanggal') }}" />
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="tanggal">Tanggal:</label>
+                                    <input type="text" name="tanggal" placeholder="Pilih Tanggal" id="tanggal"
+                                        class="form-control" value="{{ request('tanggal') }}" />
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="provinsi">Provinsi:</label>
+                                    <select id="provinsi" name="location_provinsi_id" class="form-control"
+                                        style="width: 100%;">
+                                        <option value="">Pilih Provinsi</option>
+                                        @foreach ($provinces as $province)
+                                            <option value="{{ $province->id }}"
+                                                {{ request('location_provinsi_id') == $province->id ? 'selected' : '' }}>
+                                                {{ $province->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="kabupaten">Kabupaten:</label>
+                                    <select id="kabupaten" name="location_kabupaten_id" class="form-control"
+                                        style="width: 100%;" {{ $kabupatens->isEmpty() ? 'disabled' : '' }}>
+                                        <option value="">Pilih Kabupaten</option>
+                                        @foreach ($kabupatens as $kabupaten)
+                                            <option value="{{ $kabupaten->id }}"
+                                                {{ request('location_kabupaten_id') == $kabupaten->id ? 'selected' : '' }}>
+                                                {{ $kabupaten->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="kecamatan">Kecamatan:</label>
+                                    <select id="kecamatan" name="location_kecamatan_id" class="form-control"
+                                        style="width: 100%;" {{ $kecamatans->isEmpty() ? 'disabled' : '' }}>
+                                        <option value="">Pilih Kecamatan</option>
+                                        @foreach ($kecamatans as $kecamatan)
+                                            <option value="{{ $kecamatan->id }}"
+                                                {{ request('location_kecamatan_id') == $kecamatan->id ? 'selected' : '' }}>
+                                                {{ $kecamatan->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                                <label for="provinsi">Provinsi:</label>
-                                <select id="provinsi" name="location_provinsi_id" class="form-control"
-                                    style="width: 100%;">
-                                    <option value="">Pilih Provinsi</option>
-                                    @foreach ($provinces as $province)
-                                        <option value="{{ $province->id }}"
-                                            {{ request('location_provinsi_id') == $province->id ? 'selected' : '' }}>
-                                            {{ $province->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <div class="col-md-6 form-group">
+                                    <label for="desa">Desa:</label>
+                                    <select id="desa" name="location_desa_id" class="form-control" style="width: 100%;"
+                                        {{ $desas->isEmpty() ? 'disabled' : '' }}>
+                                        <option value="">Pilih Desa</option>
+                                        @foreach ($desas as $desa)
+                                            <option value="{{ $desa->id }}"
+                                                {{ request('location_desa_id') == $desa->id ? 'selected' : '' }}>
+                                                {{ $desa->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                                <label for="kabupaten">Kabupaten:</label>
-                                <select id="kabupaten" name="location_kabupaten_id" class="form-control"
-                                    style="width: 100%;" {{ $kabupatens->isEmpty() ? 'disabled' : '' }}>
-                                    <option value="">Pilih Kabupaten</option>
-                                    @foreach ($kabupatens as $kabupaten)
-                                        <option value="{{ $kabupaten->id }}"
-                                            {{ request('location_kabupaten_id') == $kabupaten->id ? 'selected' : '' }}>
-                                            {{ $kabupaten->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <div class="col-md-6 form-group">
+                                    <label for="dusun">Dusun:</label>
+                                    <select id="dusun" name="location_dusun_id" class="form-control"
+                                        style="width: 100%;" {{ $dusuns->isEmpty() ? 'disabled' : '' }}>
+                                        <option value="">Pilih Dusun</option>
+                                        @foreach ($dusuns as $dusun)
+                                            <option value="{{ $dusun->id }}"
+                                                {{ request('location_dusun_id') == $dusun->id ? 'selected' : '' }}>
+                                                {{ $dusun->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                                <label for="kecamatan">Kecamatan:</label>
-                                <select id="kecamatan" name="location_kecamatan_id" class="form-control"
-                                    style="width: 100%;" {{ $kecamatans->isEmpty() ? 'disabled' : '' }}>
-                                    <option value="">Pilih Kecamatan</option>
-                                    @foreach ($kecamatans as $kecamatan)
-                                        <option value="{{ $kecamatan->id }}"
-                                            {{ request('location_kecamatan_id') == $kecamatan->id ? 'selected' : '' }}>
-                                            {{ $kecamatan->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-
-                                <label for="desa">Desa:</label>
-                                <select id="desa" name="location_desa_id" class="form-control" style="width: 100%;"
-                                    {{ $desas->isEmpty() ? 'disabled' : '' }}>
-                                    <option value="">Pilih Desa</option>
-                                    @foreach ($desas as $desa)
-                                        <option value="{{ $desa->id }}"
-                                            {{ request('location_desa_id') == $desa->id ? 'selected' : '' }}>
-                                            {{ $desa->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-
-                                <label for="dusun">Dusun:</label>
-                                <select id="dusun" name="location_dusun_id" class="form-control" style="width: 100%;"
-                                    {{ $dusuns->isEmpty() ? 'disabled' : '' }}>
-                                    <option value="">Pilih Dusun</option>
-                                    @foreach ($dusuns as $dusun)
-                                        <option value="{{ $dusun->id }}"
-                                            {{ request('location_dusun_id') == $dusun->id ? 'selected' : '' }}>
-                                            {{ $dusun->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-
-                                <button type="submit" class="mt-3 btn btn-primary">Filter</button>
+                                <div class="col-md-6 form-group">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
                             </div>
                         </form>
                     </div>

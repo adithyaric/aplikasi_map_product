@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BahanBaku;
-use App\Models\Category;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\RequestInput;
@@ -30,10 +28,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('product.create', [
-            // 'bahanbakus' => BahanBaku::get(),
-            // 'categories' => Category::get(),
-        ]);
+        return view('product.create', []);
     }
 
     public function store(Request $request)

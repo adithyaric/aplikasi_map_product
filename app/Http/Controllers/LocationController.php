@@ -72,9 +72,9 @@ class LocationController extends Controller
         return redirect(route('locations.index'))->with('toast_error', 'Berhasil Menghapus Data!');
     }
 
-    public function getLocationProductMapping($type = 'provinsi', $parentId = null)
+    public function getLocationProductMapping(Request $request, $type = 'provinsi', $parentId = null)
     {
-        $data = $this->locationService->getLocationProductMapping($type, $parentId);
+        $data = $this->locationService->getLocationProductMapping($type, $parentId, $request);
 
         if (isset($data[0]['coordinates'])) {
             return view('map.index', ['data' => $data, 'lokasi' => $type]);

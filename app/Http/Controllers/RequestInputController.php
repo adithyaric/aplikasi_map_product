@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Location;
 use App\Models\Product;
 use App\Models\RequestInput;
 use Illuminate\Http\Request;
@@ -38,7 +39,8 @@ class RequestInputController extends Controller
             'status' => 'waiting',
         ]);
 
-        dd($data);
+        // dd($data->toArray());
+        return redirect(route('product.input.form'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }
 
     public function approve(RequestInput $requestInput)
@@ -47,6 +49,13 @@ class RequestInputController extends Controller
             return redirect()->back()->withErrors(['error' => 'Permintaan sudah diproses sebelumnya.']);
         }
 
+        // Fetch the dusun location and traverse up the hierarchy
+        $dusun = Location::findOrFail($requestInput->location_id);
+        $desa = $dusun->parent;
+        $kecamatan = $desa?->parent;
+        $kabupaten = $kecamatan?->parent;
+        $provinsi = $kabupaten?->parent;
+
         foreach ($requestInput->products as $product) {
             Product::findOrFail($product['product_id'])
                 ->locations()
@@ -54,11 +63,17 @@ class RequestInputController extends Controller
                     'user_id' => $requestInput->user_id,
                     'quantity' => $product['quantity'],
                     'date' => $requestInput->requested_at,
+                    'location_dusun_id' => $requestInput->location_id,
+                    'location_desa_id' => $desa?->id,
+                    'location_kecamatan_id' => $kecamatan?->id,
+                    'location_kabupaten_id' => $kabupaten?->id,
+                    'location_provinsi_id' => $provinsi?->id,
                 ]);
         }
 
         $requestInput->update(['status' => 'approved']);
 
-        dd($requestInput);
+        // dd($requestInput->toArray());
+        return redirect(route('product.input.history'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }
 }

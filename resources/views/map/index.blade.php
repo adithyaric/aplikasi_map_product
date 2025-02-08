@@ -10,10 +10,63 @@
             height: 90vh;
         }
     </style>
-    <div id="map"></div>
+    <section class="content-header">
+        <h1>Peta</h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body filters">
+                        <form id="filterForm" method="GET" action="">
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <input type="text" name="tanggal" placeholder="Pilih Tanggal" id="tanggal"
+                                        class="form-control" value="{{ request('tanggal') }}" />
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="map"></div>
+
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </section><!-- /.content -->
 @endsection
 @section('page-script')
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        //filter dusun by date
+        // Set startDate to the first day of the current month
+        var startDate = new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            1
+        );
+
+        // Set endDate to the last day of the current month
+        var endDate = new Date(
+            new Date().getFullYear(),
+            new Date().getMonth() + 1,
+            0
+        );
+
+        $("#tanggal").daterangepicker({
+            format: "YYYY-MM-DD",
+            startDate: startDate,
+            endDate: endDate,
+        });
+
+        $("#tanggal").on("change", function() {
+            var dateRange = $(this).val();
+            var [start, end] = dateRange.split(" - ");
+        });
+    </script>
     <script>
         const map = L.map('map').setView([-7.656172633765166, 111.32830621325536], 9.11);
 
