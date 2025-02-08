@@ -1,4 +1,30 @@
 document.addEventListener("DOMContentLoaded", function () {
+    //filter dusun by date
+    // Set startDate to the first day of the current month
+    var startDate = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1
+    );
+
+    // Set endDate to the last day of the current month
+    var endDate = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        0
+    );
+
+    $("#tanggal").daterangepicker({
+        format: "YYYY-MM-DD",
+        startDate: startDate,
+        endDate: endDate,
+    });
+
+    $("#tanggal").on("change", function () {
+        var dateRange = $(this).val();
+        var [start, end] = dateRange.split(" - ");
+    });
+
     const chartElement = document.getElementById("productLocationChart");
     const pieChartElement = document.getElementById("productPieChart");
     let chart, pieChart;
@@ -111,7 +137,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateProductLeaderboard(leaderboard, products) {
-        const leaderboardTable = document.querySelector("#example3 tbody");
+        const productLeaderboardTable = document.querySelector("#example3 tbody");
+        productLeaderboardTable.innerHTML = "";
+
+        leaderboard.forEach((location, index) => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${location.name}</td>
+                        ${products
+                            .map(
+                                (product) =>
+                                    `<td>${
+                                        location["product_" + product.id] ?? 0
+                                    }</td>`
+                            )
+                            .join("")}
+                        <td>${location.total_sales}</td>
+                    `;
+            productLeaderboardTable.appendChild(row);
+        });
+    }
+
+    function updateLeaderboard(leaderboard, products) {
+        const leaderboardTable = document.querySelector("#examplesales tbody");
         leaderboardTable.innerHTML = "";
 
         leaderboard.forEach((location, index) => {
@@ -134,8 +184,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function fetchChartData(type, id) {
-        fetch(`/chart-data?type=${type}&id=${id}`)
+    function fetchChartData() {
+        const formData = new FormData(document.getElementById("filterForm"));
+        const queryString = new URLSearchParams(formData).toString();
+
+        // Fetch chart data
+        fetch(`/chart-data?${queryString}`)
             .then((response) => response.json())
             .then((data) => {
                 const chartData = data.flatMap((location) =>
@@ -143,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         ([product, quantity]) => ({
                             name: product,
                             y: quantity,
-                            color: location.colors[product],
+                            color: location.colors[product]
                         })
                     )
                 );
@@ -152,129 +206,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateTable(data);
             });
 
-        fetch(`/product-leaderboard?type=${type}&id=${id}`)
+        // Fetch leaderboard data
+        fetch(`/product-leaderboard?${queryString}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log("product-leaderboard");
-                console.log(data);
                 updateProductLeaderboard(
                     data.productLeaderboard,
                     data.products
                 );
             });
-    }
-
-    function fetchChartDataWithDateRange(type, id, startDate, endDate) {
-        fetch(
-            `/chart-data?type=${type}&id=${id}&start_date=${startDate}&end_date=${endDate}`
-        )
+        fetch(`/leaderboard?${queryString}`)
             .then((response) => response.json())
             .then((data) => {
-                const chartData = data.flatMap((location) =>
-                    Object.entries(location.data).map(
-                        ([product, quantity]) => ({
-                            name: product,
-                            y: quantity,
-                            color: location.colors[product],
-                        })
-                    )
-                );
-                updateChart(chartData);
-                updatePieChart(chartData);
-                updateTable(data);
+                updateLeaderboard(data.leaderboard, data.products);
             });
     }
 
-    function fetchChildLocations(type, parentId, targetSelectId) {
-        fetch(`/child-locations/${type}/${parentId}`)
-            .then((response) => response.json())
-            .then((data) => {
-                const targetSelect = document.getElementById(targetSelectId);
-                targetSelect.innerHTML =
-                    '<option value="">Pilih ' +
-                    type.charAt(0).toUpperCase() +
-                    type.slice(1) +
-                    "</option>";
-                data.forEach((location) => {
-                    const option = document.createElement("option");
-                    option.value = location.id;
-                    option.textContent = location.name;
-                    targetSelect.appendChild(option);
-                });
-                targetSelect.disabled = false;
-            });
-    }
-
-    let provinsiSelect = document.getElementById("provinsi");
-    let firstProvinsi = provinsiSelect.value;
-    let dusunSelectvalue = null;
-
-    if (firstProvinsi) {
-        fetchChartData("provinsi", firstProvinsi);
-        fetchChildLocations("kabupaten", firstProvinsi, "kabupaten");
-    }
-
-    provinsiSelect.addEventListener("change", function () {
-        fetchChartData("provinsi", this.value);
-        fetchChildLocations("kabupaten", this.value, "kabupaten");
-    });
-
-    document
-        .getElementById("kabupaten")
-        .addEventListener("change", function () {
-            const kabupatenId = this.value;
-            fetchChartData("kabupaten", kabupatenId);
-            fetchChildLocations("kecamatan", kabupatenId, "kecamatan");
-        });
-
-    document
-        .getElementById("kecamatan")
-        .addEventListener("change", function () {
-            const kecamatanId = this.value;
-            fetchChartData("kecamatan", kecamatanId);
-            fetchChildLocations("desa", kecamatanId, "desa");
-        });
-
-    document.getElementById("desa").addEventListener("change", function () {
-        const desaId = this.value;
-        fetchChartData("desa", desaId);
-        fetchChildLocations("dusun", desaId, "dusun");
-    });
-
-    document.getElementById("dusun").addEventListener("change", function () {
-        dusunSelectvalue = this.value;
-        const dusunId = this.value;
-        document.getElementById("tanggal").disabled = false;
-        fetchChartData("dusun", dusunId);
-    });
-
-    //filter dusun by date
-    // Set startDate to the first day of the current month
-    var startDate = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        1
-    );
-
-    // Set endDate to the last day of the current month
-    var endDate = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth() + 1,
-        0
-    );
-
-    $("#tanggal").daterangepicker({
-        format: "YYYY-MM-DD",
-        startDate: startDate,
-        endDate: endDate,
-    });
-
-    $("#tanggal").on("change", function () {
-        var dateRange = $(this).val();
-        var [start, end] = dateRange.split(" - ");
-
-        console.log("Dusun ID:", dusunSelectvalue);
-
-        fetchChartDataWithDateRange("dusun", dusunSelectvalue, start, end);
-    });
+    fetchChartData();
 });

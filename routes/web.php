@@ -46,11 +46,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard/{type?}/{parentId?}', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/statistic', [DashboardController::class, 'statistic'])->name('dashboard.statistik');
-    Route::get('/chart-data', [DashboardController::class, 'getChartData']);
 
     Route::resource('/users', UserController::class);
     Route::resource('/product', ProductController::class);
+    Route::get('/chart-data', [ProductController::class, 'getChartData']);
     Route::get('/product-leaderboard', [ProductController::class, 'getProductLeaderboardData']);
+    Route::get('/leaderboard', [ProductController::class, 'getLeaderboard']);
 
     // product penyebaran
     Route::get('/product-penyebaran', [ProductController::class, 'showInputForm'])->name('product.input.form');

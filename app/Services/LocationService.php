@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Location;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class LocationService
@@ -47,40 +48,86 @@ class LocationService
         });
     }
 
-    public function getChartData($type, $id = null, $startDate = null, $endDate = null)
+    public function getChartData($request)
     {
         $colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
 
-        $locations = Location::where('type', $type)
-            ->when($id, fn ($query) => $query->where('id', $id))
-            ->with(['products', 'children.children.children.children.products'])
+        $tanggal = $request->query('tanggal');
+        if ($tanggal) {
+            [$startDate, $endDate] = explode(' - ', $tanggal);
+            $startDate = Carbon::parse($startDate);
+            $endDate = Carbon::parse($endDate);
+        } else {
+            $startDate = Carbon::minValue();
+            $endDate = Carbon::maxValue();
+        }
+
+        $query = DB::table('location_product')
+            ->join('products', 'location_product.product_id', '=', 'products.id')
+            ->join('locations as dusun', 'location_product.location_dusun_id', '=', 'dusun.id')
+            ->join('locations as desa', 'location_product.location_desa_id', '=', 'desa.id')
+            ->join('locations as kecamatan', 'location_product.location_kecamatan_id', '=', 'kecamatan.id')
+            ->join('locations as kabupaten', 'location_product.location_kabupaten_id', '=', 'kabupaten.id')
+            ->join('locations as provinsi', 'location_product.location_provinsi_id', '=', 'provinsi.id')
+            ->whereBetween('location_product.date', [$startDate, $endDate]);
+
+        foreach (['location_provinsi_id', 'location_kabupaten_id', 'location_kecamatan_id', 'location_desa_id', 'location_dusun_id'] as $filter) {
+            if ($request->query($filter)) {
+                $query->where("location_product.$filter", $request->query($filter));
+            }
+        }
+
+        $results = $query->select(
+            'provinsi.name as provinsi_name',
+            'kabupaten.name as kabupaten_name',
+            'kecamatan.name as kecamatan_name',
+            'desa.name as desa_name',
+            'dusun.name as dusun_name',
+            'products.name as product_name',
+            DB::raw('SUM(location_product.quantity) as total_quantity')
+        )
+            ->groupBy(
+                'provinsi.name',
+                'kabupaten.name',
+                'kecamatan.name',
+                'desa.name',
+                'dusun.name',
+                'products.name'
+            )
             ->get();
 
-        return $locations->map(function ($location) use ($colors, $startDate, $endDate) {
-            $allProducts = $this->getAllProducts($location);
-            $filteredProducts = $allProducts->filter(function ($product) use ($startDate, $endDate) {
-                $productDate = \Carbon\Carbon::parse($product->pivot->date);
+        $groupedData = $results->groupBy('provinsi_name')->map(function ($group, $provinsiName) use ($colors) {
+            $productData = $group->groupBy('product_name')->map(fn ($productGroup) => $productGroup->sum('total_quantity'));
 
-                return (! $startDate || $productDate->gte(\Carbon\Carbon::parse($startDate))) &&
-                    (! $endDate || $productDate->lte(\Carbon\Carbon::parse($endDate)));
-            });
-            $productsData = $filteredProducts->groupBy('name')->map(fn ($group) => $group->sum('pivot.quantity'));
             $productColors = [];
-            foreach ($productsData->keys() as $index => $name) {
+            foreach ($productData->keys() as $index => $name) {
                 $productColors[$name] = $colors[$index % count($colors)];
             }
 
             return [
-                'name' => $location->name,
-                'data' => $productsData,
+                'name' => $provinsiName,
+                'data' => $productData,
                 'colors' => $productColors,
             ];
         });
+
+        return response()->json($groupedData->values());
     }
 
-    public function getLeaderboard()
+    public function getLeaderboard($request)
     {
+        $tanggal = $request->query('tanggal');
+        if ($tanggal) {
+            [$startDate, $endDate] = explode(' - ', $tanggal);
+            $startDate = Carbon::parse($startDate);
+            $endDate = Carbon::parse($endDate);
+        } else {
+            $startDate = Carbon::minValue();
+            $endDate = Carbon::maxValue();
+        }
+
         $products = Product::select('id', 'name')->get();
+
         $leaderboardQuery = User::select('users.id', 'users.name', DB::raw('SUM(location_product.quantity) as total_sales'))
             ->join('location_product', function ($join) {
                 $join->on('users.id', '=', 'location_product.user_id')
@@ -88,6 +135,7 @@ class LocationService
                         ->whereNull('products.deleted_at'));
             })
             ->where('users.role', 'sales')
+            ->whereBetween('location_product.date', [$startDate, $endDate])
             ->groupBy('users.id', 'users.name');
 
         foreach ($products as $product) {
@@ -97,22 +145,31 @@ class LocationService
         return $leaderboardQuery->orderByDesc('total_sales')->limit(10)->get();
     }
 
-    public function getProductLeaderboard($locationType = null, $locationId = null)
+    public function getProductLeaderboard($request)
     {
+        $tanggal = $request->query('tanggal');
+        if ($tanggal) {
+            [$startDate, $endDate] = explode(' - ', $tanggal);
+            $startDate = Carbon::parse($startDate);
+            $endDate = Carbon::parse($endDate);
+        } else {
+            $startDate = Carbon::minValue();
+            $endDate = Carbon::maxValue();
+        }
+
         $products = Product::select('id', 'name')
             ->whereNull('deleted_at')
             ->get();
 
-        $leaderboardQuery = Location::select('locations.id', 'locations.name', DB::raw('SUM(location_product.quantity) as total_sales'))
-            ->join('location_product', function ($join) {
-                $join->on('locations.id', '=', 'location_product.location_id')
-                    ->join('products', function ($productJoin) {
-                        $productJoin->on('location_product.product_id', '=', 'products.id')
-                            ->whereNull('products.deleted_at');
-                    });
-            });
-
-        $leaderboardQuery->groupBy('locations.id', 'locations.name');
+        $leaderboardQuery = DB::table('location_product')
+            ->join('locations', 'locations.id', '=', 'location_product.location_dusun_id')
+            ->join('products', function ($join) {
+                $join->on('location_product.product_id', '=', 'products.id')
+                    ->whereNull('products.deleted_at');
+            })
+            ->whereBetween('location_product.date', [$startDate, $endDate])
+            ->select('locations.id', 'locations.name', DB::raw('SUM(location_product.quantity) as total_sales'))
+            ->groupBy('locations.id', 'locations.name');
 
         foreach ($products as $product) {
             $leaderboardQuery->addSelect(DB::raw("SUM(CASE WHEN location_product.product_id = {$product->id} THEN location_product.quantity ELSE 0 END) as product_{$product->id}"));

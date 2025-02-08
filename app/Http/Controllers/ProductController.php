@@ -120,6 +120,7 @@ class ProductController extends Controller
                     'user_id' => $validatedData['user_id'],
                     'quantity' => $quantity,
                     'date' => $validatedData['created_at'],
+                    'location_dusun_id' => $validatedData['location_id'],
                     'location_desa_id' => $desa?->id,
                     'location_kecamatan_id' => $kecamatan?->id,
                     'location_kabupaten_id' => $kabupaten?->id,
@@ -187,12 +188,26 @@ class ProductController extends Controller
         return redirect()->route('product.input.history')->with('toast_success', 'Data berhasil diperbarui!');
     }
 
+    //fetch data
+    public function getChartData(Request $request)
+    {
+        return $this->locationService->getChartData($request);
+    }
+
+    public function getLeaderboard(Request $request)
+    {
+        $leaderboard = $this->locationService->getLeaderboard($request);
+        $products = Product::select('id', 'name')->whereNull('deleted_at')->get();
+
+        return response()->json([
+            'leaderboard' => $leaderboard,
+            'products' => $products,
+        ]);
+    }
+
     public function getProductLeaderboardData(Request $request)
     {
-        $locationType = $request->query('type');
-        $locationId = $request->query('id');
-
-        $productLeaderboard = $this->locationService->getProductLeaderboard($locationType, $locationId);
+        $productLeaderboard = $this->locationService->getProductLeaderboard($request);
         $products = Product::select('id', 'name')->whereNull('deleted_at')->get();
 
         return response()->json([

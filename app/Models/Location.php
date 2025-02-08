@@ -29,7 +29,7 @@ class Location extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class, 'location_product')
-            ->withPivot(['user_id', 'date', 'quantity', 'location_desa_id', 'location_kecamatan_id', 'location_kabupaten_id', 'location_provinsi_id'])
+            ->withPivot(['user_id', 'date', 'quantity', 'location_dusun_id', 'location_desa_id', 'location_kecamatan_id', 'location_kabupaten_id', 'location_provinsi_id'])
             ->withTimestamps();
     }
 
