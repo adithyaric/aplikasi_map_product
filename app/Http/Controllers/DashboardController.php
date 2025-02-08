@@ -21,7 +21,7 @@ class DashboardController extends Controller
         if (auth()->user()->role !== 'admin') {
             return redirect()->route('product.input.form');
         }
-        $data = $this->locationService->getLocationProductMapping($type, $parentId, 'dashboard');
+        $data = $this->locationService->getLocationProductMapping($type, $parentId);
 
         $leaderboard = $this->locationService->getLeaderboard();
         // $productLeaderboard = $this->locationService->getProductLeaderboard();

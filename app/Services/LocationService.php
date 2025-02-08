@@ -9,11 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class LocationService
 {
-    public $routeName;
-
-    public function getLocationProductMapping($type, $parentId, $routeName)
+    public function getLocationProductMapping($type, $parentId)
     {
-        $this->routeName = $routeName;
         $locations = Location::where('type', $type)
             ->when($parentId, fn ($query) => $query->where('parent_id', $parentId))
             ->with(['products', 'children.children.children.children.products'])
@@ -37,7 +34,7 @@ class LocationService
                 'data' => $productsData,
                 'coordinates' => json_decode($location->coordinates),
                 'color' => $this->getColor($totalQuantity),
-                'nextRoute' => route($this->routeName, [
+                'nextRoute' => route('locations', [
                     'type' => $this->getNextRoute($location->type),
                     'parentId' => $location->id,
                 ]),
@@ -61,21 +58,13 @@ class LocationService
 
         return $locations->map(function ($location) use ($colors, $startDate, $endDate) {
             $allProducts = $this->getAllProducts($location);
-
-            // Filter products data by date range
             $filteredProducts = $allProducts->filter(function ($product) use ($startDate, $endDate) {
-                // Convert the date in 'pivot' to Carbon instance
                 $productDate = \Carbon\Carbon::parse($product->pivot->date);
 
-                // Apply the date filter (only include products within the range)
                 return (! $startDate || $productDate->gte(\Carbon\Carbon::parse($startDate))) &&
                     (! $endDate || $productDate->lte(\Carbon\Carbon::parse($endDate)));
             });
-
-            // Group and sum the filtered products data
             $productsData = $filteredProducts->groupBy('name')->map(fn ($group) => $group->sum('pivot.quantity'));
-
-            // Generate colors for each product
             $productColors = [];
             foreach ($productsData->keys() as $index => $name) {
                 $productColors[$name] = $colors[$index % count($colors)];
@@ -123,15 +112,6 @@ class LocationService
                     });
             });
 
-        // TODO Filter by locations
-        // // Apply filters if provided
-        // if ($locationType && $locationId) {
-        //     $leaderboardQuery->where(function ($query) use ($locationId) {
-        //         $query->where('locations.parent_id', $locationId)
-        //             ->orWhere('locations.id', $locationId);
-        //     })->where('locations.type', $locationType);
-        // }
-
         $leaderboardQuery->groupBy('locations.id', 'locations.name');
 
         foreach ($products as $product) {
@@ -161,22 +141,19 @@ class LocationService
 
     private function getColor($totalQuantity)
     {
-        // Define color thresholds
         $colors = [
             0 => '#ff0000',
             100 => '#7ad9ff',
             500 => '#1696c9',
         ];
 
-        // Find the appropriate color based on the thresholds
         foreach ($colors as $threshold => $color) {
             if ($totalQuantity <= $threshold) {
                 return $color;
             }
         }
 
-        // Default color if above all thresholds
-        return '#035e82'; // Blue
+        return '#035e82';
     }
 
     private function getnextRoute($type)

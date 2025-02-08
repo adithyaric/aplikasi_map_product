@@ -11,13 +11,12 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        // 'harga',
     ];
 
     public function locations()
     {
         return $this->belongsToMany(Location::class, 'location_product')
-            ->withPivot(['user_id', 'date', 'quantity'])
+            ->withPivot(['user_id', 'date', 'quantity', 'location_desa_id', 'location_kecamatan_id', 'location_kabupaten_id', 'location_provinsi_id'])
             ->withTimestamps();
     }
 }

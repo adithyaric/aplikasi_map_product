@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BahanBaku;
 use App\Models\Category;
+use App\Models\Location;
 use App\Models\Product;
 use App\Models\RequestInput;
 use App\Models\User;
@@ -87,17 +88,24 @@ class ProductController extends Controller
     {
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'location_id' => 'required|exists:locations,id',
+            'location_id' => 'required|exists:locations,id', // This is dusun_id
             'product_id' => 'required|array',
             'product_id.*' => 'exists:products,id',
             'quantity' => 'required|array',
-            'quantity.*' => 'integer|min:0', // Allow 0, but we'll filter it later
+            'quantity.*' => 'integer|min:0',
             'created_at' => 'required|date',
         ]);
 
+        // Fetch the dusun location and traverse up the hierarchy
+        $dusun = Location::findOrFail($validatedData['location_id']);
+        $desa = $dusun->parent;
+        $kecamatan = $desa?->parent;
+        $kabupaten = $kecamatan?->parent;
+        $provinsi = $kabupaten?->parent;
+
         $filteredProducts = collect($validatedData['product_id'])
-            ->zip($validatedData['quantity']) // Pair product_id with quantity
-            ->filter(fn ($pair) => $pair[1] > 0); // Remove products with quantity 0
+            ->zip($validatedData['quantity'])
+            ->filter(fn ($pair) => $pair[1] > 0);
 
         if ($filteredProducts->isEmpty()) {
             return redirect()->back()->withErrors(['quantity' => 'Minimal satu produk harus memiliki jumlah lebih dari 0.']);
@@ -112,6 +120,10 @@ class ProductController extends Controller
                     'user_id' => $validatedData['user_id'],
                     'quantity' => $quantity,
                     'date' => $validatedData['created_at'],
+                    'location_desa_id' => $desa?->id,
+                    'location_kecamatan_id' => $kecamatan?->id,
+                    'location_kabupaten_id' => $kabupaten?->id,
+                    'location_provinsi_id' => $provinsi?->id,
                 ]
             );
         }

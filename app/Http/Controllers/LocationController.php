@@ -74,7 +74,7 @@ class LocationController extends Controller
 
     public function getLocationProductMapping($type = 'provinsi', $parentId = null)
     {
-        $data = $this->locationService->getLocationProductMapping($type, $parentId, 'locations');
+        $data = $this->locationService->getLocationProductMapping($type, $parentId);
 
         if (isset($data[0]['coordinates'])) {
             return view('map.index', ['data' => $data, 'lokasi' => $type]);
