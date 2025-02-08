@@ -9,8 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class LocationService
 {
-    public function getLocationProductMapping($type = 'provinsi', $parentId = null)
+    public $routeName;
+
+    public function getLocationProductMapping($type, $parentId, $routeName)
     {
+        $this->routeName = $routeName;
         $locations = Location::where('type', $type)
             ->when($parentId, fn ($query) => $query->where('parent_id', $parentId))
             ->with(['products', 'children.children.children.children.products'])
@@ -34,7 +37,7 @@ class LocationService
                 'data' => $productsData,
                 'coordinates' => json_decode($location->coordinates),
                 'color' => $this->getColor($totalQuantity),
-                'nextRoute' => route('locations', [
+                'nextRoute' => route($this->routeName, [
                     'type' => $this->getNextRoute($location->type),
                     'parentId' => $location->id,
                 ]),
@@ -91,7 +94,7 @@ class LocationService
         return $leaderboardQuery->orderByDesc('total_sales')->limit(10)->get();
     }
 
-    public function getProductLeaderboard()
+    public function getProductLeaderboard($locationType = null, $locationId = null)
     {
         $products = Product::select('id', 'name')
             ->whereNull('deleted_at')
@@ -104,8 +107,18 @@ class LocationService
                         $productJoin->on('location_product.product_id', '=', 'products.id')
                             ->whereNull('products.deleted_at');
                     });
-            })
-            ->groupBy('locations.id', 'locations.name');
+            });
+
+        // TODO Filter by locations
+        // // Apply filters if provided
+        // if ($locationType && $locationId) {
+        //     $leaderboardQuery->where(function ($query) use ($locationId) {
+        //         $query->where('locations.parent_id', $locationId)
+        //             ->orWhere('locations.id', $locationId);
+        //     })->where('locations.type', $locationType);
+        // }
+
+        $leaderboardQuery->groupBy('locations.id', 'locations.name');
 
         foreach ($products as $product) {
             $leaderboardQuery->addSelect(DB::raw("SUM(CASE WHEN location_product.product_id = {$product->id} THEN location_product.quantity ELSE 0 END) as product_{$product->id}"));

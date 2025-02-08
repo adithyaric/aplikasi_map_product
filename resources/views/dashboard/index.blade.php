@@ -88,7 +88,6 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
             <div class="col-md-4">
@@ -106,16 +105,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($productLeaderboard as $index => $location)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $location->name }}</td>
-                                        @foreach ($products as $product)
-                                            <td>{{ $location->{'product_' . $product->id} ?? 0 }}</td>
-                                        @endforeach
-                                        <td>{{ $location->total_sales }}</td>
-                                    </tr>
-                                @endforeach
+                                {{-- @foreach ($productLeaderboard as $index => $location) --}}
+                                    {{-- <tr> --}}
+                                        {{-- <td>{{ $index + 1 }}</td> --}}
+                                        {{-- <td>{{ $location->name }}</td> --}}
+                                        {{-- @foreach ($products as $product) --}}
+                                            {{-- <td>{{ $location->{'product_' . $product->id} ?? 0 }}</td> --}}
+                                        {{-- @endforeach --}}
+                                        {{-- <td>{{ $location->total_sales }}</td> --}}
+                                    {{-- </tr> --}}
+                                {{-- @endforeach --}}
                             </tbody>
                         </table>
                     </div>
@@ -264,6 +263,15 @@
                         updatePieChart(chartData);
                         console.log(chartData);
                     });
+
+                // Fetch product leaderboard data
+                fetch(`/product-leaderboard?type=${type}&id=${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('product-leaderboard');
+                        console.log(data);
+                        updateProductLeaderboard(data.productLeaderboard, data.products);
+                    });
             }
 
             let provinsiSelect = document.getElementById("provinsi");
@@ -319,6 +327,26 @@
                         });
                         targetSelect.disabled = false;
                     });
+            }
+
+            // Function to update the Product Leaderboard dynamically
+            function updateProductLeaderboard(leaderboard, products) {
+            // console.log(leaderboard);
+            // console.log(products);
+                const leaderboardTable = document.querySelector('#example3 tbody');
+                leaderboardTable.innerHTML = '';  // Clear existing rows
+
+                leaderboard.forEach((location, index) => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${location.name}</td>
+                        ${products.map(product => `<td>${location['product_' + product.id] ?? 0}</td>`).join('')}
+                        <td>${location.total_sales}</td>
+                    `;
+                    leaderboardTable.appendChild(row);
+                });
             }
         });
     </script>

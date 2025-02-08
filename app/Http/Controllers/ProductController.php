@@ -7,11 +7,19 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\RequestInput;
 use App\Models\User;
+use App\Services\LocationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+    protected $locationService;
+
+    public function __construct(LocationService $locationService)
+    {
+        $this->locationService = $locationService;
+    }
+
     public function index()
     {
         $products = Product::get();
@@ -165,5 +173,19 @@ class ProductController extends Controller
             ]);
 
         return redirect()->route('product.input.history')->with('toast_success', 'Data berhasil diperbarui!');
+    }
+
+    public function getProductLeaderboardData(Request $request)
+    {
+        $locationType = $request->query('type');
+        $locationId = $request->query('id');
+
+        $productLeaderboard = $this->locationService->getProductLeaderboard($locationType, $locationId);
+        $products = Product::select('id', 'name')->whereNull('deleted_at')->get();
+
+        return response()->json([
+            'productLeaderboard' => $productLeaderboard,
+            'products' => $products,
+        ]);
     }
 }

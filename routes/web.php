@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/users', UserController::class);
     Route::resource('/product', ProductController::class);
+    Route::get('/product-leaderboard', [ProductController::class, 'getProductLeaderboardData']);
 
     // product penyebaran
     Route::get('/product-penyebaran', [ProductController::class, 'showInputForm'])->name('product.input.form');
