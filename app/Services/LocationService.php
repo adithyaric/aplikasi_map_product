@@ -50,18 +50,32 @@ class LocationService
         });
     }
 
-    public function getChartData($type, $id = null)
+    public function getChartData($type, $id = null, $startDate = null, $endDate = null)
     {
         $colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+
         $locations = Location::where('type', $type)
             ->when($id, fn ($query) => $query->where('id', $id))
             ->with(['products', 'children.children.children.children.products'])
             ->get();
 
-        return $locations->map(function ($location) use ($colors) {
+        return $locations->map(function ($location) use ($colors, $startDate, $endDate) {
             $allProducts = $this->getAllProducts($location);
-            $productsData = $allProducts->groupBy('name')->map(fn ($group) => $group->sum('pivot.quantity'));
 
+            // Filter products data by date range
+            $filteredProducts = $allProducts->filter(function ($product) use ($startDate, $endDate) {
+                // Convert the date in 'pivot' to Carbon instance
+                $productDate = \Carbon\Carbon::parse($product->pivot->date);
+
+                // Apply the date filter (only include products within the range)
+                return (! $startDate || $productDate->gte(\Carbon\Carbon::parse($startDate))) &&
+                    (! $endDate || $productDate->lte(\Carbon\Carbon::parse($endDate)));
+            });
+
+            // Group and sum the filtered products data
+            $productsData = $filteredProducts->groupBy('name')->map(fn ($group) => $group->sum('pivot.quantity'));
+
+            // Generate colors for each product
             $productColors = [];
             foreach ($productsData->keys() as $index => $name) {
                 $productColors[$name] = $colors[$index % count($colors)];

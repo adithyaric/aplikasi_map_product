@@ -52,6 +52,10 @@ class DashboardController extends Controller
 
     public function getChartData(Request $request)
     {
-        return $this->locationService->getChartData($request->type, $request->id);
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
+
+        // Call the service with the additional date range filters
+        return $this->locationService->getChartData($request->type, $request->id, $startDate, $endDate);
     }
 }

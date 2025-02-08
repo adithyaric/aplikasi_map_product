@@ -57,13 +57,17 @@
                         <select id="dusun" class="form-control" disabled style="width: 100%;">
                             <option value="">Pilih Dusun</option>
                         </select>
+
+                        <label for="dusun">Tanggal:</label>
+                        <input type="text" name="tanggal" placeholder="Pilih Tanggal" id="tanggal"
+                            class="form-control" />
                     </div>
                 </div><!-- /.box -->
             </div><!-- /.col -->
             <div class="col-md-4">
                 <div class="box">
                     <div class="box-body table-responsive">
-                        <table id="example0" class="table table-bordered table-striped">
+                        <table id="examplesales" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -106,14 +110,14 @@
                             </thead>
                             <tbody>
                                 {{-- @foreach ($productLeaderboard as $index => $location) --}}
-                                    {{-- <tr> --}}
-                                        {{-- <td>{{ $index + 1 }}</td> --}}
-                                        {{-- <td>{{ $location->name }}</td> --}}
-                                        {{-- @foreach ($products as $product) --}}
-                                            {{-- <td>{{ $location->{'product_' . $product->id} ?? 0 }}</td> --}}
-                                        {{-- @endforeach --}}
-                                        {{-- <td>{{ $location->total_sales }}</td> --}}
-                                    {{-- </tr> --}}
+                                {{-- <tr> --}}
+                                {{-- <td>{{ $index + 1 }}</td> --}}
+                                {{-- <td>{{ $location->name }}</td> --}}
+                                {{-- @foreach ($products as $product) --}}
+                                {{-- <td>{{ $location->{'product_' . $product->id} ?? 0 }}</td> --}}
+                                {{-- @endforeach --}}
+                                {{-- <td>{{ $location->total_sales }}</td> --}}
+                                {{-- </tr> --}}
                                 {{-- @endforeach --}}
                             </tbody>
                         </table>
@@ -155,202 +159,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/10.3.3/modules/export-data.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/10.3.3/modules/accessibility.min.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const chartElement = document.getElementById('productLocationChart');
-            const pieChartElement = document.getElementById('productPieChart');
-            let chart, pieChart;
-
-            // Initialize the column chart
-            function initChart(data) {
-                chart = Highcharts.chart(chartElement, {
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: 'Product Quantities by Location'
-                    },
-                    xAxis: {
-                        type: 'category',
-                        title: {
-                            text: 'Products'
-                        }
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'Quantity'
-                        }
-                    },
-                    series: [{
-                        name: 'Quantity',
-                        data: data
-                    }],
-                    plotOptions: {
-                        column: {
-                            dataLabels: {
-                                enabled: true,
-                                format: '{y}'
-                            }
-                        }
-                    },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br />'
-                    }
-                });
-            }
-
-            // Initialize the pie chart
-            function initPieChart(data) {
-                pieChart = Highcharts.chart(pieChartElement, {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'Product Distribution'
-                    },
-                    series: [{
-                        name: 'Quantity',
-                        data: data
-                    }],
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.y} ({point.percentage:.2f}%)'
-                            }
-                        }
-                    },
-                    tooltip: {
-                        pointFormat: '<b>{point.y}</b>'
-                    }
-                });
-            }
-
-            // Update the column chart with new data
-            function updateChart(data) {
-                if (chart) {
-                    chart.series[0].setData(data);
-                } else {
-                    initChart(data);
-                }
-            }
-
-            // Update the pie chart with new data
-            function updatePieChart(data) {
-                if (pieChart) {
-                    pieChart.series[0].setData(data);
-                } else {
-                    initPieChart(data);
-                }
-            }
-
-            // Fetch data based on selected location
-            function fetchChartData(type, id) {
-                fetch(`/chart-data?type=${type}&id=${id}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const chartData = data.flatMap(location =>
-                            Object.entries(location.data).map(([product, quantity]) => ({
-                                name: product,
-                                y: quantity,
-                                color: location.colors[product] // Assign color from API response
-                            }))
-                        );
-                        updateChart(chartData);
-                        updatePieChart(chartData);
-                        console.log(chartData);
-                    });
-
-                // Fetch product leaderboard data
-                fetch(`/product-leaderboard?type=${type}&id=${id}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('product-leaderboard');
-                        console.log(data);
-                        updateProductLeaderboard(data.productLeaderboard, data.products);
-                    });
-            }
-
-            let provinsiSelect = document.getElementById("provinsi");
-            let firstProvinsi = provinsiSelect.value;
-
-            if (firstProvinsi) {
-                fetchChartData("provinsi", firstProvinsi);
-                fetchChildLocations("kabupaten", firstProvinsi, "kabupaten");
-            }
-
-            // Event listener for dropdown change
-            provinsiSelect.addEventListener("change", function() {
-                fetchChartData("provinsi", this.value);
-                fetchChildLocations("kabupaten", this.value, "kabupaten");
-            });
-
-            document.getElementById('kabupaten').addEventListener('change', function() {
-                const kabupatenId = this.value;
-                fetchChartData('kabupaten', kabupatenId);
-                fetchChildLocations('kecamatan', kabupatenId, 'kecamatan');
-            });
-
-            document.getElementById('kecamatan').addEventListener('change', function() {
-                const kecamatanId = this.value;
-                fetchChartData('kecamatan', kecamatanId);
-                fetchChildLocations('desa', kecamatanId, 'desa');
-            });
-
-            document.getElementById('desa').addEventListener('change', function() {
-                const desaId = this.value;
-                fetchChartData('desa', desaId);
-                fetchChildLocations('dusun', desaId, 'dusun');
-            });
-
-            document.getElementById('dusun').addEventListener('change', function() {
-                const dusunId = this.value;
-                fetchChartData('dusun', dusunId);
-            });
-
-            // Fetch child locations dynamically
-            function fetchChildLocations(type, parentId, targetSelectId) {
-                fetch(`/child-locations/${type}/${parentId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const targetSelect = document.getElementById(targetSelectId);
-                        targetSelect.innerHTML = '<option value="">Pilih ' + type.charAt(0).toUpperCase() + type
-                            .slice(1) + '</option>';
-                        data.forEach(location => {
-                            const option = document.createElement('option');
-                            option.value = location.id;
-                            option.textContent = location.name;
-                            targetSelect.appendChild(option);
-                        });
-                        targetSelect.disabled = false;
-                    });
-            }
-
-            // Function to update the Product Leaderboard dynamically
-            function updateProductLeaderboard(leaderboard, products) {
-            // console.log(leaderboard);
-            // console.log(products);
-                const leaderboardTable = document.querySelector('#example3 tbody');
-                leaderboardTable.innerHTML = '';  // Clear existing rows
-
-                leaderboard.forEach((location, index) => {
-                    const row = document.createElement('tr');
-
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${location.name}</td>
-                        ${products.map(product => `<td>${location['product_' + product.id] ?? 0}</td>`).join('')}
-                        <td>${location.total_sales}</td>
-                    `;
-                    leaderboardTable.appendChild(row);
-                });
-            }
-        });
-    </script>
-
+    <script src="{{ asset('assets/js/charts.js') }}"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         const map = L.map('map').setView([-7.656172633765166, 111.32830621325536], 9.11);
