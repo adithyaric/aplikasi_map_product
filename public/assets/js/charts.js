@@ -244,12 +244,24 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("dusun").addEventListener("change", function () {
         dusunSelectvalue = this.value;
         const dusunId = this.value;
+        document.getElementById("tanggal").disabled = false;
         fetchChartData("dusun", dusunId);
     });
 
     //filter dusun by date
-    var startDate = new Date();
-    var endDate = new Date();
+    // Set startDate to the first day of the current month
+    var startDate = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1
+    );
+
+    // Set endDate to the last day of the current month
+    var endDate = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        0
+    );
 
     $("#tanggal").daterangepicker({
         format: "YYYY-MM-DD",

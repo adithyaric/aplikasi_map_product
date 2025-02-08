@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Dashboard')
+@section('title', 'Statistik')
 
 @section('container')
     <style>
@@ -11,7 +11,7 @@
         }
     </style>
     <section class="content-header">
-        <h1>Dashboard</h1>
+        <h1>Statistik</h1>
     </section>
     <section class="content">
         <div class="row">
@@ -48,7 +48,7 @@
                         </select>
 
                         <label for="dusun">Tanggal:</label>
-                        <input type="text" name="tanggal" placeholder="Pilih Tanggal" id="tanggal" class="form-control" />
+                        <input type="text" name="tanggal" placeholder="Pilih Tanggal" id="tanggal" class="form-control" disabled/>
                     </div>
 
                     <!-- Buttons to switch between charts -->

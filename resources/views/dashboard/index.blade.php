@@ -26,7 +26,8 @@
             @endforeach
         </div>
         <div class="row">
-            <div class="col-md-4">
+            {{-- filter --}}
+            <div class="col-md-12">
                 <div class="box">
                     <div class="box-body filters">
                         <label for="provinsi">Provinsi:</label>
@@ -59,12 +60,38 @@
                         </select>
 
                         <label for="dusun">Tanggal:</label>
-                        <input type="text" name="tanggal" placeholder="Pilih Tanggal" id="tanggal"
-                            class="form-control" />
+                        <input type="text" name="tanggal" placeholder="Pilih Tanggal" id="tanggal" class="form-control" disabled/>
                     </div>
                 </div><!-- /.box -->
-            </div><!-- /.col -->
-            <div class="col-md-4">
+            </div>
+            {{-- map --}}
+            <div class="col-md-12">
+                <div class="box">
+                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+                    <style>
+                        #map {
+                            width: 100%;
+                            height: 400px;
+                        }
+                    </style>
+                    <div id="map"></div>
+
+                </div>
+            </div>
+            {{-- col charts --}}
+            <div class="col-md-6">
+                <div class="box">
+                    <div id="productLocationChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                </div>
+            </div>
+            {{-- pie charts --}}
+            <div class="col-md-6">
+                <div class="box">
+                    <div id="productPieChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                </div>
+            </div>
+            {{-- sales --}}
+            <div class="col-md-6">
                 <div class="box">
                     <div class="box-body table-responsive">
                         <table id="examplesales" class="table table-bordered table-striped">
@@ -94,7 +121,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            {{-- product --}}
+            <div class="col-md-6">
                 <div class="box">
                     <div class="box-body table-responsive">
                         <table id="example3" class="table table-bordered table-striped">
@@ -122,31 +150,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="box">
-                    <div id="productLocationChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="box">
-                    <div id="productPieChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="box">
-                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-                    <style>
-                        #map {
-                            width: 100%;
-                            height: 400px;
-                        }
-                    </style>
-                    <div id="map"></div>
-
                 </div>
             </div>
         </div><!-- /.row -->
