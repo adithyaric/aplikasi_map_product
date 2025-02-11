@@ -26,6 +26,13 @@ class ReportController extends Controller
             $endDate = Carbon::maxValue();
         }
 
-        return Excel::download(new ExportData($startDate, $endDate), 'product_distribution_report.xlsx');
+        // Format dates for the filename
+        $startDateFormatted = $startDate->format('Ymd');
+        $endDateFormatted = $endDate->format('Ymd');
+
+        // Build the filename
+        $filename = "product_distribution_report_{$startDateFormatted}_to_{$endDateFormatted}.xlsx";
+
+        return Excel::download(new ExportData($startDate, $endDate), $filename);
     }
 }

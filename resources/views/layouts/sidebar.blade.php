@@ -27,7 +27,7 @@
             <li><a href="{{ route('product.input.form') }}"><i class="fa fa-cubes"></i> Penyebaran Product</a></li>
             <li><a href="{{ route('product.input.history') }}"><i class="fa fa-history"></i> Penyebaran History</a></li>
             <li><a href="{{ route('users.index') }}"><i class="fa fa-user"></i> Users</a></li>
-            <li><a href="#"><i class="fa fa-gear"></i> Settings</a></li>
+            <li><a href="{{ route('export.index') }}"><i class="fa fa-file-excel-o"></i> Export</a></li>
             {{-- @if (auth()->user()->role == 'Administrasi') --}}
                 {{-- <li class="treeview"> --}}
                     {{-- <a href="#"> --}}

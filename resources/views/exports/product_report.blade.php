@@ -1,9 +1,9 @@
 <table>
     <tr>
         <th colspan="5">REPORT PENYEBARAN PRODUCT PERIODE
-            {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F
-                                                Y') }} -
-            {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}</th>
+            {{ \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') }} -
+            {{ \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') }}
+        </th>
     </tr>
     <tr>
         <td colspan="5"></td>
