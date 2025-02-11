@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectEntryController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RequestInputController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StockController;
@@ -70,6 +71,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/request-input', [RequestInputController::class, 'store'])->name('request.input.store');
     Route::put('/request-input/{requestInput}/approve', [RequestInputController::class, 'approve'])->name('request.input.approve');
+
+    Route::get('/export', [ReportController::class, 'index'])->name('export.index');
+    Route::get('/export-data', [ReportController::class, 'export'])->name('export.data');
 
     // Route::resource('/satuan', SatuanController::class);
     // Route::resource('/category', CategoryController::class);
