@@ -129,7 +129,7 @@ class ProductController extends Controller
 
     public function inputProductQuantityHistory()
     {
-        $locationProducts = DB::table('location_product')
+        $query = DB::table('location_product')
             ->join('users', 'location_product.user_id', '=', 'users.id')
             ->join('locations', 'location_product.location_id', '=', 'locations.id')
             ->join('products', 'location_product.product_id', '=', 'products.id')
@@ -138,18 +138,25 @@ class ProductController extends Controller
                 'users.name as user_name',
                 'locations.name as location_name',
                 'products.name as product_name'
-            )
-            ->orderBy('location_product.date', 'desc')
+            );
+
+        if (auth()->user()->role === 'sales') {
+            $query->where('location_product.user_id', auth()->id());
+        }
+
+        $locationProducts = $query->orderBy('location_product.date', 'desc')
             ->get();
-        // ->paginate(10);
 
         if (auth()->user()->role === 'admin') {
             $requestInputs = RequestInput::with(['user', 'location'])->latest()->get();
 
-            return view('inputpenyebaranhistory', ['requestInputs' => $requestInputs, 'locationProducts' => $locationProducts]);
-        } else {
-            return view('sales.inputpenyebaranhistory', compact('locationProducts'));
+            return view('inputpenyebaranhistory', [
+                'requestInputs' => $requestInputs,
+                'locationProducts' => $locationProducts,
+            ]);
         }
+
+        return view('sales.inputpenyebaranhistory', compact('locationProducts'));
     }
 
     public function editProductQuantity($id)
