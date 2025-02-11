@@ -21,12 +21,12 @@
                     <h1>Input Penyebaran Product</h1>
                     <form action="{{ route('request.input.store') }}" method="POST">
                         @csrf
-                        <div class="form-group">
+                        <div class="form-group" style="display: none;">
                             <label for="user_id">Pilih User</label>
                             <select name="user_id" id="user_id" class="form-control select2" required style="width: 100%;">
                                 <option value="" disabled selected>-- Pilih User --</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                    <option value="{{ $user->id }}">
                                         {{ $user->name }}
                                     </option>
                                 @endforeach
@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="mt-3 form-footer">
-                            <a href="{{ route('product.index') }}" class="btn btn-default">Kembali</a>
+                            <a href="{{ route('dashboard') }}" class="btn btn-default">Kembali</a>
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </form>
@@ -86,8 +86,13 @@
 @section('page-script')
     <script>
         $(document).ready(function() {
-            $('#user_id').change(function() {
-                let userId = $(this).val();
+            let userSelect = document.getElementById("user_id");
+            let firstUserOption = userSelect.options[1];
+
+            if (firstUserOption) {
+                userSelect.value = firstUserOption.value;
+                // $('#user_id').trigger('change');
+                let userId = firstUserOption.value;
                 $('#desa_id').html('<option value="" disabled selected>Loading...</option>').prop(
                     'disabled', true);
                 $('#dusun_id').html('<option value="" disabled selected>-- Pilih Dusun --</option>').prop(
@@ -100,7 +105,22 @@
                     });
                     $('#desa_id').html(options).prop('disabled', false);
                 });
-            });
+            }
+            // $('#user_id').change(function() {
+            //     let userId = $(this).val();
+            //     $('#desa_id').html('<option value="" disabled selected>Loading...</option>').prop(
+            //         'disabled', true);
+            //     $('#dusun_id').html('<option value="" disabled selected>-- Pilih Dusun --</option>').prop(
+            //         'disabled', true);
+
+            //     $.get('/get-desa/' + userId, function(data) {
+            //         let options = '<option value="" disabled selected>-- Pilih Desa --</option>';
+            //         data.forEach(function(desa) {
+            //             options += `<option value="${desa.id}">${desa.name}</option>`;
+            //         });
+            //         $('#desa_id').html(options).prop('disabled', false);
+            //     });
+            // });
 
             $('#desa_id').change(function() {
                 let desaId = $(this).val();

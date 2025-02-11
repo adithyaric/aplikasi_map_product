@@ -37,24 +37,28 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
     <!-- Datetimepicker -->
-    <link href="{{ asset('assets/adminlte/plugins/datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/adminlte/plugins/datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet"
+        type="text/css" />
     <link href="{{ asset('assets/adminlte/plugins/datepicker/datepicker3.css') }}" rel="stylesheet" type="text/css" />
     <!-- Daterangepicker -->
-    <link href="{{ asset('assets/adminlte/plugins/daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/adminlte/plugins/daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet"
+        type="text/css" />
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('assets/adminlte/plugins/select2/select2.min.css') }}">
 </head>
 
 <body class="body-scroll" data-page="index">
     {{-- @include('sweetalert::alert') --}}
     <!-- loader section -->
     {{-- <div class="container-fluid loader-wrap"> --}}
-        {{-- <div class="row h-100"> --}}
-            {{-- <div class="mx-auto text-center col-10 col-md-6 col-lg-5 col-xl-3 align-self-center"> --}}
-                {{-- <div class="mx-auto loader-cube-wrap loader-cube-animate"> --}}
-                    {{-- <img src="{{ asset('user/img/x.png') }}" alt="Logo"> --}}
-                {{-- </div> --}}
-                {{-- <p class="mt-4">It's time for track budget<br><strong>Please wait...</strong></p> --}}
-            {{-- </div> --}}
-        {{-- </div> --}}
+    {{-- <div class="row h-100"> --}}
+    {{-- <div class="mx-auto text-center col-10 col-md-6 col-lg-5 col-xl-3 align-self-center"> --}}
+    {{-- <div class="mx-auto loader-cube-wrap loader-cube-animate"> --}}
+    {{-- <img src="{{ asset('user/img/x.png') }}" alt="Logo"> --}}
+    {{-- </div> --}}
+    {{-- <p class="mt-4">It's time for track budget<br><strong>Please wait...</strong></p> --}}
+    {{-- </div> --}}
+    {{-- </div> --}}
     {{-- </div> --}}
     <!-- loader section ends -->
     {{-- @include('layouts.user.sidebar') --}}
@@ -62,31 +66,31 @@
     <!-- Begin page -->
     <main class="h-100">
         @auth
-        <!-- Header -->
-        <header class="header position-fixed">
-            <div class="row">
-                <div class="col-auto">
-                    <a href="javascript:void(0)" target="_self" class="btn btn-light btn-44 menu-btn">
-                        <i class="bi bi-list"></i>
-                    </a>
-                </div>
-                <div class="text-center col align-self-center">
-                    <div class="logo-small">
-                        <img src="{{ asset('img/x.png') }}" alt="">
-                        <h5>DECAA.ID</h5>
+            <!-- Header -->
+            <header class="header position-fixed">
+                <div class="row">
+                    <div class="col-auto">
+                        <a href="javascript:void(0)" target="_self" class="btn btn-light btn-44 menu-btn">
+                            <i class="bi bi-list"></i>
+                        </a>
+                    </div>
+                    <div class="text-center col align-self-center">
+                        <div class="logo-small">
+                            <img src="{{ asset('img/x.png') }}" alt="">
+                            <h5>DECAA.ID</h5>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="btn btn-light btn-44">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
-                <div class="col-auto">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button class="btn btn-light btn-44">
-                            <i class="bi bi-box-arrow-right"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </header>
-        <!-- Header ends -->
+            </header>
+            <!-- Header ends -->
         @endauth
 
         <!-- main page content -->
@@ -131,9 +135,9 @@
     <!-- page level custom script -->
     <script src="{{ asset('user/js/app.js') }}"></script>
 
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <!-- Datepicker -->
     <script src="{{ asset('assets/adminlte/plugins/datepicker/bootstrap-datepicker.min.js') }}"></script>
     <!-- bootstrap time picker -->
@@ -142,7 +146,25 @@
     <!-- datetimerange -->
     <script src="{{ asset('assets/adminlte/plugins/daterangepicker/moment.js') }}"></script>
     <script src="{{ asset('assets/adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
-<script>new DataTable('#example');</script>
+    <script>
+        new DataTable('#example');
+    </script>
+    <!-- Select2 -->
+    <script src="{{ asset('assets/adminlte/plugins/select2/select2.full.min.js') }}"></script>
+    <script>
+        $(function() {
+            $(".select2").select2();
+            $("#example1").DataTable();
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+            });
+        });
+    </script>
     @yield('page-script')
 </body>
 
