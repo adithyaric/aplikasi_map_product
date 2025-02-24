@@ -6,7 +6,6 @@ use App\Http\Requests\UserRequest;
 use App\Models\Location;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -21,9 +20,9 @@ class UserController extends Controller
     public function create()
     {
         $levels = ['admin', 'sales'];
-        $desas = Location::where('type', 'desa')->get();
+        $kecamatans = Location::where('type', 'kecamatan')->get();
 
-        return view('users.create', compact('levels', 'desas'));
+        return view('users.create', compact('levels', 'kecamatans'));
     }
 
     public function store(UserRequest $request)
@@ -31,10 +30,13 @@ class UserController extends Controller
         $data = $request->validated();
         $user = User::create($data);
 
-        // Attach desa location
-        if ($request->filled('desa_id')) {
-            $user->locations()->attach($request->desa_id);
-        }
+        // Get all desas under selected kecamatans
+        $desas = Location::where('type', 'desa')
+            ->whereIn('parent_id', $request->kecamatan_id) // Find desas where parent_id matches selected kecamatan
+            ->pluck('id');
+
+        // Attach desas to user
+        $user->locations()->attach($desas);
 
         return redirect(route('users.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
     }
@@ -47,10 +49,15 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $levels = ['admin', 'sales'];
-        $desas = Location::where('type', 'desa')->get();
-        $selectedDesa = $user->locations()->pluck('locations.id')->toArray();
+        $kecamatans = Location::where('type', 'kecamatan')->get();
 
-        return view('users.edit', compact('user', 'levels', 'desas', 'selectedDesa'));
+        // Find kecamatan IDs from user's associated desas
+        $selectedKecamatan = Location::where('type', 'desa')
+            ->whereIn('id', $user->locations()->pluck('locations.id'))
+            ->pluck('parent_id')
+            ->unique()->toArray();
+
+        return view('users.edit', compact('user', 'levels', 'kecamatans', 'selectedKecamatan'));
     }
 
     public function update(Request $request, User $user)
@@ -59,22 +66,25 @@ class UserController extends Controller
             'name' => 'required',
             'phone' => 'required',
             'email' => 'required|email|unique:users,email,'.$user->id,
-            'password' => 'same:confirm-password',
+            'password' => 'sometimes|nullable|same:confirm-password',
         ]);
 
-        $data = $request->all();
-        if (! empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        } else {
-            $data = Arr::except($data, ['password']);
+        $data = $request->except(['password', 'kecamatan_id']); // Exclude password & kecamatan from mass update
+        if (! empty($request->password)) {
+            $data['password'] = Hash::make($request->password);
         }
 
         $user->update($data);
 
-        // Sync desa locations
-        $user->locations()->sync($request->desa_id ?? []);
+        // Get all desas under selected kecamatans
+        $desas = Location::where('type', 'desa')
+            ->whereIn('parent_id', $request->kecamatan_id)
+            ->pluck('id');
 
-        return redirect(route('users.index'))->with('toast_success', 'Berhasil Menyimpan Data!');
+        // Sync desa locations
+        $user->locations()->sync($desas);
+
+        return redirect(route('users.index'))->with('toast_success', 'Berhasil Memperbarui Data!');
     }
 
     public function destroy(User $user)

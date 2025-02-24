@@ -28,11 +28,11 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="desa_id">Pilih Desa</label>
-                                <select name="desa_id[]" id="desa_id" class="form-control select2" multiple required>
-                                    @foreach ($desas as $desa)
-                                        <option value="{{ $desa->id }}" {{ in_array($desa->id, $selectedDesa ?? []) ? 'selected' : '' }}>
-                                            {{ $desa->name }}
+                                <label for="kecamatan_id">Pilih Kecamatan</label>
+                                <select name="kecamatan_id[]" id="kecamatan_id" class="form-control select2" multiple required>
+                                    @foreach ($kecamatans as $kecamatan)
+                                        <option value="{{ $kecamatan->id }}" {{ in_array($kecamatan->id, $selectedKecamatan ?? []) ? 'selected' : '' }}>
+                                            {{ $kecamatan->name }}
                                         </option>
                                     @endforeach
                                 </select>

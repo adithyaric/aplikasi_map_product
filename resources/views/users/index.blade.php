@@ -40,7 +40,7 @@
                                         @if (isset($value->locations))
                                             <ul>
                                             @foreach ($value->locations as $location)
-                                                <li>{{ $location->name }}</li>
+                                                <li>{{ $location->parent->name }} : {{ $location->name }}</li>
                                             @endforeach
                                             </ul>
                                         @endif
