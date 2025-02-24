@@ -37,11 +37,11 @@
                                     <td>{{ $value->phone }}</td>
                                     <td>{{ $value->role }}</td>
                                     <td>
-                                        @if (isset($value->locations))
+                                        @if ($value->locations->isNotEmpty())
                                             <ul>
-                                            @foreach ($value->locations as $location)
-                                                <li>{{ $location?->parent?->name }} : {{ $location?->name }}</li>
-                                            @endforeach
+                                                @foreach ($value->locations->map(fn($loc) => $loc->parent?->name ?? $loc->name)->unique() as $lokasi)
+                                                    <li>{{ $lokasi }}</li>
+                                                @endforeach
                                             </ul>
                                         @endif
                                     </td>
